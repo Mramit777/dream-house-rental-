@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Dream House Rental</title>
+
+<!-- Original WhatsApp Icon -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
 
@@ -46,12 +51,16 @@ nav{
   flex-wrap:wrap;
 }
 
-nav a{
+nav a,
+nav button{
   color:white;
   text-decoration:none;
   background:rgba(255,255,255,.15);
   padding:8px 12px;
   border-radius:8px;
+  border:0;
+  font-size:15px;
+  cursor:pointer;
 }
 
 .container{
@@ -80,6 +89,15 @@ nav a{
   border-radius:8px;
   background:#e8f7ee;
   color:#087a35;
+  font-weight:bold;
+}
+
+.login-status{
+  background:#eef4ff;
+  color:#1e40af;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
   font-weight:bold;
 }
 
@@ -130,10 +148,6 @@ button{
   margin:4px 2px;
 }
 
-button:hover{
-  opacity:.9;
-}
-
 button:disabled{
   opacity:.6;
   cursor:not-allowed;
@@ -159,6 +173,38 @@ button:disabled{
   background:#25d366;
 }
 
+.whatsapp i{
+  font-size:18px;
+  margin-right:5px;
+}
+
+.auth-box{
+  max-width:500px;
+  margin:auto;
+}
+
+.auth-buttons{
+  display:flex;
+  gap:5px;
+}
+
+.auth-buttons button{
+  flex:1;
+}
+
+.logout{
+  background:#dc2626;
+}
+
+.user-box{
+  background:#e8f7ee;
+  color:#087a35;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:12px;
+  font-weight:bold;
+}
+
 .search-box{
   background:#eef4ff;
   padding:14px;
@@ -178,14 +224,9 @@ button:disabled{
   gap:8px;
 }
 
-.search-buttons{
-  margin-top:5px;
-}
-
 .room-count{
   font-weight:bold;
   margin:12px 0;
-  color:#333;
 }
 
 .room-card{
@@ -277,6 +318,10 @@ footer{
     margin:2px 0;
   }
 
+  .auth-buttons{
+    flex-direction:column;
+  }
+
   .room-card img{
     max-height:260px;
   }
@@ -292,17 +337,17 @@ footer{
 
 <header>
 
-  <h1>🏠 Dream House Rental</h1>
+<h1>🏠 Dream House Rental</h1>
 
-  <nav>
+<nav>
 
-    <a href="#home">Home</a>
+<a href="#home">Home</a>
 
-    <a href="#post">Post Room</a>
+<a href="#post">Post Room</a>
 
-    <a href="#rooms">Rooms</a>
+<a href="#rooms">Rooms</a>
 
-  </nav>
+</nav>
 
 </header>
 
@@ -314,15 +359,92 @@ footer{
 
 <section id="home" class="hero">
 
-  <h2>🏠 Dream House Rental</h2>
+<h2>🏠 Dream House Rental</h2>
 
-  <p>
-    Room, BHK, Flat, House, PG aur Shop search karein.
-  </p>
+<p>
+Room, BHK, Flat, House, PG aur Shop search karein.
+</p>
 
-  <div id="firebaseStatus" class="status">
-    🔄 Firebase connecting...
-  </div>
+<div id="firebaseStatus" class="status">
+🔄 Firebase connecting...
+</div>
+
+<div id="loginStatus" class="login-status">
+🔄 Checking Login...
+</div>
+
+</section>
+
+
+<!-- ================= LOGIN ================= -->
+
+<section id="authSection">
+
+<h2>🔐 Login / Signup</h2>
+
+<div class="auth-box">
+
+<div id="loggedOutBox">
+
+<label>Email</label>
+
+<input
+id="authEmail"
+type="email"
+placeholder="example@gmail.com"
+>
+
+<label>Password</label>
+
+<input
+id="authPassword"
+type="password"
+placeholder="Minimum 6 characters"
+>
+
+<div class="auth-buttons">
+
+<button
+type="button"
+onclick="signupUser()">
+📝 Signup
+</button>
+
+<button
+type="button"
+onclick="loginUser()">
+🔐 Login
+</button>
+
+</div>
+
+</div>
+
+
+<div id="loggedInBox" style="display:none;">
+
+<div class="user-box">
+
+✅ Logged in as:
+
+<br>
+
+<span id="userEmail"></span>
+
+</div>
+
+<button
+type="button"
+class="logout"
+onclick="logoutUser()">
+
+🚪 Logout
+
+</button>
+
+</div>
+
+</div>
 
 </section>
 
@@ -332,264 +454,249 @@ footer{
 
 <section id="post">
 
-  <h2>🏠 Post Your Room</h2>
+<h2>🏠 Post Your Room</h2>
 
-  <form id="roomForm">
+<div id="postLoginMessage"
+style="
+background:#fff3cd;
+color:#856404;
+padding:12px;
+border-radius:8px;
+margin-bottom:12px;
+">
 
+🔐 Room post करने के लिए पहले Login करें।
 
-    <label>Owner Name</label>
-
-    <input
-      id="name"
-      type="text"
-      placeholder="Owner Name"
-      required
-    >
-
-
-    <label>Mobile Number</label>
-
-    <input
-      id="mobile"
-      type="tel"
-      placeholder="Mobile Number"
-      required
-    >
+</div>
 
 
-    <label>City</label>
-
-    <input
-      id="city"
-      type="text"
-      placeholder="City"
-      required
-    >
+<form id="roomForm" style="display:none;">
 
 
-    <label>Address</label>
+<label>Owner Name</label>
 
-    <input
-      id="address"
-      type="text"
-      placeholder="Full Address"
-    >
-
-
-    <label>Property Type</label>
-
-    <select id="type" required>
-
-      <option value="">
-        Select Property Type
-      </option>
-
-      <option>Room</option>
-
-      <option>1 BHK</option>
-
-      <option>2 BHK</option>
-
-      <option>3 BHK</option>
-
-      <option>Flat</option>
-
-      <option>House</option>
-
-      <option>PG</option>
-
-      <option>Shop</option>
-
-    </select>
+<input
+id="name"
+type="text"
+placeholder="Owner Name"
+required>
 
 
-    <label>Furnishing</label>
+<label>Mobile Number</label>
 
-    <select id="furnishing">
-
-      <option value="">
-        Select Furnishing
-      </option>
-
-      <option>Unfurnished</option>
-
-      <option>Semi Furnished</option>
-
-      <option>Fully Furnished</option>
-
-    </select>
+<input
+id="mobile"
+type="tel"
+placeholder="Mobile Number"
+required>
 
 
-    <label>Monthly Rent</label>
+<label>City</label>
 
-    <input
-      id="rent"
-      type="number"
-      min="0"
-      placeholder="Monthly Rent"
-      required
-    >
+<input
+id="city"
+type="text"
+placeholder="City"
+required>
 
 
-    <label>Room Photo</label>
+<label>Address</label>
 
-    <input
-      id="image"
-      type="file"
-      accept="image/*"
-    >
-
-
-    <img
-      id="photoPreview"
-      style="
-        display:none;
-        width:100%;
-        max-height:250px;
-        object-fit:cover;
-        border-radius:10px;
-        margin:10px 0;
-      "
-    >
+<input
+id="address"
+type="text"
+placeholder="Full Address">
 
 
-    <label>Description</label>
+<label>Property Type</label>
 
-    <textarea
-      id="description"
-      placeholder="Room / Property ke baare mein likhein">
-    </textarea>
+<select id="type" required>
 
+<option value="">Select Property Type</option>
 
-    <button
-      id="postButton"
-      type="submit">
-      Post Room
-    </button>
+<option>Room</option>
+<option>1 BHK</option>
+<option>2 BHK</option>
+<option>3 BHK</option>
+<option>Flat</option>
+<option>House</option>
+<option>PG</option>
+<option>Shop</option>
 
-
-    <button
-      id="cancelButton"
-      type="button"
-      class="cancel"
-      style="display:none;">
-      Cancel Edit
-    </button>
+</select>
 
 
-  </form>
+<label>Furnishing</label>
+
+<select id="furnishing">
+
+<option value="">Select Furnishing</option>
+
+<option>Unfurnished</option>
+<option>Semi Furnished</option>
+<option>Fully Furnished</option>
+
+</select>
+
+
+<label>Monthly Rent</label>
+
+<input
+id="rent"
+type="number"
+min="0"
+placeholder="Monthly Rent"
+required>
+
+
+<label>Room Photo</label>
+
+<input
+id="image"
+type="file"
+accept="image/*">
+
+
+<img
+id="photoPreview"
+style="
+display:none;
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:10px;
+margin:10px 0;
+">
+
+
+<label>Description</label>
+
+<textarea
+id="description"
+placeholder="Room / Property ke baare mein likhein">
+</textarea>
+
+
+<button
+id="postButton"
+type="submit">
+
+Post Room
+
+</button>
+
+
+<button
+id="cancelButton"
+type="button"
+class="cancel"
+style="display:none;">
+
+Cancel Edit
+
+</button>
+
+
+</form>
 
 </section>
 
 
 
-<!-- ================= SEARCH ROOMS ================= -->
+<!-- ================= ROOMS ================= -->
 
 <section id="rooms">
 
-  <h2>🏠 Search Rooms</h2>
+<h2>🏠 Search Rooms</h2>
 
 
-  <div class="search-box">
+<div class="search-box">
 
-    <div class="search-title">
-      🔎 Room Search
-    </div>
-
-
-    <div class="search-row">
+<div class="search-title">
+🔎 Room Search
+</div>
 
 
-      <div>
+<div class="search-row">
 
-        <label>City</label>
+<div>
 
-        <input
-          id="searchCity"
-          type="text"
-          placeholder="Example: Indore"
-        >
+<label>City</label>
 
-      </div>
+<input
+id="searchCity"
+type="text"
+placeholder="Example: Indore">
 
-
-      <div>
-
-        <label>Property Type</label>
-
-        <select id="searchType">
-
-          <option value="">
-            All Property Types
-          </option>
-
-          <option>Room</option>
-
-          <option>1 BHK</option>
-
-          <option>2 BHK</option>
-
-          <option>3 BHK</option>
-
-          <option>Flat</option>
-
-          <option>House</option>
-
-          <option>PG</option>
-
-          <option>Shop</option>
-
-        </select>
-
-      </div>
+</div>
 
 
-    </div>
+<div>
+
+<label>Property Type</label>
+
+<select id="searchType">
+
+<option value="">All Property Types</option>
+
+<option>Room</option>
+<option>1 BHK</option>
+<option>2 BHK</option>
+<option>3 BHK</option>
+<option>Flat</option>
+<option>House</option>
+<option>PG</option>
+<option>Shop</option>
+
+</select>
+
+</div>
+
+</div>
 
 
-    <label>Maximum Rent</label>
+<label>Maximum Rent</label>
 
-    <input
-      id="searchMaxRent"
-      type="number"
-      min="0"
-      placeholder="Example: 10000"
-    >
-
-
-    <div class="search-buttons">
-
-      <button
-        type="button"
-        onclick="searchRooms()">
-        🔎 Search
-      </button>
+<input
+id="searchMaxRent"
+type="number"
+min="0"
+placeholder="Example: 10000">
 
 
-      <button
-        type="button"
-        onclick="clearSearch()">
-        🧹 Clear
-      </button>
+<button
+type="button"
+onclick="searchRooms()">
 
-    </div>
+🔎 Search
 
-  </div>
+</button>
 
 
-  <div id="roomCount" class="room-count">
-    कुल 0 room मिले
-  </div>
+<button
+type="button"
+onclick="clearSearch()">
+
+🧹 Clear
+
+</button>
 
 
-  <div id="roomsContainer">
+</div>
 
-    <div class="loading">
-      🔄 Loading rooms...
-    </div>
 
-  </div>
+<div id="roomCount" class="room-count">
+कुल 0 room मिले
+</div>
 
+
+<div id="roomsContainer">
+
+<div class="loading">
+🔄 Loading rooms...
+</div>
+
+</div>
 
 </section>
 
@@ -599,7 +706,7 @@ footer{
 
 <footer>
 
-  🏠 Dream House Rental
+🏠 Dream House Rental
 
 </footer>
 
@@ -613,30 +720,32 @@ footer{
 ========================= */
 
 import {
-  initializeApp
+initializeApp
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
 import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-  getFirestore,
 
-  collection,
-
-  getDocs,
-
-  addDoc,
-
-  updateDoc,
-
-  deleteDoc,
-
-  doc,
-
-  serverTimestamp
-
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc,
+updateDoc,
+deleteDoc,
+doc,
+serverTimestamp
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -649,26 +758,26 @@ from
 
 const firebaseConfig = {
 
-  apiKey:
-  "AIzaSyCmMXxjiy4bSle5KdAza8dOiBKNtEwLdb0",
+apiKey:
+"AIzaSyCmMXxjiy4bSle5KdAza8dOiBKNtEwLdb0",
 
-  authDomain:
-  "dream-house-rental.firebaseapp.com",
+authDomain:
+"dream-house-rental.firebaseapp.com",
 
-  projectId:
-  "dream-house-rental",
+projectId:
+"dream-house-rental",
 
-  storageBucket:
-  "dream-house-rental.firebasestorage.app",
+storageBucket:
+"dream-house-rental.firebasestorage.app",
 
-  messagingSenderId:
-  "1032087331224",
+messagingSenderId:
+"1032087331224",
 
-  appId:
-  "1:1032087331224:web:dd7d89de72cd111fcb4bed",
+appId:
+"1:1032087331224:web:dd7d89de72cd111fcb4bed",
 
-  measurementId:
-  "G-06LZEPB9NY"
+measurementId:
+"G-06LZEPB9NY"
 
 };
 
@@ -679,15 +788,16 @@ const firebaseConfig = {
 ========================= */
 
 const app =
-  initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
+const auth =
+getAuth(app);
 
 const db =
-  getFirestore(app, "default");
-
+getFirestore(app,"default");
 
 const roomCollection =
-  collection(db, "room");
+collection(db,"room");
 
 
 
@@ -696,23 +806,52 @@ const roomCollection =
 ========================= */
 
 const firebaseStatus =
-  document.getElementById(
-    "firebaseStatus"
-  );
+document.getElementById(
+"firebaseStatus"
+);
 
+const loginStatus =
+document.getElementById(
+"loginStatus"
+);
+
+const loggedOutBox =
+document.getElementById(
+"loggedOutBox"
+);
+
+const loggedInBox =
+document.getElementById(
+"loggedInBox"
+);
+
+const userEmail =
+document.getElementById(
+"userEmail"
+);
+
+const roomForm =
+document.getElementById(
+"roomForm"
+);
+
+const postLoginMessage =
+document.getElementById(
+"postLoginMessage"
+);
 
 const roomsContainer =
-  document.getElementById(
-    "roomsContainer"
-  );
-
+document.getElementById(
+"roomsContainer"
+);
 
 const roomCount =
-  document.getElementById(
-    "roomCount"
-  );
+document.getElementById(
+"roomCount"
+);
 
 
+let currentUser = null;
 
 let allRooms = [];
 
@@ -727,7 +866,257 @@ let currentPhotoData = "";
 ========================= */
 
 firebaseStatus.textContent =
-  "✅ Firebase connected successfully";
+"✅ Firebase connected successfully";
+
+
+
+/* =========================
+   SIGNUP
+========================= */
+
+window.signupUser =
+async function(){
+
+const email =
+document
+.getElementById("authEmail")
+.value
+.trim();
+
+const password =
+document
+.getElementById("authPassword")
+.value;
+
+
+if(!email || !password){
+
+alert(
+"Email aur Password dono bhariye."
+);
+
+return;
+
+}
+
+
+if(password.length < 6){
+
+alert(
+"Password minimum 6 characters ka hona chahiye."
+);
+
+return;
+
+}
+
+
+try{
+
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert(
+"✅ Signup successful!"
+);
+
+
+document
+.getElementById("authPassword")
+.value = "";
+
+
+}catch(error){
+
+console.error(error);
+
+if(error.code ===
+"auth/email-already-in-use"){
+
+alert(
+"❌ Ye email already registered hai. Login karein."
+);
+
+}else{
+
+alert(
+"❌ Signup failed.\n\n" +
+(error.message || error)
+);
+
+}
+
+}
+
+};
+
+
+
+/* =========================
+   LOGIN
+========================= */
+
+window.loginUser =
+async function(){
+
+const email =
+document
+.getElementById("authEmail")
+.value
+.trim();
+
+const password =
+document
+.getElementById("authPassword")
+.value;
+
+
+if(!email || !password){
+
+alert(
+"Email aur Password dono bhariye."
+);
+
+return;
+
+}
+
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert(
+"✅ Login successful!"
+);
+
+
+document
+.getElementById("authPassword")
+.value = "";
+
+
+}catch(error){
+
+console.error(error);
+
+if(
+error.code ===
+"auth/invalid-credential"
+){
+
+alert(
+"❌ Email ya Password galat hai."
+);
+
+}else{
+
+alert(
+"❌ Login failed.\n\n" +
+(error.message || error)
+);
+
+}
+
+}
+
+};
+
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+window.logoutUser =
+async function(){
+
+try{
+
+await signOut(auth);
+
+alert(
+"✅ Logout successful."
+);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"❌ Logout nahi hua."
+);
+
+}
+
+};
+
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+currentUser = user || null;
+
+
+if(user){
+
+loginStatus.textContent =
+"✅ Logged in: " +
+user.email;
+
+loggedOutBox.style.display =
+"none";
+
+loggedInBox.style.display =
+"block";
+
+userEmail.textContent =
+user.email;
+
+roomForm.style.display =
+"block";
+
+postLoginMessage.style.display =
+"none";
+
+
+}else{
+
+loginStatus.textContent =
+"🔐 Please Login / Signup";
+
+loggedOutBox.style.display =
+"block";
+
+loggedInBox.style.display =
+"none";
+
+roomForm.style.display =
+"none";
+
+postLoginMessage.style.display =
+"block";
+
+editingId = null;
+
+}
+
+loadRooms();
+
+});
 
 
 
@@ -737,129 +1126,129 @@ firebaseStatus.textContent =
 
 function compressImage(file){
 
-  return new Promise((resolve,reject)=>{
+return new Promise(
+(resolve,reject)=>{
 
-    if(!file){
+if(!file){
 
-      resolve("");
+resolve("");
 
-      return;
-    }
+return;
 
-
-    const reader =
-      new FileReader();
+}
 
 
-    reader.onload =
-    function(e){
-
-      const img =
-        new Image();
+const reader =
+new FileReader();
 
 
-      img.onload =
-      function(){
+reader.onload =
+function(e){
 
-        let maxSide = 900;
-
-        let width =
-          img.width;
-
-        let height =
-          img.height;
+const img =
+new Image();
 
 
-        if(width > height){
+img.onload =
+function(){
 
-          if(width > maxSide){
+let maxSide = 900;
 
-            height =
-              Math.round(
-                height *
-                maxSide /
-                width
-              );
+let width =
+img.width;
 
-            width =
-              maxSide;
-          }
-
-        }else{
-
-          if(height > maxSide){
-
-            width =
-              Math.round(
-                width *
-                maxSide /
-                height
-              );
-
-            height =
-              maxSide;
-          }
-
-        }
+let height =
+img.height;
 
 
-        const canvas =
-          document.createElement(
-            "canvas"
-          );
+if(width > height){
+
+if(width > maxSide){
+
+height =
+Math.round(
+height *
+maxSide /
+width
+);
+
+width =
+maxSide;
+
+}
+
+}else{
+
+if(height > maxSide){
+
+width =
+Math.round(
+width *
+maxSide /
+height
+);
+
+height =
+maxSide;
+
+}
+
+}
 
 
-        canvas.width =
-          width;
-
-        canvas.height =
-          height;
-
-
-        const ctx =
-          canvas.getContext(
-            "2d"
-          );
+const canvas =
+document.createElement(
+"canvas"
+);
 
 
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          width,
-          height
-        );
+canvas.width =
+width;
+
+canvas.height =
+height;
 
 
-        const data =
-          canvas.toDataURL(
-            "image/jpeg",
-            0.75
-          );
+const ctx =
+canvas.getContext(
+"2d"
+);
 
 
-        resolve(data);
-
-      };
-
-
-      img.onerror =
-        reject;
-
-
-      img.src =
-        e.target.result;
-
-    };
+ctx.drawImage(
+img,
+0,
+0,
+width,
+height
+);
 
 
-    reader.onerror =
-      reject;
+resolve(
+canvas.toDataURL(
+"image/jpeg",
+0.75
+)
+);
+
+};
 
 
-    reader.readAsDataURL(file);
+img.onerror =
+reject;
 
-  });
+img.src =
+e.target.result;
+
+};
+
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(file);
+
+});
 
 }
 
@@ -872,51 +1261,48 @@ function compressImage(file){
 document
 .getElementById("image")
 .addEventListener(
-  "change",
-  async function(){
+"change",
+async function(){
 
-    const file =
-      this.files[0];
+const file =
+this.files[0];
 
+if(!file){
 
-    if(!file){
+return;
 
-      return;
-    }
-
-
-    try{
-
-      currentPhotoData =
-        await compressImage(file);
+}
 
 
-      const preview =
-        document.getElementById(
-          "photoPreview"
-        );
+try{
+
+currentPhotoData =
+await compressImage(file);
 
 
-      preview.src =
-        currentPhotoData;
-
-
-      preview.style.display =
-        "block";
-
-
-    }catch(error){
-
-      console.error(error);
-
-      alert(
-        "❌ Photo load nahi hui."
-      );
-
-    }
-
-  }
+const preview =
+document.getElementById(
+"photoPreview"
 );
+
+preview.src =
+currentPhotoData;
+
+preview.style.display =
+"block";
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"❌ Photo load nahi hui."
+);
+
+}
+
+});
 
 
 
@@ -926,77 +1312,69 @@ document
 
 async function loadRooms(){
 
-  roomsContainer.innerHTML =
-    '<div class="loading">🔄 Loading rooms...</div>';
+roomsContainer.innerHTML =
+'<div class="loading">🔄 Loading rooms...</div>';
 
 
-  try{
+try{
 
-    const snapshot =
-      await getDocs(
-        roomCollection
-      );
-
-
-    allRooms = [];
+const snapshot =
+await getDocs(
+roomCollection
+);
 
 
-    snapshot.forEach(
-      (item)=>{
-
-        allRooms.push({
-
-          id:item.id,
-
-          ...item.data()
-
-        });
-
-      }
-    );
+allRooms = [];
 
 
-    console.log(
-      "Firestore rooms:",
-      allRooms.length
-    );
+snapshot.forEach(
+(item)=>{
+
+allRooms.push({
+
+id:item.id,
+
+...item.data()
+
+});
+
+});
 
 
-    displayRooms(
-      allRooms
-    );
+displayRooms(
+allRooms
+);
 
 
-  }catch(error){
+}catch(error){
 
-    console.error(error);
-
-
-    roomsContainer.innerHTML = `
-
-      <div class="no-room">
-
-        ❌ Rooms load nahi ho rahe.
-
-        <br><br>
-
-        <b>Error:</b>
-
-        ${error.code || ""}
-
-        <br>
-
-        ${error.message || ""}
-
-      </div>
-
-    `;
+console.error(error);
 
 
-    roomCount.textContent =
-      "❌ Firebase error";
+roomsContainer.innerHTML = `
 
-  }
+<div class="no-room">
+
+❌ Rooms load nahi ho rahe.
+
+<br><br>
+
+<b>Error:</b>
+${error.code || ""}
+
+<br>
+
+${error.message || ""}
+
+</div>
+
+`;
+
+
+roomCount.textContent =
+"❌ Firebase error";
+
+}
 
 }
 
@@ -1008,222 +1386,219 @@ async function loadRooms(){
 
 function displayRooms(rooms){
 
-  roomCount.textContent =
-    "कुल " +
-    rooms.length +
-    " room मिले";
+roomCount.textContent =
+"कुल " +
+rooms.length +
+" room मिले";
 
 
-  if(rooms.length === 0){
+if(rooms.length === 0){
 
-    roomsContainer.innerHTML = `
+roomsContainer.innerHTML = `
 
-      <div class="no-room">
+<div class="no-room">
 
-        🏠 कोई room नहीं मिला
+🏠 कोई room नहीं मिला
 
-        <br><br>
+<br><br>
 
-        Search बदलकर फिर कोशिश करें।
+Search बदलकर फिर कोशिश करें।
 
-      </div>
+</div>
 
-    `;
+`;
 
-    return;
-  }
+return;
 
+}
 
-  roomsContainer.innerHTML =
-    "";
 
+roomsContainer.innerHTML =
+"";
 
-  rooms.forEach(
-    (room)=>{
 
-      const card =
-        document.createElement(
-          "div"
-        );
+rooms.forEach(
+(room)=>{
 
+const card =
+document.createElement(
+"div"
+);
 
-      card.className =
-        "room-card";
 
+card.className =
+"room-card";
 
-      let imageHTML =
-        "";
 
+let imageHTML = "";
 
-      if(room.image){
 
-        imageHTML = `
+if(room.image){
 
-          <img
-            src="${room.image}"
-            alt="Room Photo">
+imageHTML = `
 
-        `;
+<img
+src="${room.image}"
+alt="Room Photo">
 
-      }
+`;
 
+}
 
-      const safeName =
-        room.name ||
-        "Owner";
 
+const safeName =
+room.name ||
+"Owner";
 
-      const safeCity =
-        room.city ||
-        "";
+const safeCity =
+room.city ||
+"";
 
+const safeAddress =
+room.address ||
+"";
 
-      const safeAddress =
-        room.address ||
-        "";
+const safeType =
+room.type ||
+"";
 
+const safeFurnishing =
+room.furnishing ||
+"";
 
-      const safeType =
-        room.type ||
-        "";
+const safeRent =
+room.rent ||
+"";
 
+const safeDescription =
+room.description ||
+"";
 
-      const safeFurnishing =
-        room.furnishing ||
-        "";
 
+const mobile =
+String(
+room.mobile || ""
+).replace(
+/\D/g,
+""
+);
 
-      const safeRent =
-        room.rent ||
-        "";
 
+const isOwner =
+currentUser &&
+room.ownerId ===
+currentUser.uid;
 
-      const safeDescription =
-        room.description ||
-        "";
 
+card.innerHTML = `
 
-      const mobile =
-        String(
-          room.mobile || ""
-        ).replace(
-          /\D/g,
-          ""
-        );
+${imageHTML}
 
+<div class="room-info">
 
-      card.innerHTML = `
+<h3>
+🏠 ${safeType || "Property"}
+</h3>
 
-        ${imageHTML}
+<p class="rent">
+💰 ₹${safeRent} / Month
+</p>
 
+<p>
+📍 <b>City:</b>
+${safeCity}
+</p>
 
-        <div class="room-info">
+<p>
+🏠 <b>Address:</b>
+${safeAddress || "Not specified"}
+</p>
 
+<p>
+🛋️ <b>Furnishing:</b>
+${safeFurnishing || "Not specified"}
+</p>
 
-          <h3>
-            🏠 ${safeType || "Property"}
-          </h3>
+<div class="owner-box">
 
+<p>
+👤 <b>Owner:</b>
+${safeName}
+</p>
 
-          <p class="rent">
-            💰 ₹${safeRent} / Month
-          </p>
+<p>
+📞 <b>Mobile:</b>
+${room.mobile || ""}
+</p>
 
+</div>
 
-          <p>
-            📍 <b>City:</b>
-            ${safeCity}
-          </p>
+<p>
+📝 ${safeDescription || "No description"}
+</p>
 
 
-          <p>
-            🏠 <b>Address:</b>
-            ${safeAddress || "Not specified"}
-          </p>
+<div class="action-buttons">
 
 
-          <p>
-            🛋️ <b>Furnishing:</b>
-            ${safeFurnishing || "Not specified"}
-          </p>
+<button
+class="call"
+onclick="contactOwner('${mobile}')">
 
+📞 Call
 
-          <div class="owner-box">
+</button>
 
 
-            <p>
-              👤 <b>Owner:</b>
-              ${safeName}
-            </p>
+<button
+class="whatsapp"
+onclick="whatsappOwner('${mobile}','${safeName}')">
 
+<i class="fa-brands fa-whatsapp"></i>
+WhatsApp
 
-            <p>
-              📞 <b>Mobile:</b>
-              ${room.mobile || ""}
-            </p>
+</button>
 
 
-          </div>
+${
+isOwner
+?
+`
 
+<button
+class="edit"
+onclick="editRoom('${room.id}')">
 
-          <p>
-            📝 ${safeDescription || "No description"}
-          </p>
+✏️ Edit
 
+</button>
 
-          <div class="action-buttons">
+<button
+class="delete"
+onclick="deleteRoom('${room.id}')">
 
+🗑️ Delete
 
-            <button
-              class="call"
-              onclick="contactOwner('${mobile}')">
+</button>
 
-              📞 Call
+`
+:
+""
+}
 
-            </button>
 
+</div>
 
-            <button
-              class="whatsapp"
-              onclick="whatsappOwner('${mobile}','${safeName}')">
+</div>
 
-              💬 WhatsApp
+`;
 
-            </button>
 
+roomsContainer.appendChild(
+card
+);
 
-            <button
-              class="edit"
-              onclick="editRoom('${room.id}')">
-
-              ✏️ Edit
-
-            </button>
-
-
-            <button
-              class="delete"
-              onclick="deleteRoom('${room.id}')">
-
-              🗑️ Delete
-
-            </button>
-
-
-          </div>
-
-
-        </div>
-
-      `;
-
-
-      roomsContainer.appendChild(
-        card
-      );
-
-    }
-  );
+});
 
 }
 
@@ -1236,94 +1611,89 @@ function displayRooms(rooms){
 window.searchRooms =
 function(){
 
-  const city =
-    document
-    .getElementById(
-      "searchCity"
-    )
-    .value
-    .trim()
-    .toLowerCase();
+const city =
+document
+.getElementById(
+"searchCity"
+)
+.value
+.trim()
+.toLowerCase();
 
 
-  const type =
-    document
-    .getElementById(
-      "searchType"
-    )
-    .value
-    .trim()
-    .toLowerCase();
+const type =
+document
+.getElementById(
+"searchType"
+)
+.value
+.trim()
+.toLowerCase();
 
 
-  const maxRentValue =
-    document
-    .getElementById(
-      "searchMaxRent"
-    )
-    .value
-    .trim();
+const maxRentValue =
+document
+.getElementById(
+"searchMaxRent"
+)
+.value
+.trim();
 
 
-  const maxRent =
-    maxRentValue
-    ? Number(maxRentValue)
-    : Infinity;
+const maxRent =
+maxRentValue
+?
+Number(maxRentValue)
+:
+Infinity;
 
 
-  const filtered =
-    allRooms.filter(
-      (room)=>{
+const filtered =
+allRooms.filter(
+(room)=>{
 
-        const roomCity =
-          String(
-            room.city || ""
-          )
-          .toLowerCase();
-
-
-        const roomType =
-          String(
-            room.type || ""
-          )
-          .toLowerCase();
+const roomCity =
+String(
+room.city || ""
+)
+.toLowerCase();
 
 
-        const roomRent =
-          Number(
-            room.rent || 0
-          );
+const roomType =
+String(
+room.type || ""
+)
+.toLowerCase();
 
 
-        const cityOK =
-          !city ||
-          roomCity.includes(
-            city
-          );
+const roomRent =
+Number(
+room.rent || 0
+);
 
 
-        const typeOK =
-          !type ||
-          roomType === type;
+return (
+
+(!city ||
+roomCity.includes(city))
+
+&&
+
+(!type ||
+roomType === type)
+
+&&
+
+(roomRent <= maxRent)
+
+);
+
+});
 
 
-        const rentOK =
-          roomRent <= maxRent;
-
-
-        return (
-          cityOK &&
-          typeOK &&
-          rentOK
-        );
-
-      }
-    );
-
-
-  displayRooms(
-    filtered
-  );
+displayRooms(
+filtered
+);
 
 };
 
@@ -1336,30 +1706,30 @@ function(){
 window.clearSearch =
 function(){
 
-  document
-  .getElementById(
-    "searchCity"
-  )
-  .value = "";
+document
+.getElementById(
+"searchCity"
+)
+.value = "";
 
 
-  document
-  .getElementById(
-    "searchType"
-  )
-  .value = "";
+document
+.getElementById(
+"searchType"
+)
+.value = "";
 
 
-  document
-  .getElementById(
-    "searchMaxRent"
-  )
-  .value = "";
+document
+.getElementById(
+"searchMaxRent"
+)
+.value = "";
 
 
-  displayRooms(
-    allRooms
-  );
+displayRooms(
+allRooms
+);
 
 };
 
@@ -1372,81 +1742,74 @@ function(){
 window.contactOwner =
 function(number){
 
-  if(!number){
+if(!number){
 
-    alert(
-      "Owner mobile number available nahi hai."
-    );
+alert(
+"Owner mobile number available nahi hai."
+);
 
-    return;
-  }
+return;
 
-
-  let phone =
-    String(number)
-    .replace(
-      /\D/g,
-      ""
-    );
+}
 
 
-  /*
-     07772064727
-          ↓
-     7772064727
-          ↓
-     917772064727
-  */
+let phone =
+String(number)
+.replace(
+/\D/g,
+""
+);
 
 
-  if(phone.startsWith("0")){
+if(phone.startsWith("0")){
 
-    phone =
-      phone.substring(1);
+phone =
+phone.substring(1);
 
-  }
-
-
-  if(phone.length === 10){
-
-    phone =
-      "91" + phone;
-
-  }
+}
 
 
-  if(
-    phone.length !== 12 ||
-    !phone.startsWith("91")
-  ){
+if(phone.length === 10){
 
-    alert(
-      "❌ Mobile number galat hai.\n\n" +
-      "Example: 7772064727"
-    );
+phone =
+"91" + phone;
 
-    return;
-  }
+}
 
 
-  const displayNumber =
-    phone.substring(2);
+if(
+phone.length !== 12 ||
+!phone.startsWith("91")
+){
+
+alert(
+"❌ Mobile number galat hai.\n\n" +
+"Example: 7772064727"
+);
+
+return;
+
+}
 
 
-  const ok =
-    confirm(
-      "Owner ko call karna hai?\n\n" +
-      "+91 " +
-      displayNumber
-    );
+const displayNumber =
+phone.substring(2);
 
 
-  if(ok){
+const ok =
+confirm(
+"Owner ko call karna hai?\n\n" +
+"+91 " +
+displayNumber
+);
 
-    window.location.href =
-      "tel:+" + phone;
 
-  }
+if(ok){
+
+window.location.href =
+"tel:+" + phone;
+
+}
 
 };
 
@@ -1459,82 +1822,75 @@ function(number){
 window.whatsappOwner =
 function(number,name){
 
-  if(!number){
+if(!number){
 
-    alert(
-      "Owner mobile number available nahi hai."
-    );
+alert(
+"Owner mobile number available nahi hai."
+);
 
-    return;
-  }
+return;
 
-
-  let phone =
-    String(number)
-    .replace(
-      /\D/g,
-      ""
-    );
+}
 
 
-  /*
-     07772064727
-          ↓
-     7772064727
-          ↓
-     917772064727
-  */
+let phone =
+String(number)
+.replace(
+/\D/g,
+""
+);
 
 
-  if(phone.startsWith("0")){
+if(phone.startsWith("0")){
 
-    phone =
-      phone.substring(1);
+phone =
+phone.substring(1);
 
-  }
-
-
-  if(phone.length === 10){
-
-    phone =
-      "91" + phone;
-
-  }
+}
 
 
-  if(
-    phone.length !== 12 ||
-    !phone.startsWith("91")
-  ){
+if(phone.length === 10){
 
-    alert(
-      "❌ WhatsApp number galat hai.\n\n" +
-      "Example: 7772064727"
-    );
+phone =
+"91" + phone;
 
-    return;
-  }
+}
 
 
-  const message =
-    "Hello " +
-    (name || "Owner") +
-    ", I found your property on Dream House Rental. I am interested in this property.";
+if(
+phone.length !== 12 ||
+!phone.startsWith("91")
+){
+
+alert(
+"❌ WhatsApp number galat hai.\n\n" +
+"Example: 7772064727"
+);
+
+return;
+
+}
 
 
-  const url =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(
-      message
-    );
+const message =
+"Hello " +
+(name || "Owner") +
+", I found your property on Dream House Rental. I am interested in this property.";
 
 
-  window.open(
-    url,
-    "_blank"
-  );
+const url =
+"https://wa.me/" +
+phone +
+"?text=" +
+encodeURIComponent(
+message
+);
+
+
+window.open(
+url,
+"_blank"
+);
 
 };
 
@@ -1547,182 +1903,221 @@ function(number,name){
 document
 .getElementById("roomForm")
 .addEventListener(
-  "submit",
-  async function(e){
+"submit",
+async function(e){
 
-    e.preventDefault();
+e.preventDefault();
 
 
-    const button =
-      document.getElementById(
-        "postButton"
-      );
+if(!currentUser){
 
-
-    button.disabled =
-      true;
-
-
-    const wasEditing =
-      !!editingId;
-
-
-    button.textContent =
-      wasEditing
-      ? "Updating..."
-      : "Saving...";
-
-
-    try{
-
-      const data = {
-
-        name:
-          document
-          .getElementById("name")
-          .value
-          .trim(),
-
-
-        mobile:
-          document
-          .getElementById("mobile")
-          .value
-          .trim(),
-
-
-        city:
-          document
-          .getElementById("city")
-          .value
-          .trim(),
-
-
-        address:
-          document
-          .getElementById("address")
-          .value
-          .trim(),
-
-
-        type:
-          document
-          .getElementById("type")
-          .value,
-
-
-        furnishing:
-          document
-          .getElementById("furnishing")
-          .value,
-
-
-        rent:
-          document
-          .getElementById("rent")
-          .value,
-
-
-        description:
-          document
-          .getElementById("description")
-          .value
-          .trim(),
-
-
-        updatedAt:
-          serverTimestamp()
-
-      };
-
-
-      if(currentPhotoData){
-
-        data.image =
-          currentPhotoData;
-
-      }
-
-
-      if(editingId){
-
-        await updateDoc(
-
-          doc(
-            db,
-            "room",
-            editingId
-          ),
-
-          data
-
-        );
-
-
-        alert(
-          "✅ Room successfully updated."
-        );
-
-
-      }else{
-
-        data.createdAt =
-          serverTimestamp();
-
-
-        await addDoc(
-
-          roomCollection,
-
-          data
-
-        );
-
-
-        alert(
-          "✅ Room successfully posted."
-        );
-
-      }
-
-
-      resetForm();
-
-
-      await loadRooms();
-
-
-      document
-      .getElementById(
-        "rooms"
-      )
-      .scrollIntoView({
-        behavior:"smooth"
-      });
-
-
-    }catch(error){
-
-      console.error(error);
-
-
-      alert(
-        "❌ Save nahi hua.\n\n" +
-        (error.message || error)
-      );
-
-    }
-
-
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      "Post Room";
-
-  }
+alert(
+"❌ Room post karne ke liye Login karein."
 );
+
+return;
+
+}
+
+
+const button =
+document.getElementById(
+"postButton"
+);
+
+
+button.disabled =
+true;
+
+
+const wasEditing =
+!!editingId;
+
+
+button.textContent =
+wasEditing
+?
+"Updating..."
+:
+"Saving...";
+
+
+try{
+
+const data = {
+
+name:
+document
+.getElementById("name")
+.value
+.trim(),
+
+mobile:
+document
+.getElementById("mobile")
+.value
+.trim(),
+
+city:
+document
+.getElementById("city")
+.value
+.trim(),
+
+address:
+document
+.getElementById("address")
+.value
+.trim(),
+
+type:
+document
+.getElementById("type")
+.value,
+
+furnishing:
+document
+.getElementById("furnishing")
+.value,
+
+rent:
+document
+.getElementById("rent")
+.value,
+
+description:
+document
+.getElementById("description")
+.value
+.trim(),
+
+updatedAt:
+serverTimestamp()
+
+};
+
+
+if(!editingId){
+
+data.ownerId =
+currentUser.uid;
+
+data.ownerEmail =
+currentUser.email;
+
+}
+
+
+if(currentPhotoData){
+
+data.image =
+currentPhotoData;
+
+}
+
+
+if(editingId){
+
+const existingRoom =
+allRooms.find(
+r => r.id === editingId
+);
+
+
+if(
+!existingRoom ||
+existingRoom.ownerId !==
+currentUser.uid
+){
+
+alert(
+"❌ Aap sirf apna room edit kar sakte hain."
+);
+
+button.disabled =
+false;
+
+button.textContent =
+"Post Room";
+
+return;
+
+}
+
+
+await updateDoc(
+
+doc(
+db,
+"room",
+editingId
+),
+
+data
+
+);
+
+
+alert(
+"✅ Room successfully updated."
+);
+
+
+}else{
+
+data.createdAt =
+serverTimestamp();
+
+
+await addDoc(
+
+roomCollection,
+
+data
+
+);
+
+
+alert(
+"✅ Room successfully posted."
+);
+
+}
+
+
+resetForm();
+
+await loadRooms();
+
+
+document
+.getElementById(
+"rooms"
+)
+.scrollIntoView({
+behavior:"smooth"
+});
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"❌ Save nahi hua.\n\n" +
+(error.message || error)
+);
+
+}
+
+
+button.disabled =
+false;
+
+button.textContent =
+"Post Room";
+
+});
 
 
 
@@ -1733,121 +2128,141 @@ document
 window.editRoom =
 function(id){
 
-  const room =
-    allRooms.find(
-      item =>
-      item.id === id
-    );
+if(!currentUser){
+
+alert(
+"❌ Pehle Login karein."
+);
+
+return;
+
+}
 
 
-  if(!room){
-
-    alert(
-      "Room nahi mila."
-    );
-
-    return;
-  }
+const room =
+allRooms.find(
+item => item.id === id
+);
 
 
-  editingId =
-    id;
+if(!room){
+
+alert(
+"Room nahi mila."
+);
+
+return;
+
+}
 
 
-  document
-  .getElementById("name")
-  .value =
-    room.name || "";
+if(room.ownerId !==
+currentUser.uid){
+
+alert(
+"❌ Aap sirf apna room edit kar sakte hain."
+);
+
+return;
+
+}
 
 
-  document
-  .getElementById("mobile")
-  .value =
-    room.mobile || "";
+editingId =
+id;
 
 
-  document
-  .getElementById("city")
-  .value =
-    room.city || "";
+document
+.getElementById("name")
+.value =
+room.name || "";
 
 
-  document
-  .getElementById("address")
-  .value =
-    room.address || "";
+document
+.getElementById("mobile")
+.value =
+room.mobile || "";
 
 
-  document
-  .getElementById("type")
-  .value =
-    room.type || "";
+document
+.getElementById("city")
+.value =
+room.city || "";
 
 
-  document
-  .getElementById("furnishing")
-  .value =
-    room.furnishing || "";
+document
+.getElementById("address")
+.value =
+room.address || "";
 
 
-  document
-  .getElementById("rent")
-  .value =
-    room.rent || "";
+document
+.getElementById("type")
+.value =
+room.type || "";
 
 
-  document
-  .getElementById("description")
-  .value =
-    room.description || "";
+document
+.getElementById("furnishing")
+.value =
+room.furnishing || "";
 
 
-  currentPhotoData =
-    room.image || "";
+document
+.getElementById("rent")
+.value =
+room.rent || "";
 
 
-  if(room.image){
-
-    const preview =
-      document
-      .getElementById(
-        "photoPreview"
-      );
+document
+.getElementById("description")
+.value =
+room.description || "";
 
 
-    preview.src =
-      room.image;
+currentPhotoData =
+room.image || "";
 
 
-    preview.style.display =
-      "block";
+if(room.image){
 
-  }
+const preview =
+document.getElementById(
+"photoPreview"
+);
 
+preview.src =
+room.image;
 
-  document
-  .getElementById(
-    "postButton"
-  )
-  .textContent =
-    "Update Room";
+preview.style.display =
+"block";
 
-
-  document
-  .getElementById(
-    "cancelButton"
-  )
-  .style.display =
-    "inline-block";
+}
 
 
-  document
-  .getElementById(
-    "post"
-  )
-  .scrollIntoView({
-    behavior:"smooth"
-  });
+document
+.getElementById(
+"postButton"
+)
+.textContent =
+"Update Room";
+
+
+document
+.getElementById(
+"cancelButton"
+)
+.style.display =
+"inline-block";
+
+
+document
+.getElementById(
+"post"
+)
+.scrollIntoView({
+behavior:"smooth"
+});
 
 };
 
@@ -1860,51 +2275,82 @@ function(id){
 window.deleteRoom =
 async function(id){
 
-  const ok =
-    confirm(
-      "Kya aap is room ko delete karna chahte hain?"
-    );
+if(!currentUser){
+
+alert(
+"❌ Pehle Login karein."
+);
+
+return;
+
+}
 
 
-  if(!ok){
-
-    return;
-
-  }
-
-
-  try{
-
-    await deleteDoc(
-
-      doc(
-        db,
-        "room",
-        id
-      )
-
-    );
+const room =
+allRooms.find(
+item => item.id === id
+);
 
 
-    alert(
-      "✅ Room deleted."
-    );
+if(
+!room ||
+room.ownerId !==
+currentUser.uid
+){
+
+alert(
+"❌ Aap sirf apna room delete kar sakte hain."
+);
+
+return;
+
+}
 
 
-    await loadRooms();
+const ok =
+confirm(
+"Kya aap apne room ko delete karna chahte hain?"
+);
 
 
-  }catch(error){
+if(!ok){
 
-    console.error(error);
+return;
+
+}
 
 
-    alert(
-      "❌ Delete nahi hua.\n\n" +
-      (error.message || error)
-    );
+try{
 
-  }
+await deleteDoc(
+
+doc(
+db,
+"room",
+id
+)
+
+);
+
+
+alert(
+"✅ Room deleted."
+);
+
+
+await loadRooms();
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"❌ Delete nahi hua.\n\n" +
+(error.message || error)
+);
+
+}
 
 };
 
@@ -1916,51 +2362,51 @@ async function(id){
 
 function resetForm(){
 
-  document
-  .getElementById(
-    "roomForm"
-  )
-  .reset();
+document
+.getElementById(
+"roomForm"
+)
+.reset();
 
 
-  editingId =
-    null;
+editingId =
+null;
 
 
-  currentPhotoData =
-    "";
+currentPhotoData =
+"";
 
 
-  document
-  .getElementById(
-    "photoPreview"
-  )
-  .style.display =
-    "none";
+document
+.getElementById(
+"photoPreview"
+)
+.style.display =
+"none";
 
 
-  document
-  .getElementById(
-    "photoPreview"
-  )
-  .src =
-    "";
+document
+.getElementById(
+"photoPreview"
+)
+.src =
+"";
 
 
-  document
-  .getElementById(
-    "postButton"
-  )
-  .textContent =
-    "Post Room";
+document
+.getElementById(
+"postButton"
+)
+.textContent =
+"Post Room";
 
 
-  document
-  .getElementById(
-    "cancelButton"
-  )
-  .style.display =
-    "none";
+document
+.getElementById(
+"cancelButton"
+)
+.style.display =
+"none";
 
 }
 
@@ -1972,25 +2418,23 @@ function resetForm(){
 
 document
 .getElementById(
-  "cancelButton"
+"cancelButton"
 )
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    resetForm();
+resetForm();
 
-  }
-);
+});
 
 
 
 /* =========================
-   START APP
+   START
 ========================= */
 
 loadRooms();
-
 
 </script>
 
