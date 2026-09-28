@@ -7,6 +7,7 @@
 <title>Dream House Rental</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   margin:0;
@@ -279,23 +280,37 @@ footer{
   .room-card img{
     max-height:260px;
   }
+
 }
+
 </style>
 </head>
 
+
 <body>
 
+
 <header>
+
   <h1>🏠 Dream House Rental</h1>
 
   <nav>
+
     <a href="#home">Home</a>
+
     <a href="#post">Post Room</a>
+
     <a href="#rooms">Rooms</a>
+
   </nav>
+
 </header>
 
+
 <div class="container">
+
+
+<!-- ================= HOME ================= -->
 
 <section id="home" class="hero">
 
@@ -312,261 +327,320 @@ footer{
 </section>
 
 
+
 <!-- ================= POST ROOM ================= -->
 
 <section id="post">
 
-<h2>🏠 Post Your Room</h2>
+  <h2>🏠 Post Your Room</h2>
 
-<form id="roomForm">
-
-<label>Owner Name</label>
-
-<input
-  id="name"
-  type="text"
-  placeholder="Owner Name"
-  required>
+  <form id="roomForm">
 
 
-<label>Mobile Number</label>
+    <label>Owner Name</label>
 
-<input
-  id="mobile"
-  type="tel"
-  placeholder="Mobile Number"
-  required>
-
-
-<label>City</label>
-
-<input
-  id="city"
-  type="text"
-  placeholder="City"
-  required>
+    <input
+      id="name"
+      type="text"
+      placeholder="Owner Name"
+      required
+    >
 
 
-<label>Address</label>
+    <label>Mobile Number</label>
 
-<input
-  id="address"
-  type="text"
-  placeholder="Full Address">
-
-
-<label>Property Type</label>
-
-<select id="type" required>
-
-  <option value="">
-    Select Property Type
-  </option>
-
-  <option>Room</option>
-  <option>1 BHK</option>
-  <option>2 BHK</option>
-  <option>3 BHK</option>
-  <option>Flat</option>
-  <option>House</option>
-  <option>PG</option>
-  <option>Shop</option>
-
-</select>
+    <input
+      id="mobile"
+      type="tel"
+      placeholder="Mobile Number"
+      required
+    >
 
 
-<label>Furnishing</label>
+    <label>City</label>
 
-<select id="furnishing">
-
-  <option value="">
-    Select Furnishing
-  </option>
-
-  <option>Unfurnished</option>
-  <option>Semi Furnished</option>
-  <option>Fully Furnished</option>
-
-</select>
+    <input
+      id="city"
+      type="text"
+      placeholder="City"
+      required
+    >
 
 
-<label>Monthly Rent</label>
+    <label>Address</label>
 
-<input
-  id="rent"
-  type="number"
-  min="0"
-  placeholder="Monthly Rent"
-  required>
-
-
-<label>Room Photo</label>
-
-<input
-  id="image"
-  type="file"
-  accept="image/*">
+    <input
+      id="address"
+      type="text"
+      placeholder="Full Address"
+    >
 
 
-<img
-  id="photoPreview"
-  style="
-    display:none;
-    width:100%;
-    max-height:250px;
-    object-fit:cover;
-    border-radius:10px;
-    margin:10px 0;
-  ">
+    <label>Property Type</label>
+
+    <select id="type" required>
+
+      <option value="">
+        Select Property Type
+      </option>
+
+      <option>Room</option>
+
+      <option>1 BHK</option>
+
+      <option>2 BHK</option>
+
+      <option>3 BHK</option>
+
+      <option>Flat</option>
+
+      <option>House</option>
+
+      <option>PG</option>
+
+      <option>Shop</option>
+
+    </select>
 
 
-<label>Description</label>
+    <label>Furnishing</label>
 
-<textarea
-  id="description"
-  placeholder="Room / Property ke baare mein likhein">
-</textarea>
+    <select id="furnishing">
+
+      <option value="">
+        Select Furnishing
+      </option>
+
+      <option>Unfurnished</option>
+
+      <option>Semi Furnished</option>
+
+      <option>Fully Furnished</option>
+
+    </select>
 
 
-<button
-  id="postButton"
-  type="submit">
-  Post Room
-</button>
+    <label>Monthly Rent</label>
+
+    <input
+      id="rent"
+      type="number"
+      min="0"
+      placeholder="Monthly Rent"
+      required
+    >
 
 
-<button
-  id="cancelButton"
-  type="button"
-  class="cancel"
-  style="display:none;">
-  Cancel Edit
-</button>
+    <label>Room Photo</label>
 
-</form>
+    <input
+      id="image"
+      type="file"
+      accept="image/*"
+    >
+
+
+    <img
+      id="photoPreview"
+      style="
+        display:none;
+        width:100%;
+        max-height:250px;
+        object-fit:cover;
+        border-radius:10px;
+        margin:10px 0;
+      "
+    >
+
+
+    <label>Description</label>
+
+    <textarea
+      id="description"
+      placeholder="Room / Property ke baare mein likhein">
+    </textarea>
+
+
+    <button
+      id="postButton"
+      type="submit">
+      Post Room
+    </button>
+
+
+    <button
+      id="cancelButton"
+      type="button"
+      class="cancel"
+      style="display:none;">
+      Cancel Edit
+    </button>
+
+
+  </form>
 
 </section>
 
 
-<!-- ================= SEARCH ================= -->
+
+<!-- ================= SEARCH ROOMS ================= -->
 
 <section id="rooms">
 
-<h2>🏠 Search Rooms</h2>
-
-<div class="search-box">
-
-<div class="search-title">
-🔎 Room Search
-</div>
-
-<div class="search-row">
-
-<div>
-
-<label>City</label>
-
-<input
-  id="searchCity"
-  type="text"
-  placeholder="Example: Indore">
-
-</div>
-
-<div>
-
-<label>Property Type</label>
-
-<select id="searchType">
-
-  <option value="">
-    All Property Types
-  </option>
-
-  <option>Room</option>
-  <option>1 BHK</option>
-  <option>2 BHK</option>
-  <option>3 BHK</option>
-  <option>Flat</option>
-  <option>House</option>
-  <option>PG</option>
-  <option>Shop</option>
-
-</select>
-
-</div>
-
-</div>
+  <h2>🏠 Search Rooms</h2>
 
 
-<label>Maximum Rent</label>
+  <div class="search-box">
 
-<input
-  id="searchMaxRent"
-  type="number"
-  min="0"
-  placeholder="Example: 10000">
+    <div class="search-title">
+      🔎 Room Search
+    </div>
 
 
-<div class="search-buttons">
-
-<button
-  type="button"
-  onclick="searchRooms()">
-  🔎 Search
-</button>
-
-<button
-  type="button"
-  onclick="clearSearch()">
-  🧹 Clear
-</button>
-
-</div>
-
-</div>
+    <div class="search-row">
 
 
-<div id="roomCount" class="room-count">
-  कुल 0 room मिले
-</div>
+      <div>
+
+        <label>City</label>
+
+        <input
+          id="searchCity"
+          type="text"
+          placeholder="Example: Indore"
+        >
+
+      </div>
 
 
-<div id="roomsContainer">
+      <div>
 
-  <div class="loading">
-    🔄 Loading rooms...
+        <label>Property Type</label>
+
+        <select id="searchType">
+
+          <option value="">
+            All Property Types
+          </option>
+
+          <option>Room</option>
+
+          <option>1 BHK</option>
+
+          <option>2 BHK</option>
+
+          <option>3 BHK</option>
+
+          <option>Flat</option>
+
+          <option>House</option>
+
+          <option>PG</option>
+
+          <option>Shop</option>
+
+        </select>
+
+      </div>
+
+
+    </div>
+
+
+    <label>Maximum Rent</label>
+
+    <input
+      id="searchMaxRent"
+      type="number"
+      min="0"
+      placeholder="Example: 10000"
+    >
+
+
+    <div class="search-buttons">
+
+      <button
+        type="button"
+        onclick="searchRooms()">
+        🔎 Search
+      </button>
+
+
+      <button
+        type="button"
+        onclick="clearSearch()">
+        🧹 Clear
+      </button>
+
+    </div>
+
   </div>
 
-</div>
+
+  <div id="roomCount" class="room-count">
+    कुल 0 room मिले
+  </div>
+
+
+  <div id="roomsContainer">
+
+    <div class="loading">
+      🔄 Loading rooms...
+    </div>
+
+  </div>
+
 
 </section>
+
 
 </div>
 
 
 <footer>
+
   🏠 Dream House Rental
+
 </footer>
+
 
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+/* =========================
+   FIREBASE IMPORT
+========================= */
+
+import {
+  initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
 import {
+
   getFirestore,
+
   collection,
+
   getDocs,
+
   addDoc,
+
   updateDoc,
+
   deleteDoc,
+
   doc,
+
   serverTimestamp
+
 }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
 
 
 /* =========================
@@ -595,7 +669,9 @@ const firebaseConfig = {
 
   measurementId:
   "G-06LZEPB9NY"
+
 };
+
 
 
 /* =========================
@@ -613,6 +689,11 @@ const db =
 const roomCollection =
   collection(db, "room");
 
+
+
+/* =========================
+   ELEMENTS
+========================= */
 
 const firebaseStatus =
   document.getElementById(
@@ -632,11 +713,13 @@ const roomCount =
   );
 
 
+
 let allRooms = [];
 
 let editingId = null;
 
 let currentPhotoData = "";
+
 
 
 /* =========================
@@ -645,6 +728,7 @@ let currentPhotoData = "";
 
 firebaseStatus.textContent =
   "✅ Firebase connected successfully";
+
 
 
 /* =========================
@@ -668,105 +752,105 @@ function compressImage(file){
 
 
     reader.onload =
-      function(e){
+    function(e){
 
-        const img =
-          new Image();
-
-
-        img.onload =
-          function(){
-
-            let maxSide = 900;
-
-            let width =
-              img.width;
-
-            let height =
-              img.height;
+      const img =
+        new Image();
 
 
-            if(width > height){
+      img.onload =
+      function(){
 
-              if(width > maxSide){
+        let maxSide = 900;
 
-                height =
-                  Math.round(
-                    height *
-                    maxSide /
-                    width
-                  );
+        let width =
+          img.width;
 
-                width =
-                  maxSide;
-              }
-
-            }else{
-
-              if(height > maxSide){
-
-                width =
-                  Math.round(
-                    width *
-                    maxSide /
-                    height
-                  );
-
-                height =
-                  maxSide;
-              }
-
-            }
+        let height =
+          img.height;
 
 
-            const canvas =
-              document.createElement(
-                "canvas"
+        if(width > height){
+
+          if(width > maxSide){
+
+            height =
+              Math.round(
+                height *
+                maxSide /
+                width
               );
 
+            width =
+              maxSide;
+          }
 
-            canvas.width =
-              width;
+        }else{
 
-            canvas.height =
-              height;
+          if(height > maxSide){
 
-
-            const ctx =
-              canvas.getContext(
-                "2d"
+            width =
+              Math.round(
+                width *
+                maxSide /
+                height
               );
 
+            height =
+              maxSide;
+          }
 
-            ctx.drawImage(
-              img,
-              0,
-              0,
-              width,
-              height
-            );
+        }
 
 
-            const data =
-              canvas.toDataURL(
-                "image/jpeg",
-                0.75
-              );
+        const canvas =
+          document.createElement(
+            "canvas"
+          );
 
 
-            resolve(data);
+        canvas.width =
+          width;
 
-          };
-
-
-        img.onerror =
-          reject;
+        canvas.height =
+          height;
 
 
-        img.src =
-          e.target.result;
+        const ctx =
+          canvas.getContext(
+            "2d"
+          );
+
+
+        ctx.drawImage(
+          img,
+          0,
+          0,
+          width,
+          height
+        );
+
+
+        const data =
+          canvas.toDataURL(
+            "image/jpeg",
+            0.75
+          );
+
+
+        resolve(data);
 
       };
+
+
+      img.onerror =
+        reject;
+
+
+      img.src =
+        e.target.result;
+
+    };
 
 
     reader.onerror =
@@ -778,6 +862,7 @@ function compressImage(file){
   });
 
 }
+
 
 
 /* =========================
@@ -822,16 +907,17 @@ document
 
     }catch(error){
 
-      alert(
-        "Photo load nahi hui."
-      );
-
       console.error(error);
+
+      alert(
+        "❌ Photo load nahi hui."
+      );
 
     }
 
   }
 );
+
 
 
 /* =========================
@@ -913,6 +999,7 @@ async function loadRooms(){
   }
 
 }
+
 
 
 /* =========================
@@ -1029,7 +1116,9 @@ function displayRooms(rooms){
 
         ${imageHTML}
 
+
         <div class="room-info">
+
 
           <h3>
             🏠 ${safeType || "Property"}
@@ -1061,6 +1150,7 @@ function displayRooms(rooms){
 
           <div class="owner-box">
 
+
             <p>
               👤 <b>Owner:</b>
               ${safeName}
@@ -1072,6 +1162,7 @@ function displayRooms(rooms){
               ${room.mobile || ""}
             </p>
 
+
           </div>
 
 
@@ -1081,6 +1172,7 @@ function displayRooms(rooms){
 
 
           <div class="action-buttons">
+
 
             <button
               class="call"
@@ -1117,7 +1209,9 @@ function displayRooms(rooms){
 
             </button>
 
+
           </div>
+
 
         </div>
 
@@ -1132,6 +1226,7 @@ function displayRooms(rooms){
   );
 
 }
+
 
 
 /* =========================
@@ -1233,6 +1328,7 @@ function(){
 };
 
 
+
 /* =========================
    CLEAR SEARCH
 ========================= */
@@ -1268,6 +1364,7 @@ function(){
 };
 
 
+
 /* =========================
    CALL OWNER
 ========================= */
@@ -1285,21 +1382,74 @@ function(number){
   }
 
 
+  let phone =
+    String(number)
+    .replace(
+      /\D/g,
+      ""
+    );
+
+
+  /*
+     07772064727
+          ↓
+     7772064727
+          ↓
+     917772064727
+  */
+
+
+  if(phone.startsWith("0")){
+
+    phone =
+      phone.substring(1);
+
+  }
+
+
+  if(phone.length === 10){
+
+    phone =
+      "91" + phone;
+
+  }
+
+
+  if(
+    phone.length !== 12 ||
+    !phone.startsWith("91")
+  ){
+
+    alert(
+      "❌ Mobile number galat hai.\n\n" +
+      "Example: 7772064727"
+    );
+
+    return;
+  }
+
+
+  const displayNumber =
+    phone.substring(2);
+
+
   const ok =
     confirm(
       "Owner ko call karna hai?\n\n" +
-      number
+      "+91 " +
+      displayNumber
     );
 
 
   if(ok){
 
     window.location.href =
-      "tel:" + number;
+      "tel:+" + phone;
 
   }
 
 };
+
 
 
 /* =========================
@@ -1328,17 +1478,41 @@ function(number,name){
 
 
   /*
-    India ke 10 digit number ke
-    aage 91 automatically add hoga.
+     07772064727
+          ↓
+     7772064727
+          ↓
+     917772064727
   */
 
-  if(
-    phone.length === 10
-  ){
+
+  if(phone.startsWith("0")){
+
+    phone =
+      phone.substring(1);
+
+  }
+
+
+  if(phone.length === 10){
 
     phone =
       "91" + phone;
 
+  }
+
+
+  if(
+    phone.length !== 12 ||
+    !phone.startsWith("91")
+  ){
+
+    alert(
+      "❌ WhatsApp number galat hai.\n\n" +
+      "Example: 7772064727"
+    );
+
+    return;
   }
 
 
@@ -1363,6 +1537,7 @@ function(number,name){
   );
 
 };
+
 
 
 /* =========================
@@ -1550,6 +1725,7 @@ document
 );
 
 
+
 /* =========================
    EDIT ROOM
 ========================= */
@@ -1676,6 +1852,7 @@ function(id){
 };
 
 
+
 /* =========================
    DELETE ROOM
 ========================= */
@@ -1730,6 +1907,7 @@ async function(id){
   }
 
 };
+
 
 
 /* =========================
@@ -1787,6 +1965,7 @@ function resetForm(){
 }
 
 
+
 /* =========================
    CANCEL EDIT
 ========================= */
@@ -1805,11 +1984,13 @@ document
 );
 
 
+
 /* =========================
-   START
+   START APP
 ========================= */
 
 loadRooms();
+
 
 </script>
 
