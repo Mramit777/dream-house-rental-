@@ -6,12 +6,10 @@
 
 <title>Dream House Rental</title>
 
-<!-- WhatsApp / Icons -->
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
-
 *{
   box-sizing:border-box;
   margin:0;
@@ -23,148 +21,252 @@ html{
 }
 
 body{
-  font-family:Arial,sans-serif;
-  background:#f4f6f8;
-  color:#222;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f7fb;
+  color:#182230;
   line-height:1.5;
+}
+
+button,input,select,textarea{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
 }
 
 a{
   text-decoration:none;
 }
 
+/* ================= HEADER ================= */
+
 header{
-  background:#1e3a8a;
-  color:white;
-  padding:15px 10px;
   position:sticky;
   top:0;
   z-index:1000;
-  box-shadow:0 2px 8px rgba(0,0,0,.2);
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid #e8ebf0;
+  box-shadow:0 3px 18px rgba(15,23,42,.06);
 }
 
 .header-inner{
-  max-width:1100px;
+  max-width:1150px;
   margin:auto;
+  min-height:68px;
+  padding:10px 16px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:10px;
+  gap:15px;
 }
 
 .logo{
-  font-size:21px;
-  font-weight:bold;
+  color:#172554;
+  font-size:20px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.logo span{
+  color:#2563eb;
 }
 
 nav{
   display:flex;
-  gap:6px;
+  align-items:center;
+  gap:5px;
   flex-wrap:wrap;
 }
 
 nav a{
-  color:white;
-  padding:7px 9px;
-  border-radius:6px;
+  color:#475569;
   font-size:14px;
+  font-weight:700;
+  padding:9px 11px;
+  border-radius:9px;
 }
 
 nav a:hover{
-  background:rgba(255,255,255,.15);
+  background:#eff6ff;
+  color:#2563eb;
 }
+
+/* ================= MAIN ================= */
 
 .container{
   width:94%;
-  max-width:1100px;
-  margin:20px auto;
+  max-width:1150px;
+  margin:22px auto;
 }
 
+/* ================= HERO ================= */
+
 .hero{
-  background:linear-gradient(135deg,#2563eb,#1e3a8a);
+  position:relative;
+  overflow:hidden;
+  border-radius:24px;
+  padding:48px 25px;
   color:white;
-  padding:35px 20px;
-  border-radius:15px;
   text-align:center;
-  margin-bottom:20px;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(255,255,255,.18),transparent 25%),
+    radial-gradient(circle at 85% 80%,rgba(255,255,255,.12),transparent 30%),
+    linear-gradient(135deg,#172554,#2563eb 55%,#4f46e5);
+  box-shadow:0 15px 40px rgba(37,99,235,.22);
+}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:rgba(255,255,255,.07);
+  right:-50px;
+  top:-60px;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  background:rgba(255,255,255,.06);
+  left:-45px;
+  bottom:-50px;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+.hero-badge{
+  display:inline-block;
+  padding:7px 13px;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:30px;
+  font-size:13px;
+  margin-bottom:14px;
 }
 
 .hero h1{
-  font-size:28px;
-  margin-bottom:8px;
+  font-size:36px;
+  margin-bottom:9px;
+  font-weight:800;
 }
 
 .hero p{
   font-size:16px;
+  opacity:.92;
+  margin-bottom:22px;
 }
+
+.hero-button{
+  display:inline-block;
+  padding:12px 19px;
+  background:white;
+  color:#1d4ed8;
+  border-radius:10px;
+  font-weight:800;
+}
+
+/* ================= SECTIONS ================= */
 
 section{
   background:white;
-  border-radius:14px;
-  padding:20px;
+  border:1px solid #e8ebf0;
+  border-radius:18px;
+  padding:22px;
   margin-bottom:20px;
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  box-shadow:0 5px 22px rgba(15,23,42,.05);
 }
 
-h2{
-  color:#1e3a8a;
-  margin-bottom:15px;
-  font-size:23px;
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.section-title h2{
+  color:#172554;
+  font-size:22px;
+}
+
+.section-icon{
+  width:40px;
+  height:40px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eff6ff;
+  color:#2563eb;
+  font-size:18px;
+}
+
+/* ================= FIREBASE ================= */
+
+.firebase-status{
+  background:#ecfdf5;
+  border:1px solid #bbf7d0;
+  color:#166534;
+  padding:11px 14px;
+  border-radius:11px;
+  margin-bottom:18px;
+  font-weight:700;
+  font-size:14px;
+}
+
+/* ================= AUTH ================= */
+
+.auth-box{
+  max-width:600px;
 }
 
 label{
   display:block;
-  font-weight:bold;
-  margin-top:10px;
-  margin-bottom:5px;
+  font-size:14px;
+  font-weight:700;
+  color:#334155;
+  margin:11px 0 6px;
 }
 
 input,
 select,
 textarea{
   width:100%;
-  padding:12px;
-  border:1px solid #ccc;
-  border-radius:8px;
+  border:1px solid #d8dee8;
+  background:#fff;
+  color:#182230;
+  padding:12px 13px;
+  border-radius:10px;
   font-size:15px;
-  background:white;
-}
-
-textarea{
-  min-height:90px;
-  resize:vertical;
+  outline:none;
+  transition:.2s;
 }
 
 input:focus,
 select:focus,
 textarea:focus{
-  outline:none;
-  border-color:#2563eb;
-  box-shadow:0 0 0 2px rgba(37,99,235,.12);
+  border-color:#60a5fa;
+  box-shadow:0 0 0 3px rgba(37,99,235,.09);
 }
 
-button{
-  border:none;
-  border-radius:8px;
-  padding:12px 16px;
-  font-size:15px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.primary{
-  background:#2563eb;
-  color:white;
-}
-
-.primary:hover{
-  background:#1d4ed8;
+textarea{
+  min-height:95px;
+  resize:vertical;
 }
 
 .auth-buttons{
   display:flex;
   gap:10px;
-  margin-top:15px;
+  margin-top:16px;
 }
 
 .auth-buttons button{
@@ -190,52 +292,42 @@ button{
 
 .user-box{
   background:#ecfdf5;
-  border:1px solid #86efac;
-  padding:12px;
-  border-radius:8px;
+  border:1px solid #bbf7d0;
+  border-radius:11px;
+  padding:13px;
   color:#166534;
   word-break:break-word;
 }
 
 .login-required{
   background:#fff7ed;
-  border:1px solid #fdba74;
-  padding:15px;
-  border-radius:10px;
+  border:1px solid #fed7aa;
   color:#9a3412;
+  border-radius:11px;
+  padding:15px;
+  font-weight:600;
 }
 
-.message{
-  margin-top:10px;
-  padding:10px;
-  border-radius:7px;
-  display:none;
-}
+/* ================= FORMS ================= */
 
-.success{
-  background:#dcfce7;
-  color:#166534;
-}
-
-.error{
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-.search-grid{
+.form-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  grid-template-columns:1fr 1fr;
+  gap:2px 14px;
 }
 
-.search-buttons{
-  display:flex;
-  gap:10px;
-  margin-top:15px;
+.form-full{
+  grid-column:1/-1;
 }
 
-.search-buttons button{
-  flex:1;
+.primary{
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  color:white;
+}
+
+.primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 7px 18px rgba(37,99,235,.2);
 }
 
 .clear{
@@ -243,10 +335,90 @@ button{
   color:white;
 }
 
-.status{
-  margin:15px 0;
-  font-weight:bold;
+.preview{
+  width:100%;
+  max-width:430px;
+  max-height:260px;
+  object-fit:cover;
+  border-radius:12px;
+  margin-top:10px;
+  display:none;
+  border:1px solid #e2e8f0;
 }
+
+.small{
+  color:#64748b;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.message{
+  display:none;
+  margin-top:12px;
+  padding:11px;
+  border-radius:9px;
+  font-weight:600;
+  font-size:14px;
+}
+
+.success{
+  display:block;
+  background:#ecfdf5;
+  color:#166534;
+  border:1px solid #bbf7d0;
+}
+
+.error{
+  display:block;
+  background:#fef2f2;
+  color:#991b1b;
+  border:1px solid #fecaca;
+}
+
+/* ================= SEARCH ================= */
+
+.search-box{
+  background:linear-gradient(135deg,#f8fafc,#eff6ff);
+  border:1px solid #dbeafe;
+  border-radius:15px;
+  padding:16px;
+}
+
+.search-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+}
+
+.search-label{
+  margin-top:0;
+}
+
+.search-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+
+.search-buttons button{
+  flex:1;
+}
+
+.status-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:18px 0 13px;
+}
+
+.status{
+  font-size:15px;
+  font-weight:800;
+  color:#334155;
+}
+
+/* ================= ROOMS ================= */
 
 .rooms-grid{
   display:grid;
@@ -255,62 +427,111 @@ button{
 }
 
 .room-card{
-  background:white;
-  border:1px solid #ddd;
-  border-radius:14px;
   overflow:hidden;
-  box-shadow:0 3px 10px rgba(0,0,0,.08);
+  background:white;
+  border:1px solid #e2e8f0;
+  border-radius:17px;
+  box-shadow:0 5px 18px rgba(15,23,42,.07);
+  transition:.25s;
+}
+
+.room-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px rgba(15,23,42,.12);
+}
+
+.room-image-wrap{
+  position:relative;
+  width:100%;
+  height:215px;
+  background:#e2e8f0;
 }
 
 .room-photo{
   width:100%;
-  height:210px;
+  height:100%;
   object-fit:cover;
   display:block;
-  background:#e5e7eb;
+}
+
+.photo-label{
+  position:absolute;
+  top:11px;
+  left:11px;
+  background:rgba(15,23,42,.72);
+  color:white;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
 }
 
 .room-content{
   padding:15px;
 }
 
+.room-title-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
 .room-title{
-  font-size:20px;
-  font-weight:bold;
-  color:#1e3a8a;
-  margin-bottom:5px;
+  color:#172554;
+  font-size:19px;
+  font-weight:800;
 }
 
 .rent{
   color:#15803d;
-  font-size:20px;
-  font-weight:bold;
-  margin:8px 0;
+  font-size:19px;
+  font-weight:800;
+  margin:7px 0 12px;
 }
 
-.info{
-  font-size:14px;
-  margin:5px 0;
+.rent span{
+  font-size:12px;
+  color:#64748b;
+  font-weight:500;
+}
+
+.room-info{
+  display:flex;
+  gap:8px;
+  margin:7px 0;
+  color:#475569;
+  font-size:13px;
+}
+
+.room-info i{
+  width:17px;
+  color:#2563eb;
+  margin-top:3px;
 }
 
 .description{
   background:#f8fafc;
+  border-radius:9px;
   padding:9px;
-  border-radius:7px;
-  margin-top:8px;
-  font-size:14px;
+  margin-top:10px;
+  color:#475569;
+  font-size:13px;
 }
 
 .card-buttons{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-  margin-top:12px;
+  margin-top:13px;
 }
 
 .card-buttons button{
   width:100%;
   padding:10px 6px;
+  border:0;
+  border-radius:9px;
+  font-weight:700;
 }
 
 .call{
@@ -333,59 +554,78 @@ button{
   color:white;
 }
 
+.card-buttons i{
+  margin-right:3px;
+}
+
 .empty{
+  grid-column:1/-1;
   text-align:center;
-  padding:30px 15px;
+  padding:35px 15px;
+  border:1px dashed #cbd5e1;
   background:#f8fafc;
-  border-radius:10px;
-  color:#555;
+  border-radius:14px;
+  color:#64748b;
 }
 
-.preview{
-  width:100%;
-  max-height:250px;
-  object-fit:contain;
-  margin-top:10px;
-  border-radius:10px;
-  display:none;
-  background:#eee;
+.empty-icon{
+  font-size:38px;
+  margin-bottom:8px;
 }
 
-.small{
-  font-size:12px;
-  color:#666;
-  margin-top:5px;
-}
-
-.firebase-status{
-  background:#dcfce7;
-  color:#166534;
-  padding:10px;
-  border-radius:8px;
-  margin-bottom:15px;
-  font-weight:bold;
-}
+/* ================= FOOTER ================= */
 
 footer{
-  background:#111827;
-  color:white;
-  text-align:center;
-  padding:20px;
   margin-top:30px;
+  background:#0f172a;
+  color:#cbd5e1;
+  text-align:center;
+  padding:25px 15px;
 }
 
-@media(max-width:800px){
+.footer-title{
+  color:white;
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+  .rooms-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:700px){
 
   .header-inner{
     flex-direction:column;
+    padding:10px;
   }
 
   nav{
     justify-content:center;
   }
 
-  .search-grid{
+  .hero{
+    padding:36px 18px;
+  }
+
+  .hero h1{
+    font-size:29px;
+  }
+
+  .search-grid,
+  .form-grid{
     grid-template-columns:1fr;
+  }
+
+  .form-full{
+    grid-column:auto;
   }
 
   .rooms-grid{
@@ -394,41 +634,56 @@ footer{
 
 }
 
-@media(max-width:500px){
+@media(max-width:480px){
 
   .container{
     width:96%;
+    margin:15px auto;
   }
 
   section{
-    padding:15px;
+    padding:16px;
   }
 
-  .hero{
-    padding:25px 15px;
+  nav a{
+    font-size:13px;
+    padding:7px 8px;
   }
 
   .hero h1{
-    font-size:24px;
+    font-size:25px;
+  }
+
+  .hero p{
+    font-size:14px;
   }
 
   .auth-buttons{
     flex-direction:column;
   }
 
-}
+  .search-buttons{
+    flex-direction:column;
+  }
 
+  .room-image-wrap{
+    height:220px;
+  }
+
+}
 </style>
 </head>
 
 <body>
+
+<!-- ================= HEADER ================= -->
 
 <header>
 
 <div class="header-inner">
 
 <div class="logo">
-🏠 Dream House Rental
+🏠 <span>Dream House</span> Rental
 </div>
 
 <nav>
@@ -445,31 +700,60 @@ footer{
 
 <main class="container">
 
-<!-- HOME -->
+<!-- ================= HERO ================= -->
 
 <section id="home" class="hero">
+
+<div class="hero-content">
+
+<div class="hero-badge">
+<i class="fa-solid fa-house"></i>
+Find Your Perfect Property
+</div>
 
 <h1>🏠 Dream House Rental</h1>
 
 <p>
-Room, BHK, Flat, House, PG aur Shop search karein.
+Room, BHK, Flat, House, PG aur Shop —
+apni जरूरत के हिसाब से property खोजें।
 </p>
+
+<a class="hero-button" href="#rooms">
+<i class="fa-solid fa-magnifying-glass"></i>
+&nbsp; Find a Room
+</a>
+
+</div>
 
 </section>
 
 
-<!-- FIREBASE STATUS -->
+<!-- ================= FIREBASE STATUS ================= -->
 
-<div class="firebase-status" id="firebaseStatus">
+<div
+id="firebaseStatus"
+class="firebase-status"
+>
 ⏳ Firebase connecting...
 </div>
 
 
-<!-- AUTH -->
+<!-- ================= LOGIN ================= -->
 
 <section id="auth">
 
-<h2>🔐 Login / Signup</h2>
+<div class="section-title">
+
+<div class="section-icon">
+<i class="fa-solid fa-user-lock"></i>
+</div>
+
+<h2>Login / Signup</h2>
+
+</div>
+
+
+<div class="auth-box">
 
 <div id="loggedOutBox">
 
@@ -482,6 +766,7 @@ placeholder="example@gmail.com"
 autocomplete="email"
 >
 
+
 <label>Password</label>
 
 <input
@@ -491,6 +776,7 @@ placeholder="Minimum 6 characters"
 autocomplete="current-password"
 >
 
+
 <div class="auth-buttons">
 
 <button
@@ -498,7 +784,8 @@ type="button"
 class="signup"
 onclick="signupUser()"
 >
-📝 Signup
+<i class="fa-solid fa-user-plus"></i>
+Signup
 </button>
 
 <button
@@ -506,10 +793,12 @@ type="button"
 class="login"
 onclick="loginUser()"
 >
-🔐 Login
+<i class="fa-solid fa-right-to-bracket"></i>
+Login
 </button>
 
 </div>
+
 
 <div
 id="authMessage"
@@ -519,11 +808,15 @@ class="message"
 </div>
 
 
-<div id="loggedInBox" style="display:none;">
+<div
+id="loggedInBox"
+style="display:none;"
+>
 
 <div class="user-box">
 
-✅ Logged in as:
+<i class="fa-solid fa-circle-check"></i>
+Logged in as:
 
 <br>
 
@@ -536,28 +829,39 @@ type="button"
 class="logout"
 onclick="logoutUser()"
 >
-🚪 Logout
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
 </button>
+
+</div>
 
 </div>
 
 </section>
 
 
-<!-- POST -->
+<!-- ================= POST ROOM ================= -->
 
 <section id="post">
 
-<h2>🏠 Post Your Room</h2>
+<div class="section-title">
+
+<div class="section-icon">
+<i class="fa-solid fa-house-circle-plus"></i>
+</div>
+
+<h2>Post Your Room</h2>
+
+</div>
 
 
 <div
 id="postLoginMessage"
 class="login-required"
 >
-
-🔐 Room post करने के लिए पहले Login करें।
-
+<i class="fa-solid fa-lock"></i>
+&nbsp;
+Room post करने के लिए पहले Login करें।
 </div>
 
 
@@ -565,6 +869,10 @@ class="login-required"
 id="roomForm"
 style="display:none;"
 >
+
+<div class="form-grid">
+
+<div>
 
 <label>Owner Name</label>
 
@@ -575,6 +883,10 @@ placeholder="Owner Name"
 required
 >
 
+</div>
+
+
+<div>
 
 <label>Mobile Number</label>
 
@@ -585,6 +897,10 @@ placeholder="10 digit mobile number"
 required
 >
 
+</div>
+
+
+<div>
 
 <label>City</label>
 
@@ -595,6 +911,10 @@ placeholder="City"
 required
 >
 
+</div>
+
+
+<div>
 
 <label>Address</label>
 
@@ -605,37 +925,44 @@ placeholder="Full Address"
 required
 >
 
+</div>
+
+
+<div>
 
 <label>Property Type</label>
 
-<select id="type" required>
+<select
+id="type"
+required
+>
 
 <option value="">
 Select Property Type
 </option>
 
 <option value="Room">Room</option>
-
 <option value="1 BHK">1 BHK</option>
-
 <option value="2 BHK">2 BHK</option>
-
 <option value="3 BHK">3 BHK</option>
-
 <option value="Flat">Flat</option>
-
 <option value="House">House</option>
-
 <option value="PG">PG</option>
-
 <option value="Shop">Shop</option>
 
 </select>
 
+</div>
+
+
+<div>
 
 <label>Furnishing</label>
 
-<select id="furnishing" required>
+<select
+id="furnishing"
+required
+>
 
 <option value="">
 Select Furnishing
@@ -655,17 +982,25 @@ Fully Furnished
 
 </select>
 
+</div>
+
+
+<div>
 
 <label>Monthly Rent</label>
 
 <input
 id="rent"
 type="number"
-min="0"
+min="1"
 placeholder="Monthly Rent ₹"
 required
 >
 
+</div>
+
+
+<div>
 
 <label>Room Photo</label>
 
@@ -675,17 +1010,26 @@ type="file"
 accept="image/*"
 >
 
+</div>
+
+
+<div class="form-full">
+
 <img
 id="photoPreview"
 class="preview"
 alt="Photo Preview"
 >
 
-
 <div class="small">
-Photo automatically compress होगी ताकि Firestore में आसानी से save हो सके।
+<i class="fa-solid fa-compress"></i>
+Photo automatically compress होगी।
 </div>
 
+</div>
+
+
+<div class="form-full">
 
 <label>Description</label>
 
@@ -693,6 +1037,10 @@ Photo automatically compress होगी ताकि Firestore में आ�
 id="description"
 placeholder="Room की जानकारी लिखें..."
 ></textarea>
+
+</div>
+
+</div>
 
 
 <div class="auth-buttons">
@@ -702,7 +1050,8 @@ id="postButton"
 type="submit"
 class="primary"
 >
-🏠 Post Room
+<i class="fa-solid fa-house-circle-plus"></i>
+Post Room
 </button>
 
 <button
@@ -712,7 +1061,8 @@ class="clear"
 style="display:none;"
 onclick="cancelEdit()"
 >
-❌ Cancel
+<i class="fa-solid fa-xmark"></i>
+Cancel
 </button>
 
 </div>
@@ -728,18 +1078,31 @@ class="message"
 </section>
 
 
-<!-- SEARCH -->
+<!-- ================= SEARCH ================= -->
 
 <section id="rooms">
 
-<h2>🏠 Search Rooms</h2>
+<div class="section-title">
 
+<div class="section-icon">
+<i class="fa-solid fa-magnifying-glass"></i>
+</div>
+
+<h2>Find Your Room</h2>
+
+</div>
+
+
+<div class="search-box">
 
 <div class="search-grid">
 
 <div>
 
-<label>City</label>
+<label class="search-label">
+<i class="fa-solid fa-location-dot"></i>
+City
+</label>
 
 <input
 id="searchCity"
@@ -752,7 +1115,10 @@ placeholder="Enter city"
 
 <div>
 
-<label>Property Type</label>
+<label class="search-label">
+<i class="fa-solid fa-building"></i>
+Property Type
+</label>
 
 <select id="searchType">
 
@@ -761,19 +1127,12 @@ All Property Types
 </option>
 
 <option value="Room">Room</option>
-
 <option value="1 BHK">1 BHK</option>
-
 <option value="2 BHK">2 BHK</option>
-
 <option value="3 BHK">3 BHK</option>
-
 <option value="Flat">Flat</option>
-
 <option value="House">House</option>
-
 <option value="PG">PG</option>
-
 <option value="Shop">Shop</option>
 
 </select>
@@ -783,7 +1142,10 @@ All Property Types
 
 <div>
 
-<label>Maximum Rent</label>
+<label class="search-label">
+<i class="fa-solid fa-indian-rupee-sign"></i>
+Maximum Rent
+</label>
 
 <input
 id="searchRent"
@@ -804,7 +1166,8 @@ type="button"
 class="primary"
 onclick="searchRooms()"
 >
-🔎 Search
+<i class="fa-solid fa-magnifying-glass"></i>
+Search
 </button>
 
 <button
@@ -812,11 +1175,16 @@ type="button"
 class="clear"
 onclick="clearSearch()"
 >
-🧹 Clear
+<i class="fa-solid fa-broom"></i>
+Clear
 </button>
 
 </div>
 
+</div>
+
+
+<div class="status-row">
 
 <div
 class="status"
@@ -825,12 +1193,13 @@ id="roomCount"
 ⏳ Rooms loading...
 </div>
 
+</div>
+
 
 <div
 id="roomsContainer"
 class="rooms-grid"
 >
-
 </div>
 
 </section>
@@ -838,18 +1207,26 @@ class="rooms-grid"
 </main>
 
 
+<!-- ================= FOOTER ================= -->
+
 <footer>
 
+<div class="footer-title">
 🏠 Dream House Rental
+</div>
 
-<br>
+<div>
+Find • Rent • Live
+</div>
 
+<div style="margin-top:8px;font-size:12px;">
 © 2026 All Rights Reserved
+</div>
 
 </footer>
 
 
-<!-- FIREBASE -->
+<!-- ================= FIREBASE ================= -->
 
 <script type="module">
 
@@ -879,9 +1256,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-/* ================================
-   FIREBASE CONFIG
-================================ */
+/* ================= FIREBASE CONFIG ================= */
 
 const firebaseConfig = {
 
@@ -909,9 +1284,7 @@ const firebaseConfig = {
 };
 
 
-/* ================================
-   FIREBASE INITIALIZE
-================================ */
+/* ================= INITIALIZE ================= */
 
 let app;
 let db;
@@ -919,27 +1292,35 @@ let auth;
 
 try{
 
-  app = initializeApp(firebaseConfig);
+  app =
+  initializeApp(firebaseConfig);
 
-  db = getFirestore(app,"default");
+  db =
+  getFirestore(app,"default");
 
-  auth = getAuth(app);
+  auth =
+  getAuth(app);
 
-  document.getElementById("firebaseStatus").innerText =
+  document
+  .getElementById("firebaseStatus")
+  .innerHTML =
   "✅ Firebase connected successfully";
 
 }catch(error){
 
   console.error(error);
 
-  document.getElementById("firebaseStatus").innerText =
-  "❌ Firebase connection failed: " + error.message;
+  document
+  .getElementById("firebaseStatus")
+  .innerHTML =
+  "❌ Firebase connection failed: " +
+  escapeHtml(error.message);
 
 }
 
 
 const roomCollection =
-  collection(db,"room");
+collection(db,"room");
 
 
 let currentUser = null;
@@ -949,49 +1330,47 @@ let editingId = null;
 let currentPhotoData = "";
 
 
-/* ================================
-   FALLBACK IMAGE
-================================ */
-
 const FALLBACK_IMAGE =
-"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80";
+"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=85";
 
 
-/* ================================
-   MESSAGE
-================================ */
+/* ================= MESSAGE ================= */
 
 function showMessage(
-  elementId,
+  id,
   message,
-  type="success"
+  type
 ){
 
   const el =
-  document.getElementById(elementId);
+  document.getElementById(id);
 
-  el.innerText = message;
+  el.innerText =
+  message;
 
   el.className =
   "message " + type;
 
-  el.style.display = "block";
+  el.style.display =
+  "block";
 
 }
 
 
-/* ================================
-   SIGNUP
-================================ */
+/* ================= SIGNUP ================= */
 
-window.signupUser = async function(){
+window.signupUser =
+async function(){
 
   const email =
-  document.getElementById("authEmail")
-  .value.trim();
+  document
+  .getElementById("authEmail")
+  .value
+  .trim();
 
   const password =
-  document.getElementById("authPassword")
+  document
+  .getElementById("authPassword")
   .value;
 
 
@@ -1029,40 +1408,59 @@ window.signupUser = async function(){
       password
     );
 
+
     showMessage(
       "authMessage",
       "✅ Signup successful!",
       "success"
     );
 
-    document.getElementById("authPassword").value = "";
+
+    document
+    .getElementById("authPassword")
+    .value = "";
+
 
   }catch(error){
 
     console.error(error);
 
-    let msg = error.message;
+    let msg =
+    error.message;
 
-    if(error.code === "auth/email-already-in-use"){
+
+    if(
+      error.code ===
+      "auth/email-already-in-use"
+    ){
 
       msg =
       "यह email पहले से registered है। Login करें।";
 
     }
 
-    if(error.code === "auth/invalid-email"){
+
+    if(
+      error.code ===
+      "auth/invalid-email"
+    ){
 
       msg =
       "Email सही नहीं है।";
 
     }
 
-    if(error.code === "auth/weak-password"){
+
+    if(
+      error.code ===
+      "auth/weak-password"
+    ){
 
       msg =
       "Password बहुत छोटा है।";
 
     }
+
 
     showMessage(
       "authMessage",
@@ -1075,18 +1473,20 @@ window.signupUser = async function(){
 };
 
 
-/* ================================
-   LOGIN
-================================ */
+/* ================= LOGIN ================= */
 
-window.loginUser = async function(){
+window.loginUser =
+async function(){
 
   const email =
-  document.getElementById("authEmail")
-  .value.trim();
+  document
+  .getElementById("authEmail")
+  .value
+  .trim();
 
   const password =
-  document.getElementById("authPassword")
+  document
+  .getElementById("authPassword")
   .value;
 
 
@@ -1111,13 +1511,18 @@ window.loginUser = async function(){
       password
     );
 
+
     showMessage(
       "authMessage",
       "✅ Login successful!",
       "success"
     );
 
-    document.getElementById("authPassword").value = "";
+
+    document
+    .getElementById("authPassword")
+    .value = "";
+
 
   }catch(error){
 
@@ -1125,6 +1530,7 @@ window.loginUser = async function(){
 
     let msg =
     "Login failed.";
+
 
     if(
       error.code ===
@@ -1136,6 +1542,7 @@ window.loginUser = async function(){
 
     }
 
+
     if(
       error.code ===
       "auth/user-not-found"
@@ -1146,6 +1553,7 @@ window.loginUser = async function(){
 
     }
 
+
     if(
       error.code ===
       "auth/wrong-password"
@@ -1155,6 +1563,7 @@ window.loginUser = async function(){
       "Password गलत है।";
 
     }
+
 
     showMessage(
       "authMessage",
@@ -1167,11 +1576,10 @@ window.loginUser = async function(){
 };
 
 
-/* ================================
-   LOGOUT
-================================ */
+/* ================= LOGOUT ================= */
 
-window.logoutUser = async function(){
+window.logoutUser =
+async function(){
 
   try{
 
@@ -1186,31 +1594,40 @@ window.logoutUser = async function(){
 };
 
 
-/* ================================
-   AUTH STATE
-================================ */
+/* ================= AUTH STATE ================= */
 
 onAuthStateChanged(
   auth,
   user => {
 
-    currentUser = user || null;
+    currentUser =
+    user || null;
 
 
     const loggedOutBox =
-    document.getElementById("loggedOutBox");
+    document.getElementById(
+      "loggedOutBox"
+    );
 
     const loggedInBox =
-    document.getElementById("loggedInBox");
+    document.getElementById(
+      "loggedInBox"
+    );
 
     const userEmail =
-    document.getElementById("userEmail");
+    document.getElementById(
+      "userEmail"
+    );
 
     const roomForm =
-    document.getElementById("roomForm");
+    document.getElementById(
+      "roomForm"
+    );
 
     const postLoginMessage =
-    document.getElementById("postLoginMessage");
+    document.getElementById(
+      "postLoginMessage"
+    );
 
 
     if(user){
@@ -1253,9 +1670,7 @@ onAuthStateChanged(
 );
 
 
-/* ================================
-   IMAGE COMPRESS
-================================ */
+/* ================= IMAGE COMPRESS ================= */
 
 function compressImage(file){
 
@@ -1266,15 +1681,18 @@ function compressImage(file){
       new FileReader();
 
 
-      reader.onload = function(e){
+      reader.onload =
+      function(e){
 
         const img =
         new Image();
 
 
-        img.onload = function(){
+        img.onload =
+        function(){
 
-          const maxSide = 900;
+          const maxSide =
+          900;
 
           let width =
           img.width;
@@ -1315,7 +1733,9 @@ function compressImage(file){
 
 
           const canvas =
-          document.createElement("canvas");
+          document.createElement(
+            "canvas"
+          );
 
 
           canvas.width =
@@ -1326,7 +1746,9 @@ function compressImage(file){
 
 
           const ctx =
-          canvas.getContext("2d");
+          canvas.getContext(
+            "2d"
+          );
 
 
           ctx.drawImage(
@@ -1338,7 +1760,8 @@ function compressImage(file){
           );
 
 
-          let quality = .75;
+          let quality =
+          .75;
 
           let dataUrl =
           canvas.toDataURL(
@@ -1346,8 +1769,6 @@ function compressImage(file){
             quality
           );
 
-
-          /* कोशिश करें कि photo बहुत बड़ा न हो */
 
           while(
             dataUrl.length > 420000 &&
@@ -1372,7 +1793,9 @@ function compressImage(file){
 
         img.onerror =
         () => reject(
-          new Error("Photo load नहीं हुई")
+          new Error(
+            "Photo load नहीं हुई"
+          )
         );
 
 
@@ -1384,7 +1807,9 @@ function compressImage(file){
 
       reader.onerror =
       () => reject(
-        new Error("Photo read नहीं हुई")
+        new Error(
+          "Photo read नहीं हुई"
+        )
       );
 
 
@@ -1396,9 +1821,7 @@ function compressImage(file){
 }
 
 
-/* ================================
-   PHOTO PREVIEW
-================================ */
+/* ================= PHOTO PREVIEW ================= */
 
 document
 .getElementById("image")
@@ -1424,7 +1847,9 @@ document
 
 
       const preview =
-      document.getElementById("photoPreview");
+      document.getElementById(
+        "photoPreview"
+      );
 
 
       preview.src =
@@ -1447,9 +1872,7 @@ document
 );
 
 
-/* ================================
-   POST / UPDATE ROOM
-================================ */
+/* ================= POST / UPDATE ================= */
 
 document
 .getElementById("roomForm")
@@ -1472,60 +1895,78 @@ document
 
 
     const button =
-    document.getElementById("postButton");
+    document.getElementById(
+      "postButton"
+    );
 
 
     button.disabled =
     true;
 
-    button.innerText =
+
+    button.innerHTML =
     editingId
-    ? "⏳ Updating..."
-    : "⏳ Saving...";
+    ?
+    '<i class="fa-solid fa-spinner fa-spin"></i> Updating...'
+    :
+    '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
 
     try{
 
       const name =
-      document.getElementById("name")
-      .value.trim();
+      document
+      .getElementById("name")
+      .value
+      .trim();
 
 
       const mobile =
-      document.getElementById("mobile")
-      .value.trim();
+      document
+      .getElementById("mobile")
+      .value
+      .trim();
 
 
       const city =
-      document.getElementById("city")
-      .value.trim();
+      document
+      .getElementById("city")
+      .value
+      .trim();
 
 
       const address =
-      document.getElementById("address")
-      .value.trim();
+      document
+      .getElementById("address")
+      .value
+      .trim();
 
 
       const type =
-      document.getElementById("type")
+      document
+      .getElementById("type")
       .value;
 
 
       const furnishing =
-      document.getElementById("furnishing")
+      document
+      .getElementById("furnishing")
       .value;
 
 
       const rent =
       Number(
-        document.getElementById("rent")
+        document
+        .getElementById("rent")
         .value
       );
 
 
       const description =
-      document.getElementById("description")
-      .value.trim();
+      document
+      .getElementById("description")
+      .value
+      .trim();
 
 
       if(
@@ -1561,8 +2002,7 @@ document
 
         rent:rent,
 
-        description:
-        description,
+        description:description,
 
         updatedAt:
         serverTimestamp()
@@ -1577,8 +2017,6 @@ document
 
       }
 
-
-      /* नया room */
 
       if(!editingId){
 
@@ -1604,11 +2042,7 @@ document
           "success"
         );
 
-      }
-
-      /* पुराना room update */
-
-      else{
+      }else{
 
         const roomRef =
         doc(
@@ -1639,7 +2073,7 @@ document
 
 
       setTimeout(
-        () => {
+        function(){
 
           document
           .getElementById("rooms")
@@ -1668,10 +2102,13 @@ document
       button.disabled =
       false;
 
-      button.innerText =
+
+      button.innerHTML =
       editingId
-      ? "✏️ Update Room"
-      : "🏠 Post Room";
+      ?
+      '<i class="fa-solid fa-pen"></i> Update Room'
+      :
+      '<i class="fa-solid fa-house-circle-plus"></i> Post Room';
 
     }
 
@@ -1679,9 +2116,7 @@ document
 );
 
 
-/* ================================
-   RESET FORM
-================================ */
+/* ================= RESET ================= */
 
 function resetForm(){
 
@@ -1690,20 +2125,24 @@ function resetForm(){
   .reset();
 
 
-  currentPhotoData = "";
+  currentPhotoData =
+  "";
 
-  editingId = null;
+  editingId =
+  null;
 
 
-  document
-  .getElementById("photoPreview")
-  .style.display =
+  const preview =
+  document.getElementById(
+    "photoPreview"
+  );
+
+
+  preview.style.display =
   "none";
 
-
-  document
-  .getElementById("photoPreview")
-  .src = "";
+  preview.src =
+  "";
 
 
   document
@@ -1714,15 +2153,13 @@ function resetForm(){
 
   document
   .getElementById("postButton")
-  .innerText =
-  "🏠 Post Room";
+  .innerHTML =
+  '<i class="fa-solid fa-house-circle-plus"></i> Post Room';
 
 }
 
 
-/* ================================
-   CANCEL EDIT
-================================ */
+/* ================= CANCEL EDIT ================= */
 
 window.cancelEdit =
 function(){
@@ -1737,9 +2174,7 @@ function(){
 };
 
 
-/* ================================
-   LOAD ROOMS
-================================ */
+/* ================= LOAD ROOMS ================= */
 
 async function loadRooms(){
 
@@ -1748,7 +2183,6 @@ async function loadRooms(){
     "roomsContainer"
   );
 
-
   const count =
   document.getElementById(
     "roomCount"
@@ -1756,7 +2190,14 @@ async function loadRooms(){
 
 
   container.innerHTML =
-  "<div class='empty'>⏳ Rooms loading...</div>";
+  `
+  <div class="empty">
+    <div class="empty-icon">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
+    Rooms loading...
+  </div>
+  `;
 
 
   try{
@@ -1774,8 +2215,11 @@ async function loadRooms(){
       docSnap => {
 
         rooms.push({
+
           id:docSnap.id,
+
           ...docSnap.data()
+
         });
 
       }
@@ -1797,33 +2241,43 @@ async function loadRooms(){
     );
 
 
-    renderRooms(rooms);
+    renderRooms(
+      rooms
+    );
 
 
   }catch(error){
 
     console.error(error);
 
+
     count.innerText =
     "❌ Rooms load नहीं हुए";
 
 
     container.innerHTML =
+    `
+    <div class="empty">
 
-    `<div class="empty">
-      ❌ Error loading rooms
+      <div class="empty-icon">
+        ❌
+      </div>
+
+      Error loading rooms
+
       <br><br>
+
       ${escapeHtml(error.message)}
-    </div>`;
+
+    </div>
+    `;
 
   }
 
 }
 
 
-/* ================================
-   RENDER ROOMS
-================================ */
+/* ================= RENDER ROOMS ================= */
 
 function renderRooms(rooms){
 
@@ -1840,18 +2294,27 @@ function renderRooms(rooms){
 
 
   count.innerText =
-  `कुल ${rooms.length} room मिले`;
+  `🏠 कुल ${rooms.length} room मिले`;
 
 
   if(rooms.length === 0){
 
     container.innerHTML =
+    `
+    <div class="empty">
 
-    `<div class="empty">
-      🏠 कोई room नहीं मिला
-      <br><br>
+      <div class="empty-icon">
+        <i class="fa-solid fa-house-circle-xmark"></i>
+      </div>
+
+      <strong>कोई room नहीं मिला</strong>
+
+      <br>
+
       Search बदलकर फिर कोशिश करें।
-    </div>`;
+
+    </div>
+    `;
 
     return;
 
@@ -1875,14 +2338,15 @@ function renderRooms(rooms){
 
 
       const safeMobile =
-      String(
+      escapeHtml(
         room.mobile || ""
       );
 
 
       const safeName =
       escapeHtml(
-        room.name || "Owner"
+        room.name ||
+        "Owner"
       );
 
 
@@ -1917,62 +2381,123 @@ function renderRooms(rooms){
 
 
       const rent =
-      Number(room.rent || 0);
+      Number(
+        room.rent || 0
+      );
 
 
       return `
 
-      <div class="room-card">
+      <article class="room-card">
 
-        <img
-          class="room-photo"
-          src="${image}"
-          alt="Room Photo"
-          onerror="this.src='${FALLBACK_IMAGE}'"
-        >
+        <div class="room-image-wrap">
+
+          <img
+            class="room-photo"
+            src="${image}"
+            alt="Property Photo"
+            onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
+          >
+
+          <div class="photo-label">
+            <i class="fa-solid fa-camera"></i>
+            Property
+          </div>
+
+        </div>
+
 
         <div class="room-content">
 
-          <div class="room-title">
-            🏠 ${safeType}
+          <div class="room-title-row">
+
+            <div class="room-title">
+              ${safeType}
+            </div>
+
           </div>
+
 
           <div class="rent">
+
             ₹${rent.toLocaleString("en-IN")}
-            / Month
+
+            <span>
+              / Month
+            </span>
+
           </div>
 
-          <div class="info">
-            👤 <strong>Owner:</strong>
-            ${safeName}
+
+          <div class="room-info">
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>
+              <strong>Owner:</strong>
+              ${safeName}
+            </span>
+
           </div>
 
-          <div class="info">
-            📱 <strong>Mobile:</strong>
-            ${escapeHtml(safeMobile)}
+
+          <div class="room-info">
+
+            <i class="fa-solid fa-phone"></i>
+
+            <span>
+              ${safeMobile}
+            </span>
+
           </div>
 
-          <div class="info">
-            📍 <strong>City:</strong>
-            ${safeCity}
+
+          <div class="room-info">
+
+            <i class="fa-solid fa-location-dot"></i>
+
+            <span>
+              <strong>City:</strong>
+              ${safeCity}
+            </span>
+
           </div>
 
-          <div class="info">
-            🏠 <strong>Address:</strong>
-            ${safeAddress}
+
+          <div class="room-info">
+
+            <i class="fa-solid fa-map-location-dot"></i>
+
+            <span>
+              ${safeAddress}
+            </span>
+
           </div>
 
-          <div class="info">
-            🛋️ <strong>Furnishing:</strong>
-            ${safeFurnishing}
+
+          <div class="room-info">
+
+            <i class="fa-solid fa-couch"></i>
+
+            <span>
+              ${safeFurnishing}
+            </span>
+
           </div>
+
 
           ${
             safeDescription
             ?
-            `<div class="description">
-              📝 ${safeDescription}
-            </div>`
+            `
+            <div class="description">
+
+              <i class="fa-solid fa-circle-info"></i>
+
+              ${safeDescription}
+
+            </div>
+            `
             :
             ""
           }
@@ -1982,18 +2507,23 @@ function renderRooms(rooms){
 
             <button
               class="call"
-              onclick="callOwner('${safeMobile}')"
+              onclick="callOwner('${escapeForJs(room.mobile || "")}')"
             >
-              📞 Call
+
+              <i class="fa-solid fa-phone"></i>
+              Call
+
             </button>
 
 
             <button
               class="whatsapp"
-              onclick="whatsappOwner('${safeMobile}','${escapeForAttribute(room.name || "Room")}')"
+              onclick="whatsappOwner('${escapeForJs(room.mobile || "")}','${escapeForJs(room.name || "Owner")}')"
             >
+
               <i class="fa-brands fa-whatsapp"></i>
               WhatsApp
+
             </button>
 
 
@@ -2001,19 +2531,28 @@ function renderRooms(rooms){
               isOwner
               ?
               `
+
               <button
                 class="edit"
-                onclick="editRoom('${room.id}')"
+                onclick="editRoom('${escapeForJs(room.id)}')"
               >
-                ✏️ Edit
+
+                <i class="fa-solid fa-pen"></i>
+                Edit
+
               </button>
+
 
               <button
                 class="delete"
-                onclick="deleteRoom('${room.id}')"
+                onclick="deleteRoom('${escapeForJs(room.id)}')"
               >
-                🗑️ Delete
+
+                <i class="fa-solid fa-trash"></i>
+                Delete
+
               </button>
+
               `
               :
               ""
@@ -2023,7 +2562,7 @@ function renderRooms(rooms){
 
         </div>
 
-      </div>
+      </article>
 
       `;
 
@@ -2033,9 +2572,7 @@ function renderRooms(rooms){
 }
 
 
-/* ================================
-   SEARCH
-================================ */
+/* ================= SEARCH ================= */
 
 window.searchRooms =
 async function(){
@@ -2068,14 +2605,18 @@ async function(){
   );
 
 
-  const count =
-  document.getElementById(
-    "roomCount"
-  );
-
-
   container.innerHTML =
-  "<div class='empty'>🔎 Searching...</div>";
+  `
+  <div class="empty">
+
+    <div class="empty-icon">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
+
+    Searching...
+
+  </div>
+  `;
 
 
   try{
@@ -2095,6 +2636,7 @@ async function(){
         const room = {
 
           id:docSnap.id,
+
           ...docSnap.data()
 
         };
@@ -2103,12 +2645,15 @@ async function(){
         const roomCity =
         String(
           room.city || ""
-        ).toLowerCase();
+        )
+        .toLowerCase();
 
 
         const cityMatch =
         !city ||
-        roomCity.includes(city);
+        roomCity.includes(
+          city
+        );
 
 
         const typeMatch =
@@ -2151,56 +2696,61 @@ async function(){
     );
 
 
-    renderRooms(rooms);
+    renderRooms(
+      rooms
+    );
 
 
   }catch(error){
 
     console.error(error);
 
-    count.innerText =
+    document
+    .getElementById("roomCount")
+    .innerText =
     "❌ Search failed";
 
+
     container.innerHTML =
-    `<div class="empty">
+    `
+    <div class="empty">
+
       ❌ ${escapeHtml(error.message)}
-    </div>`;
+
+    </div>
+    `;
 
   }
 
 };
 
 
-/* ================================
-   CLEAR SEARCH
-================================ */
+/* ================= CLEAR SEARCH ================= */
 
 window.clearSearch =
 function(){
 
   document
   .getElementById("searchCity")
-  .value = "";
-
+  .value =
+  "";
 
   document
   .getElementById("searchType")
-  .value = "";
-
+  .value =
+  "";
 
   document
   .getElementById("searchRent")
-  .value = "";
-
+  .value =
+  "";
 
   loadRooms();
 
 };
 
 
-/* ================================
-   CALL OWNER
-================================ */
+/* ================= CALL ================= */
 
 window.callOwner =
 function(mobile){
@@ -2246,9 +2796,7 @@ function(mobile){
 };
 
 
-/* ================================
-   WHATSAPP OWNER
-================================ */
+/* ================= WHATSAPP ================= */
 
 window.whatsappOwner =
 function(mobile,name){
@@ -2307,9 +2855,7 @@ function(mobile,name){
 };
 
 
-/* ================================
-   EDIT ROOM
-================================ */
+/* ================= EDIT ROOM ================= */
 
 window.editRoom =
 async function(id){
@@ -2333,17 +2879,23 @@ async function(id){
     );
 
 
-    let room = null;
+    let room =
+    null;
 
 
     snapshot.forEach(
       docSnap => {
 
-        if(docSnap.id === id){
+        if(
+          docSnap.id === id
+        ){
 
           room = {
+
             id:docSnap.id,
+
             ...docSnap.data()
+
           };
 
         }
@@ -2452,8 +3004,8 @@ async function(id){
 
     document
     .getElementById("postButton")
-    .innerText =
-    "✏️ Update Room";
+    .innerHTML =
+    '<i class="fa-solid fa-pen"></i> Update Room';
 
 
     document
@@ -2483,9 +3035,7 @@ async function(id){
 };
 
 
-/* ================================
-   DELETE ROOM
-================================ */
+/* ================= DELETE ROOM ================= */
 
 window.deleteRoom =
 async function(id){
@@ -2522,17 +3072,23 @@ async function(id){
     );
 
 
-    let room = null;
+    let room =
+    null;
 
 
     snapshot.forEach(
       docSnap => {
 
-        if(docSnap.id === id){
+        if(
+          docSnap.id === id
+        ){
 
           room = {
+
             id:docSnap.id,
+
             ...docSnap.data()
+
           };
 
         }
@@ -2598,9 +3154,7 @@ async function(id){
 };
 
 
-/* ================================
-   ESCAPE HTML
-================================ */
+/* ================= ESCAPE ================= */
 
 function escapeHtml(value){
 
@@ -2614,19 +3168,18 @@ function escapeHtml(value){
 }
 
 
-function escapeForAttribute(value){
+function escapeForJs(value){
 
   return String(value || "")
   .replace(/\\/g,"\\\\")
   .replace(/'/g,"\\'")
-  .replace(/"/g,"&quot;");
+  .replace(/\r/g,"")
+  .replace(/\n/g,"\\n");
 
 }
 
 
-/* ================================
-   INITIAL LOAD
-================================ */
+/* ================= INITIAL LOAD ================= */
 
 loadRooms();
 
