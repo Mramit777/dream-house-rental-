@@ -131,8 +131,7 @@ color:#172554;
 font-size:21px
 }
 
-.status,
-.loginreq{
+.status,.loginreq{
 padding:12px;
 border-radius:10px;
 margin-bottom:15px;
@@ -155,9 +154,7 @@ font-weight:700;
 font-size:14px
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
 width:100%;
 padding:12px;
 border:1px solid #d8dee8;
@@ -165,9 +162,7 @@ border-radius:10px;
 background:#fff
 }
 
-textarea{
-min-height:90px
-}
+textarea{min-height:90px}
 
 .grid{
 display:grid;
@@ -175,9 +170,7 @@ grid-template-columns:1fr 1fr;
 gap:4px 14px
 }
 
-.full{
-grid-column:1/-1
-}
+.full{grid-column:1/-1}
 
 .btns{
 display:flex;
@@ -185,9 +178,7 @@ gap:9px;
 margin-top:14px
 }
 
-.btns>*{
-flex:1
-}
+.btns>*{flex:1}
 
 .blue{background:#2563eb;color:#fff}
 .green{background:#16a34a;color:#fff}
@@ -270,9 +261,7 @@ border-radius:20px;
 font-size:12px
 }
 
-.body{
-padding:15px
-}
+.body{padding:15px}
 
 .type{
 font-size:19px;
@@ -343,6 +332,30 @@ background:#fef2f2;
 color:#991b1b
 }
 
+.passwordBox{
+position:relative
+}
+
+.passwordBox input{
+padding-right:52px
+}
+
+.passwordEye{
+position:absolute;
+right:5px;
+top:5px;
+width:42px;
+height:40px;
+padding:0;
+background:transparent;
+color:#475569;
+font-size:18px
+}
+
+#recaptcha-container{
+margin-top:10px
+}
+
 @media(max-width:900px){
 .rooms{
 grid-template-columns:1fr 1fr
@@ -355,9 +368,7 @@ grid-template-columns:1fr 1fr
 flex-direction:column
 }
 
-.grid,
-.searchgrid,
-.rooms{
+.grid,.searchgrid,.rooms{
 grid-template-columns:1fr
 }
 
@@ -380,7 +391,6 @@ flex-direction:column
 <body>
 
 <header>
-
 <div class="head">
 
 <div class="logo">
@@ -395,12 +405,9 @@ flex-direction:column
 </nav>
 
 </div>
-
 </header>
 
-
 <main class="wrap">
-
 
 <section id="home" class="hero">
 
@@ -413,98 +420,121 @@ Room, BHK, Flat, House, PG aur Shop खोजें
 और सीधे location तक पहुँचें।
 </p>
 
-<a href="#rooms">
-🔍 Find a Room
-</a>
+<a href="#rooms">🔍 Find a Room</a>
 
 </section>
-
 
 <div id="firebaseStatus" class="status">
 ⏳ Firebase connecting...
 </div>
 
 
-<!-- LOGIN -->
+<!-- ================= AUTH ================= -->
 
 <section id="auth">
 
 <div class="title">
-
 <i class="fa-solid fa-user-lock"></i>
-
-<h2>Login / Signup</h2>
-
+<h2>Mobile Login / Signup</h2>
 </div>
-
 
 <div id="loggedOut">
 
-<label>Email</label>
+<label>📱 Mobile Number</label>
 
 <input
-id="email"
-type="email"
-placeholder="example@gmail.com"
+id="mobileAuth"
+type="tel"
+inputmode="numeric"
+maxlength="10"
+placeholder="10 digit mobile number"
+autocomplete="tel"
 >
 
+<label>🔑 Password</label>
 
-<label>Password</label>
+<div class="passwordBox">
 
 <input
 id="password"
 type="password"
 placeholder="Minimum 6 characters"
+autocomplete="current-password"
 >
 
+<button
+type="button"
+class="passwordEye"
+onclick="togglePassword()"
+>
+
+<i id="passwordEyeIcon"
+class="fa-solid fa-eye"></i>
+
+</button>
+
+</div>
 
 <div class="btns">
 
 <button
 class="green"
-onclick="signup()"
+type="button"
+onclick="startSignup()"
 >
-<i class="fa-solid fa-user-plus"></i>
-Signup
-</button>
 
+<i class="fa-solid fa-user-plus"></i>
+First Time Signup
+
+</button>
 
 <button
 class="blue"
+type="button"
 onclick="login()"
 >
+
 <i class="fa-solid fa-right-to-bracket"></i>
 Login
+
 </button>
 
 </div>
 
 
-<!-- FORGOT PASSWORD -->
+<!-- OTP -->
 
-<div style="
-text-align:center;
-margin-top:12px;
-">
-
-<button
-type="button"
-onclick="forgotPassword()"
-style="
-background:none;
-color:#2563eb;
-padding:6px;
-font-weight:700;
-"
+<div
+id="otpBox"
+style="display:none;margin-top:15px"
 >
 
-<i class="fa-solid fa-key"></i>
-Forgot Password?
+<label>🔐 OTP</label>
+
+<input
+id="otp"
+type="tel"
+inputmode="numeric"
+maxlength="6"
+placeholder="6 digit OTP"
+autocomplete="one-time-code"
+>
+
+<button
+class="purple"
+type="button"
+style="width:100%;margin-top:10px"
+onclick="verifyOTP()"
+>
+
+✅ Verify OTP & Create Account
 
 </button>
 
 </div>
 
+
+<div id="recaptcha-container"></div>
 
 <div id="authMsg" class="msg"></div>
 
@@ -524,7 +554,6 @@ style="display:none"
 
 </div>
 
-
 <button
 class="red"
 style="width:100%"
@@ -542,7 +571,7 @@ Logout
 </section>
 
 
-<!-- POST ROOM -->
+<!-- ================= POST ROOM ================= -->
 
 <section id="post">
 
@@ -554,7 +583,6 @@ Logout
 
 </div>
 
-
 <div
 id="needLogin"
 class="loginreq"
@@ -564,78 +592,41 @@ class="loginreq"
 
 </div>
 
-
-<form
-id="form"
-style="display:none"
->
+<form id="form" style="display:none">
 
 <div class="grid">
 
-
 <div>
-
 <label>Owner Name</label>
-
-<input
-id="name"
-required
->
-
+<input id="name" required>
 </div>
 
-
 <div>
-
 <label>Mobile Number</label>
-
-<input
-id="mobile"
-required
-placeholder="10 digit"
->
-
+<input id="mobile" required placeholder="10 digit">
 </div>
 
-
 <div>
-
 <label>City</label>
-
-<input
-id="city"
-required
->
-
+<input id="city" required>
 </div>
 
-
 <div>
-
 <label>Address</label>
-
 <input
 id="address"
 required
 placeholder="Full Address"
 >
-
 </div>
-
 
 <div>
 
 <label>Property Type</label>
 
-<select
-id="type"
-required
->
+<select id="type" required>
 
-<option value="">
-Select
-</option>
-
+<option value="">Select</option>
 <option>Room</option>
 <option>1 BHK</option>
 <option>2 BHK</option>
@@ -649,20 +640,13 @@ Select
 
 </div>
 
-
 <div>
 
 <label>Furnishing</label>
 
-<select
-id="furnishing"
-required
->
+<select id="furnishing" required>
 
-<option value="">
-Select
-</option>
-
+<option value="">Select</option>
 <option>Unfurnished</option>
 <option>Semi Furnished</option>
 <option>Fully Furnished</option>
@@ -670,7 +654,6 @@ Select
 </select>
 
 </div>
-
 
 <div>
 
@@ -685,7 +668,6 @@ required
 
 </div>
 
-
 <div>
 
 <label>Room Photo</label>
@@ -697,7 +679,6 @@ accept="image/*"
 >
 
 </div>
-
 
 <div class="full">
 
@@ -714,7 +695,6 @@ class="preview"
 
 </div>
 
-
 <div class="full">
 
 <label>Description</label>
@@ -727,13 +707,9 @@ placeholder="Room की जानकारी"
 </div>
 
 
-<!-- LOCATION -->
-
 <div class="full loc">
 
-<b>
-📍 Property Location
-</b>
+<b>📍 Property Location</b>
 
 <p style="font-size:12px">
 
@@ -741,7 +717,6 @@ GPS save करने पर renter सीधे
 Google Maps directions ले सकेगा।
 
 </p>
-
 
 <div class="btns">
 
@@ -755,7 +730,6 @@ onclick="gps()"
 
 </button>
 
-
 <button
 type="button"
 class="gray"
@@ -768,18 +742,13 @@ Clear
 
 </div>
 
-
 <small id="locStatus">
-
 Location not selected
-
 </small>
 
 </div>
 
-
 </div>
-
 
 <div class="btns">
 
@@ -791,7 +760,6 @@ class="blue"
 🏠 Post Room
 
 </button>
-
 
 <button
 id="cancel"
@@ -807,20 +775,14 @@ Cancel
 
 </div>
 
-
-<div
-id="postMsg"
-class="msg"
->
-</div>
-
+<div id="postMsg" class="msg"></div>
 
 </form>
 
 </section>
 
 
-<!-- ROOMS -->
+<!-- ================= ROOMS ================= -->
 
 <section id="rooms">
 
@@ -832,7 +794,6 @@ class="msg"
 
 </div>
 
-
 <div
 style="
 background:#eff6ff;
@@ -843,12 +804,9 @@ border-radius:14px
 
 <div class="searchgrid">
 
-
 <div>
 
-<label>
-📍 City
-</label>
+<label>📍 City</label>
 
 <input
 id="scity"
@@ -857,19 +815,13 @@ placeholder="City"
 
 </div>
 
-
 <div>
 
-<label>
-🏢 Type
-</label>
+<label>🏢 Type</label>
 
 <select id="stype">
 
-<option value="">
-All Types
-</option>
-
+<option value="">All Types</option>
 <option>Room</option>
 <option>1 BHK</option>
 <option>2 BHK</option>
@@ -883,12 +835,9 @@ All Types
 
 </div>
 
-
 <div>
 
-<label>
-₹ Max Rent
-</label>
+<label>₹ Max Rent</label>
 
 <input
 id="sRent"
@@ -897,9 +846,7 @@ type="number"
 
 </div>
 
-
 </div>
-
 
 <div class="btns">
 
@@ -911,7 +858,6 @@ onclick="searchRooms()"
 🔍 Search
 
 </button>
-
 
 <button
 class="gray"
@@ -926,7 +872,6 @@ onclick="clearSearch()"
 
 </div>
 
-
 <div
 id="count"
 style="
@@ -939,13 +884,7 @@ margin:18px 0 12px
 
 </div>
 
-
-<div
-id="list"
-class="rooms"
->
-
-</div>
+<div id="list" class="rooms"></div>
 
 </section>
 
@@ -954,9 +893,7 @@ class="rooms"
 
 <footer>
 
-<b>
-🏠 Dream House Rental
-</b>
+<b>🏠 Dream House Rental</b>
 
 <br>
 
@@ -996,11 +933,13 @@ from
 
 import {
 getAuth,
-createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
-sendPasswordResetEmail,
 signOut,
-onAuthStateChanged
+onAuthStateChanged,
+RecaptchaVerifier,
+signInWithPhoneNumber,
+EmailAuthProvider,
+linkWithCredential
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
@@ -1052,67 +991,176 @@ const fallback =
 
 
 let user = null;
-
 let editId = null;
-
 let imgData = "";
-
 let lat = null;
-
 let lng = null;
 
+let confirmationResult = null;
+let recaptchaVerifier = null;
 
-firebaseStatus.textContent =
+
+document
+.getElementById("firebaseStatus")
+.textContent =
 "✅ Firebase connected successfully";
 
 
 /* ================= MESSAGE ================= */
 
-function message(
-id,
-text,
-good
-){
+function message(id,text,good){
 
 const el =
 document.getElementById(id);
 
-el.textContent =
-text;
+el.textContent = text;
 
 el.className =
 "msg " +
 (good ? "ok" : "err");
 
-el.style.display =
-"block";
+el.style.display = "block";
 
 }
 
 
-/* ================= FORGOT PASSWORD ================= */
+/* ================= PASSWORD SHOW/HIDE ================= */
 
-window.forgotPassword =
+window.togglePassword = function(){
+
+const input =
+document.getElementById("password");
+
+const icon =
+document.getElementById("passwordEyeIcon");
+
+
+if(input.type === "password"){
+
+input.type = "text";
+
+icon.className =
+"fa-solid fa-eye-slash";
+
+}else{
+
+input.type = "password";
+
+icon.className =
+"fa-solid fa-eye";
+
+}
+
+};
+
+
+/* ================= MOBILE ================= */
+
+function normalizeMobile(value){
+
+let number =
+String(value || "")
+.replace(/\D/g,"");
+
+
+if(
+number.startsWith("91") &&
+number.length === 12
+){
+
+number =
+number.substring(2);
+
+}
+
+
+if(number.startsWith("0")){
+
+number =
+number.substring(1);
+
+}
+
+
+return number;
+
+}
+
+
+function validMobile(mobile){
+
+return /^[6-9][0-9]{9}$/.test(mobile);
+
+}
+
+
+function mobileEmail(mobile){
+
+return "m" +
+mobile +
+"@phone.dreamhouserental.local";
+
+}
+
+
+/* ================= RECAPTCHA ================= */
+
+function setupRecaptcha(){
+
+if(recaptchaVerifier){
+return;
+}
+
+recaptchaVerifier =
+new RecaptchaVerifier(
+auth,
+"recaptcha-container",
+{
+size:"invisible"
+}
+);
+
+}
+
+
+/* ================= FIRST TIME SIGNUP ================= */
+
+window.startSignup =
 async function(){
 
-const emailValue =
+const mobile =
+normalizeMobile(
 document
-.getElementById("email")
+.getElementById("mobileAuth")
 .value
-.trim();
+);
+
+const password =
+document
+.getElementById("password")
+.value;
 
 
-if(!emailValue){
+if(!validMobile(mobile)){
 
 message(
 "authMsg",
-"पहले अपना registered Email डालें।",
+"❌ सही 10 digit Indian mobile number डालें।",
 false
 );
 
-document
-.getElementById("email")
-.focus();
+return;
+
+}
+
+
+if(password.length < 6){
+
+message(
+"authMsg",
+"❌ Password कम से कम 6 characters का होना चाहिए।",
+false
+);
 
 return;
 
@@ -1121,43 +1169,72 @@ return;
 
 try{
 
-await sendPasswordResetEmail(
+setupRecaptcha();
+
+
+const phone =
+"+91" + mobile;
+
+
+confirmationResult =
+await signInWithPhoneNumber(
 auth,
-emailValue
+phone,
+recaptchaVerifier
 );
+
+
+document
+.getElementById("otpBox")
+.style.display =
+"block";
 
 
 message(
 "authMsg",
-"✅ Password reset link आपके email पर भेज दिया गया है। Inbox/Spam folder भी check करें।",
+"✅ OTP भेज दिया गया है। SMS में आया 6 digit OTP डालें।",
 true
 );
 
 
 }catch(error){
 
-console.error(error);
+console.error(
+"OTP ERROR:",
+error
+);
 
 
 if(
 error.code ===
-"auth/user-not-found"
+"auth/invalid-phone-number"
 ){
 
 message(
 "authMsg",
-"❌ इस email से account नहीं मिला।",
+"❌ Mobile number सही नहीं है।",
 false
 );
 
 }else if(
 error.code ===
-"auth/invalid-email"
+"auth/too-many-requests"
 ){
 
 message(
 "authMsg",
-"❌ Email address सही नहीं है।",
+"❌ बहुत ज्यादा attempts हो गए। थोड़ी देर बाद फिर try करें।",
+false
+);
+
+}else if(
+error.code ===
+"auth/operation-not-allowed"
+){
+
+message(
+"authMsg",
+"❌ Firebase में Phone Authentication अभी enabled नहीं है।",
 false
 );
 
@@ -1165,7 +1242,8 @@ false
 
 message(
 "authMsg",
-"❌ Password reset नहीं हो पाया।",
+"❌ OTP नहीं भेजा गया: " +
+error.message,
 false
 );
 
@@ -1176,31 +1254,100 @@ false
 };
 
 
-/* ================= SIGNUP ================= */
+/* ================= VERIFY OTP ================= */
 
-window.signup =
+window.verifyOTP =
 async function(){
+
+const mobile =
+normalizeMobile(
+document
+.getElementById("mobileAuth")
+.value
+);
+
+const password =
+document
+.getElementById("password")
+.value;
+
+const otp =
+document
+.getElementById("otp")
+.value
+.trim();
+
+
+if(!confirmationResult){
+
+message(
+"authMsg",
+"❌ पहले First Time Signup दबाकर OTP भेजें।",
+false
+);
+
+return;
+
+}
+
+
+if(!/^[0-9]{6}$/.test(otp)){
+
+message(
+"authMsg",
+"❌ 6 digit OTP डालें।",
+false
+);
+
+return;
+
+}
+
 
 try{
 
-await createUserWithEmailAndPassword(
-auth,
-document
-.getElementById("email")
-.value
-.trim(),
+const result =
+await confirmationResult.confirm(otp);
 
-document
-.getElementById("password")
-.value
+
+const firebaseUser =
+result.user;
+
+
+const internalEmail =
+mobileEmail(mobile);
+
+
+const credential =
+EmailAuthProvider.credential(
+internalEmail,
+password
+);
+
+
+await linkWithCredential(
+firebaseUser,
+credential
 );
 
 
 message(
 "authMsg",
-"✅ Signup successful!",
+"✅ Account successfully created! अब Mobile + Password से Login कर सकते हैं।",
 true
 );
+
+
+document
+.getElementById("otpBox")
+.style.display =
+"none";
+
+
+document
+.getElementById("otp")
+.value =
+"";
 
 
 document
@@ -1209,15 +1356,60 @@ document
 "";
 
 
+confirmationResult = null;
+
+
 }catch(error){
 
-console.error(error);
+console.error(
+"OTP VERIFY ERROR:",
+error
+);
+
+
+if(
+error.code ===
+"auth/invalid-verification-code"
+){
 
 message(
 "authMsg",
-"❌ " + error.message,
+"❌ OTP गलत है।",
 false
 );
+
+}else if(
+error.code ===
+"auth/code-expired"
+){
+
+message(
+"authMsg",
+"❌ OTP expire हो गया। फिर से OTP भेजें।",
+false
+);
+
+}else if(
+error.code ===
+"auth/email-already-in-use"
+){
+
+message(
+"authMsg",
+"❌ यह mobile पहले से registered है। Login करें।",
+false
+);
+
+}else{
+
+message(
+"authMsg",
+"❌ Account create नहीं हुआ: " +
+error.message,
+false
+);
+
+}
 
 }
 
@@ -1229,19 +1421,55 @@ false
 window.login =
 async function(){
 
+const mobile =
+normalizeMobile(
+document
+.getElementById("mobileAuth")
+.value
+);
+
+const password =
+document
+.getElementById("password")
+.value;
+
+
+if(!validMobile(mobile)){
+
+message(
+"authMsg",
+"❌ सही 10 digit mobile number डालें।",
+false
+);
+
+return;
+
+}
+
+
+if(!password){
+
+message(
+"authMsg",
+"❌ Password डालें।",
+false
+);
+
+return;
+
+}
+
+
 try{
+
+const internalEmail =
+mobileEmail(mobile);
+
 
 await signInWithEmailAndPassword(
 auth,
-
-document
-.getElementById("email")
-.value
-.trim(),
-
-document
-.getElementById("password")
-.value
+internalEmail,
+password
 );
 
 
@@ -1254,19 +1482,38 @@ true
 
 document
 .getElementById("password")
-.value =
-"";
+.value = "";
 
 
 }catch(error){
 
-console.error(error);
+console.error(
+"LOGIN ERROR:",
+error
+);
+
+
+if(
+error.code ===
+"auth/invalid-credential"
+){
 
 message(
 "authMsg",
-"❌ Email या Password गलत है।",
+"❌ Mobile number या Password गलत है।",
 false
 );
+
+}else{
+
+message(
+"authMsg",
+"❌ Login नहीं हुआ: " +
+error.message,
+false
+);
+
+}
 
 }
 
@@ -1289,8 +1536,7 @@ onAuthStateChanged(
 auth,
 function(current){
 
-user =
-current;
+user = current;
 
 
 document
@@ -1338,7 +1584,8 @@ if(current){
 document
 .getElementById("who")
 .textContent =
-current.email;
+current.phoneNumber ||
+"Mobile User";
 
 }
 
@@ -1358,13 +1605,11 @@ function(resolve,reject){
 const reader =
 new FileReader();
 
-
 reader.onload =
 function(event){
 
 const image =
 new Image();
-
 
 image.onload =
 function(){
@@ -1375,8 +1620,7 @@ image.width;
 let height =
 image.height;
 
-const max =
-900;
+const max = 900;
 
 
 if(width > max){
@@ -1384,8 +1628,7 @@ if(width > max){
 height =
 height * max / width;
 
-width =
-max;
+width = max;
 
 }
 
@@ -1395,22 +1638,16 @@ if(height > max){
 width =
 width * max / height;
 
-height =
-max;
+height = max;
 
 }
 
 
 const canvas =
-document.createElement(
-"canvas"
-);
+document.createElement("canvas");
 
-canvas.width =
-width;
-
-canvas.height =
-height;
+canvas.width = width;
+canvas.height = height;
 
 
 canvas
@@ -1424,8 +1661,7 @@ height
 );
 
 
-let quality =
-0.75;
+let quality = 0.75;
 
 let data =
 canvas.toDataURL(
@@ -1455,8 +1691,7 @@ resolve(data);
 };
 
 
-image.onerror =
-reject;
+image.onerror = reject;
 
 image.src =
 event.target.result;
@@ -1464,8 +1699,7 @@ event.target.result;
 };
 
 
-reader.onerror =
-reject;
+reader.onerror = reject;
 
 reader.readAsDataURL(file);
 
@@ -1481,9 +1715,7 @@ document
 .onchange =
 async function(){
 
-if(
-this.files[0]
-){
+if(this.files[0]){
 
 try{
 
@@ -1523,9 +1755,7 @@ alert(
 window.gps =
 function(){
 
-if(
-!navigator.geolocation
-){
+if(!navigator.geolocation){
 
 alert(
 "GPS उपलब्ध नहीं है।"
@@ -1542,9 +1772,7 @@ document
 "⏳ Location खोजी जा रही है...";
 
 
-navigator
-.geolocation
-.getCurrentPosition(
+navigator.geolocation.getCurrentPosition(
 
 function(position){
 
@@ -1596,9 +1824,7 @@ window.clearGPS =
 function(){
 
 lat = null;
-
 lng = null;
-
 
 document
 .getElementById("locStatus")
@@ -1632,9 +1858,7 @@ return;
 const save =
 document.getElementById("save");
 
-
-save.disabled =
-true;
+save.disabled = true;
 
 
 try{
@@ -1696,8 +1920,7 @@ serverTimestamp()
 
 if(imgData){
 
-data.image =
-imgData;
+data.image = imgData;
 
 }
 
@@ -1707,11 +1930,8 @@ lat !== null &&
 lng !== null
 ){
 
-data.latitude =
-lat;
-
-data.longitude =
-lng;
+data.latitude = lat;
+data.longitude = lng;
 
 }
 
@@ -1739,8 +1959,8 @@ true
 data.ownerId =
 user.uid;
 
-data.ownerEmail =
-user.email;
+data.ownerPhone =
+user.phoneNumber || "";
 
 data.createdAt =
 serverTimestamp();
@@ -1776,11 +1996,9 @@ message(
 false
 );
 
-
 }finally{
 
-save.disabled =
-false;
+save.disabled = false;
 
 }
 
@@ -1797,17 +2015,10 @@ document
 .reset();
 
 
-editId =
-null;
-
-imgData =
-"";
-
-lat =
-null;
-
-lng =
-null;
+editId = null;
+imgData = "";
+lat = null;
+lng = null;
 
 
 document
@@ -1851,9 +2062,7 @@ function(item){
 
 array.push({
 
-id:
-item.id,
-
+id:item.id,
 ...item.data()
 
 });
@@ -1864,9 +2073,8 @@ item.id,
 array.sort(
 function(a,b){
 
-return (
-(b.createdAt?.seconds || 0)
--
+return(
+(b.createdAt?.seconds || 0) -
 (a.createdAt?.seconds || 0)
 );
 
@@ -1899,7 +2107,6 @@ await all();
 
 render(data);
 
-
 }catch(error){
 
 console.error(error);
@@ -1909,7 +2116,7 @@ document
 .innerHTML =
 `
 <div class="empty">
-❌ ${error.message}
+❌ ${escapeHtml(error.message)}
 </div>
 `;
 
@@ -1946,9 +2153,7 @@ let array =
 getFavorites();
 
 
-if(
-array.includes(id)
-){
+if(array.includes(id)){
 
 array =
 array.filter(
@@ -2043,25 +2248,18 @@ Number(rent)
 
 try{
 
-if(
-navigator.share
-){
+if(navigator.share){
 
 await navigator.share({
 
-title:
-"Dream House Rental",
-
-text:
-text
+title:"Dream House Rental",
+text:text
 
 });
 
 }else{
 
-await navigator.clipboard.writeText(
-text
-);
+await navigator.clipboard.writeText(text);
 
 alert(
 "Property details copied!"
@@ -2080,31 +2278,23 @@ console.log(error);
 
 /* ================= PHONE ================= */
 
-function phone(
-mobile
-){
+function phone(mobile){
 
 let p =
 String(mobile || "")
 .replace(/\D/g,"");
 
 
-if(
-p.startsWith("0")
-){
+if(p.startsWith("0")){
 
-p =
-p.slice(1);
+p = p.slice(1);
 
 }
 
 
-if(
-p.length === 10
-){
+if(p.length === 10){
 
-p =
-"91" + p;
+p = "91" + p;
 
 }
 
@@ -2119,13 +2309,10 @@ return p;
 window.call =
 function(mobile){
 
-const p =
-phone(mobile);
+const p = phone(mobile);
 
 
-if(
-p.length !== 12
-){
+if(p.length !== 12){
 
 alert(
 "Mobile number सही नहीं है"
@@ -2147,13 +2334,10 @@ location.href =
 window.wa =
 function(mobile){
 
-const p =
-phone(mobile);
+const p = phone(mobile);
 
 
-if(
-p.length !== 12
-){
+if(p.length !== 12){
 
 alert(
 "Mobile number सही नहीं है"
@@ -2165,8 +2349,7 @@ return;
 
 
 window.open(
-"https://wa.me/" +
-p,
+"https://wa.me/" + p,
 "_blank"
 );
 
@@ -2209,9 +2392,7 @@ array.length +
 " room मिले";
 
 
-if(
-array.length === 0
-){
+if(array.length === 0){
 
 document
 .getElementById("list")
@@ -2240,14 +2421,11 @@ function(room){
 
 const owner =
 user &&
-room.ownerId ===
-user.uid;
+room.ownerId === user.uid;
 
 
 const favorite =
-favorites.includes(
-room.id
-);
+favorites.includes(room.id);
 
 
 const created =
@@ -2276,11 +2454,9 @@ alt="Property Photo"
 onerror="this.src='${fallback}'"
 >
 
-
 <span class="badge">
 📸 Property
 </span>
-
 
 ${
 isNew
@@ -2296,18 +2472,13 @@ NEW
 
 </div>
 
-
 <div class="body">
 
-
 <div class="type">
-
 ${escapeHtml(
 room.type || "Property"
 )}
-
 </div>
-
 
 <div class="rent">
 
@@ -2316,17 +2487,13 @@ Number(room.rent || 0)
 .toLocaleString("en-IN")
 }
 
-<small>
- / Month
-</small>
+<small>/ Month</small>
 
 </div>
 
-
 <div class="info">
 
-👤
-<b>Owner:</b>
+👤 <b>Owner:</b>
 
 ${escapeHtml(
 room.name || "Owner"
@@ -2334,22 +2501,18 @@ room.name || "Owner"
 
 </div>
 
-
 <div class="info">
 
 📞
-
 ${escapeHtml(
 room.mobile || ""
 )}
 
 </div>
 
-
 <div class="info">
 
-📍
-<b>City:</b>
+📍 <b>City:</b>
 
 ${escapeHtml(
 room.city || ""
@@ -2357,28 +2520,23 @@ room.city || ""
 
 </div>
 
-
 <div class="info">
 
 🗺️
-
 ${escapeHtml(
 room.address || ""
 )}
 
 </div>
 
-
 <div class="info">
 
 🛋️
-
 ${escapeHtml(
 room.furnishing || ""
 )}
 
 </div>
-
 
 ${
 room.description
@@ -2387,7 +2545,6 @@ room.description
 <div class="desc">
 
 ℹ️
-
 ${escapeHtml(
 room.description
 )}
@@ -2398,31 +2555,22 @@ room.description
 ""
 }
 
-
 <div class="cardbtn">
-
 
 <button
 class="blue"
 onclick="call('${escapeJs(room.mobile)}')"
 >
-
 📞 Call
-
 </button>
-
 
 <button
 class="wa"
 onclick="wa('${escapeJs(room.mobile)}')"
 >
-
 <i class="fa-brands fa-whatsapp"></i>
-
 WhatsApp
-
 </button>
-
 
 <button
 class="purple"
@@ -2433,11 +2581,8 @@ ${room.longitude ?? "null"},
 '${escapeJs(room.city)}'
 )"
 >
-
 🗺️ Directions
-
 </button>
-
 
 <button
 class="teal"
@@ -2447,19 +2592,12 @@ onclick="share(
 '${escapeJs(room.rent)}'
 )"
 >
-
 📤 Share
-
 </button>
-
 
 <button
 class="${
-favorite
-?
-"red"
-:
-"orange"
+favorite ? "red" : "orange"
 }"
 onclick="fav('${escapeJs(room.id)}')"
 >
@@ -2474,7 +2612,6 @@ favorite
 
 </button>
 
-
 ${
 owner
 ?
@@ -2484,19 +2621,14 @@ owner
 class="orange"
 onclick="edit('${escapeJs(room.id)}')"
 >
-
 ✏️ Edit
-
 </button>
-
 
 <button
 class="red"
 onclick="del('${escapeJs(room.id)}')"
 >
-
 🗑️ Delete
-
 </button>
 
 `
@@ -2504,9 +2636,7 @@ onclick="del('${escapeJs(room.id)}')"
 ""
 }
 
-
 </div>
-
 
 </div>
 
@@ -2563,32 +2693,25 @@ room.city || ""
 .toLowerCase();
 
 
-return (
+return(
 
-(
-!city ||
-roomCity.includes(city)
-)
+(!city ||
+roomCity.includes(city))
 
 &&
 
-(
-!type ||
-room.type === type
-)
+(!type ||
+room.type === type)
 
 &&
 
-(
-!maxRent ||
+(!maxRent ||
 Number(room.rent || 0)
-<= maxRent
-)
+<= maxRent)
 
 );
 
-}
-);
+});
 
 
 render(filtered);
@@ -2603,21 +2726,15 @@ function(){
 
 document
 .getElementById("scity")
-.value =
-"";
-
+.value = "";
 
 document
 .getElementById("stype")
-.value =
-"";
-
+.value = "";
 
 document
 .getElementById("sRent")
-.value =
-"";
-
+.value = "";
 
 load();
 
@@ -2652,8 +2769,7 @@ return;
 
 if(
 !user ||
-room.ownerId !==
-user.uid
+room.ownerId !== user.uid
 ){
 
 alert(
@@ -2665,8 +2781,7 @@ return;
 }
 
 
-editId =
-id;
+editId = id;
 
 
 document
@@ -2722,13 +2837,10 @@ room.image || "";
 
 
 lat =
-room.latitude ??
-null;
-
+room.latitude ?? null;
 
 lng =
-room.longitude ??
-null;
+room.longitude ?? null;
 
 
 if(imgData){
@@ -2825,8 +2937,7 @@ x => x.id === id
 
 if(
 !room ||
-room.ownerId !==
-user.uid
+room.ownerId !== user.uid
 ){
 
 alert(
