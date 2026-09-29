@@ -3,18 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>Dream House Rental</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
+
+html{
+scroll-behavior:smooth
+}
+
 body{
 font-family:Arial,sans-serif;
 background:#f5f7fb;
 color:#182230;
 }
-button,input,select,textarea{font:inherit}
-button{cursor:pointer;border:0;border-radius:10px;padding:12px;font-weight:700}
+
+button,
+input,
+select,
+textarea{
+font:inherit
+}
+
+button{
+cursor:pointer;
+border:0;
+border-radius:10px;
+padding:12px;
+font-weight:700
+}
+
+/* HEADER */
 
 header{
 position:sticky;
@@ -41,7 +66,9 @@ font-size:21px;
 color:#172554
 }
 
-.logo span{color:#2563eb}
+.logo span{
+color:#2563eb
+}
 
 .tagline{
 font-size:11px;
@@ -63,11 +90,40 @@ font-weight:700;
 font-size:14px
 }
 
+nav a:hover{
+color:#2563eb
+}
+
+/* COMMON */
+
 .wrap{
 max-width:1150px;
 width:94%;
 margin:20px auto
 }
+
+section{
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:18px;
+padding:20px;
+margin:20px 0;
+box-shadow:0 5px 22px #0f172a0b
+}
+
+.title{
+display:flex;
+gap:10px;
+align-items:center;
+margin-bottom:17px
+}
+
+.title h2{
+color:#172554;
+font-size:21px
+}
+
+/* HERO */
 
 .hero{
 padding:52px 20px;
@@ -116,26 +172,7 @@ border:0;
 background:#fff
 }
 
-section{
-background:#fff;
-border:1px solid #e5e7eb;
-border-radius:18px;
-padding:20px;
-margin:20px 0;
-box-shadow:0 5px 22px #0f172a0b
-}
-
-.title{
-display:flex;
-gap:10px;
-align-items:center;
-margin-bottom:17px
-}
-
-.title h2{
-color:#172554;
-font-size:21px
-}
+/* STATUS */
 
 .status{
 padding:12px;
@@ -157,6 +194,8 @@ border:1px solid #fed7aa;
 font-weight:700
 }
 
+/* FORM */
+
 label{
 display:block;
 margin:10px 0 5px;
@@ -164,7 +203,9 @@ font-weight:700;
 font-size:14px
 }
 
-input,select,textarea{
+input,
+select,
+textarea{
 width:100%;
 padding:12px;
 border:1px solid #d8dee8;
@@ -196,14 +237,49 @@ margin-top:14px
 flex:1
 }
 
-.blue{background:#2563eb;color:#fff}
-.green{background:#16a34a;color:#fff}
-.red{background:#dc2626;color:#fff}
-.gray{background:#64748b;color:#fff}
-.purple{background:#7c3aed;color:#fff}
-.teal{background:#0f766e;color:#fff}
-.orange{background:#f59e0b;color:#fff}
-.wa{background:#25D366;color:#fff}
+/* BUTTONS */
+
+.blue{
+background:#2563eb;
+color:#fff
+}
+
+.green{
+background:#16a34a;
+color:#fff
+}
+
+.red{
+background:#dc2626;
+color:#fff
+}
+
+.gray{
+background:#64748b;
+color:#fff
+}
+
+.purple{
+background:#7c3aed;
+color:#fff
+}
+
+.teal{
+background:#0f766e;
+color:#fff
+}
+
+.orange{
+background:#f59e0b;
+color:#fff
+}
+
+.wa{
+background:#25D366;
+color:#fff
+}
+
+/* IMAGE */
 
 .preview{
 max-width:430px;
@@ -215,6 +291,8 @@ border-radius:12px;
 display:none
 }
 
+/* LOCATION */
+
 .loc{
 margin-top:12px;
 padding:12px;
@@ -222,6 +300,8 @@ border:1px solid #bbf7d0;
 background:#f0fdf4;
 border-radius:12px
 }
+
+/* SEARCH */
 
 .searchbox{
 background:#eff6ff;
@@ -234,6 +314,8 @@ display:grid;
 grid-template-columns:repeat(5,1fr);
 gap:12px
 }
+
+/* ROOMS */
 
 .rooms{
 display:grid;
@@ -330,6 +412,8 @@ color:#64748b;
 grid-column:1/-1
 }
 
+/* RATING */
+
 .rating{
 display:flex;
 gap:6px;
@@ -345,6 +429,8 @@ opacity:.35
 .rating span.active{
 opacity:1
 }
+
+/* FEEDBACK */
 
 .feedback-note{
 background:#f8fafc;
@@ -373,6 +459,8 @@ background:#fef2f2;
 color:#991b1b
 }
 
+/* FEATURES */
+
 .features{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -392,10 +480,18 @@ color:#172554;
 margin-top:8px
 }
 
+.feature small{
+color:#64748b;
+line-height:1.5
+}
+
+/* SOCIAL */
+
 .social{
 display:flex;
 gap:10px;
-flex-wrap:wrap
+flex-wrap:wrap;
+justify-content:center
 }
 
 .social a{
@@ -406,9 +502,40 @@ text-decoration:none;
 font-weight:800
 }
 
-.ig{background:#c13584}
-.yt{background:#dc2626}
-.fb{background:#1877f2}
+.ig{
+background:#c13584
+}
+
+.yt{
+background:#dc2626
+}
+
+.fb{
+background:#1877f2
+}
+
+/* MORE */
+
+.more-card{
+min-height:190px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center
+}
+
+.more-icon{
+font-size:32px;
+margin-bottom:8px
+}
+
+.more-card button{
+margin-top:12px;
+width:100%;
+max-width:220px
+}
+
+/* FOOTER */
 
 footer{
 text-align:center;
@@ -421,6 +548,13 @@ margin-top:30px
 footer b{
 font-size:18px
 }
+
+footer a{
+color:#93c5fd;
+text-decoration:none
+}
+
+/* RESPONSIVE */
 
 @media(max-width:900px){
 
@@ -476,11 +610,19 @@ flex-direction:column
 padding:40px 15px
 }
 
+.cardbtn{
+grid-template-columns:1fr 1fr
 }
+
+}
+
 </style>
 </head>
 
+
 <body>
+
+<!-- HEADER -->
 
 <header>
 
@@ -498,18 +640,27 @@ Find • Rent • Stay
 
 </div>
 
+
 <nav>
 
-<a href="#home">Home</a>
+<a href="#home">
+Home
+</a>
 
-<a href="#auth">Login</a>
+<a href="#auth">
+Login
+</a>
 
-<a href="#post">Post Room</a>
+<a href="#post">
+Post Room
+</a>
 
-<a href="#rooms">Rooms</a>
+<a href="#rooms">
+Rooms
+</a>
 
-<a href="#feedback">
-सुझाव & शिकायत
+<a href="#more">
+☰ More
 </a>
 
 </nav>
@@ -526,7 +677,9 @@ Find • Rent • Stay
 
 <section id="home" class="hero">
 
-<b>🏠 Smart Property Search</b>
+<b>
+🏠 Smart Property Search
+</b>
 
 <h1>
 Find Your Perfect Home
@@ -569,6 +722,8 @@ Search
 </section>
 
 
+<!-- FIREBASE STATUS -->
+
 <div
 id="firebaseStatus"
 class="status">
@@ -599,7 +754,9 @@ Property Categories
 
 🛏️
 
-<b>Rooms</b>
+<b>
+Rooms
+</b>
 
 <small>
 Single / Shared
@@ -612,7 +769,9 @@ Single / Shared
 
 🏢
 
-<b>BHK / Flats</b>
+<b>
+BHK / Flats
+</b>
 
 <small>
 1, 2, 3 BHK
@@ -625,7 +784,9 @@ Single / Shared
 
 🏡
 
-<b>Houses</b>
+<b>
+Houses
+</b>
 
 <small>
 Family Homes
@@ -638,7 +799,9 @@ Family Homes
 
 🏪
 
-<b>PG / Shops</b>
+<b>
+PG / Shops
+</b>
 
 <small>
 Business & Stay
@@ -804,8 +967,6 @@ placeholder="10 digit">
 </div>
 
 
-<!-- STATE -->
-
 <div>
 
 <label>
@@ -869,8 +1030,6 @@ Other
 </div>
 
 
-<!-- CITY -->
-
 <div>
 
 <label>
@@ -885,8 +1044,6 @@ placeholder="जैसे Betul, Indore, Lucknow">
 </div>
 
 
-<!-- VILLAGE -->
-
 <div>
 
 <label>
@@ -899,8 +1056,6 @@ placeholder="जैसे Multai, Nayegaon, Ward/Colony">
 
 </div>
 
-
-<!-- ADDRESS -->
 
 <div>
 
@@ -915,8 +1070,6 @@ placeholder="Full Address">
 
 </div>
 
-
-<!-- TYPE -->
 
 <div>
 
@@ -969,8 +1122,6 @@ Shop
 </div>
 
 
-<!-- FURNISHING -->
-
 <div>
 
 <label>
@@ -1002,8 +1153,6 @@ Fully Furnished
 </div>
 
 
-<!-- RENT -->
-
 <div>
 
 <label>
@@ -1018,8 +1167,6 @@ required>
 
 </div>
 
-
-<!-- PHOTO -->
 
 <div>
 
@@ -1048,8 +1195,6 @@ class="preview">
 </div>
 
 
-<!-- DESCRIPTION -->
-
 <div class="full">
 
 <label>
@@ -1063,8 +1208,6 @@ placeholder="Room की जानकारी">
 
 </div>
 
-
-<!-- GPS -->
 
 <div class="full loc">
 
@@ -1165,11 +1308,10 @@ Find Your Room
 
 <div class="searchbox">
 
-
 <div class="searchgrid">
 
 
-<!-- STATE FILTER -->
+<!-- STATE -->
 
 <div>
 
@@ -1177,57 +1319,46 @@ Find Your Room
 📍 State
 </label>
 
-<select id="sstate">
+<input
+id="sstate"
+list="stateList"
+placeholder="MP / UP / Madhya Pradesh">
 
-<option value="">
-All States
-</option>
+<datalist id="stateList">
 
-<option>
-Madhya Pradesh
-</option>
+<option value="Madhya Pradesh">
+<option value="MP">
+<option value="M.P.">
 
-<option>
-Uttar Pradesh
-</option>
+<option value="Uttar Pradesh">
+<option value="UP">
+<option value="U.P.">
 
-<option>
-Chhattisgarh
-</option>
+<option value="Chhattisgarh">
+<option value="CG">
 
-<option>
-Maharashtra
-</option>
+<option value="Maharashtra">
+<option value="MH">
 
-<option>
-Rajasthan
-</option>
+<option value="Rajasthan">
+<option value="RJ">
 
-<option>
-Gujarat
-</option>
+<option value="Gujarat">
+<option value="GJ">
 
-<option>
-Delhi
-</option>
+<option value="Delhi">
+<option value="DL">
 
-<option>
-Bihar
-</option>
+<option value="Bihar">
+<option value="BR">
 
-<option>
-Jharkhand
-</option>
+<option value="Jharkhand">
+<option value="JH">
 
-<option>
-Odisha
-</option>
+<option value="Odisha">
+<option value="OD">
 
-<option>
-Other
-</option>
-
-</select>
+</datalist>
 
 </div>
 
@@ -1242,7 +1373,7 @@ Other
 
 <input
 id="scity"
-placeholder="City">
+placeholder="City / District">
 
 </div>
 
@@ -1262,7 +1393,7 @@ placeholder="Village / Area">
 </div>
 
 
-<!-- PROPERTY -->
+<!-- TYPE -->
 
 <div>
 
@@ -1270,7 +1401,8 @@ placeholder="Village / Area">
 🏢 Property Type
 </label>
 
-<select id="stype">
+<select
+id="stype">
 
 <option value="">
 All Types
@@ -1389,7 +1521,6 @@ Why Dream House Rental?
 
 <div class="features">
 
-
 <div class="feature">
 
 🔎
@@ -1454,31 +1585,42 @@ Save Property
 </section>
 
 
-<!-- SOCIAL -->
+<!-- MORE -->
 
-<section>
+<section id="more">
 
 <div class="title">
 
-<div>📱</div>
+<div>☰</div>
 
 <h2>
-Follow Dream House Rental
+More • Connect With Us
 </h2>
 
 </div>
 
 
-<p
-style="margin-bottom:14px;color:#64748b">
-
-हमारे social media links जल्द जोड़ेंगे।
-अभी buttons तैयार हैं।
-
-</p>
+<div class="features">
 
 
-<div class="social">
+<!-- SOCIAL -->
+
+<div class="feature more-card">
+
+<div class="more-icon">
+📱
+</div>
+
+<b>
+Follow Us
+</b>
+
+<small>
+Dream House Rental को social media पर follow करें।
+</small>
+
+
+<div class="social" style="margin-top:14px">
 
 <a
 class="ig"
@@ -1489,7 +1631,6 @@ onclick="return false">
 
 </a>
 
-
 <a
 class="yt"
 href="#"
@@ -1498,7 +1639,6 @@ onclick="return false">
 ▶️ YouTube
 
 </a>
-
 
 <a
 class="fb"
@@ -1511,22 +1651,83 @@ onclick="return false">
 
 </div>
 
-</section>
+</div>
 
 
 <!-- FEEDBACK -->
 
-<section id="feedback">
+<div class="feature more-card">
 
-<div class="title">
+<div class="more-icon">
+💬
+</div>
 
-<div>💡</div>
-
-<h2>
+<b>
 सुझाव & शिकायत
-</h2>
+</b>
+
+<small>
+Website या Property से संबंधित सुझाव या शिकायत भेजें।
+</small>
+
+<button
+class="blue"
+onclick="openFeedback()">
+
+💡 Feedback दें
+
+</button>
 
 </div>
+
+
+<!-- ABOUT -->
+
+<div class="feature more-card">
+
+<div class="more-icon">
+ℹ️
+</div>
+
+<b>
+About Dream House Rental
+</b>
+
+<small>
+Find • Rent • Stay
+<br><br>
+Room, BHK, Flat, House, PG और Shop खोजें।
+</small>
+
+</div>
+
+
+<!-- CONTACT -->
+
+<div class="feature more-card">
+
+<div class="more-icon">
+📞
+</div>
+
+<b>
+Contact Us
+</b>
+
+<small>
+Owner से सीधे Contact करें और Property की जानकारी लें।
+</small>
+
+</div>
+
+</div>
+
+
+<!-- FEEDBACK BOX -->
+
+<div
+id="feedbackBox"
+style="display:none;margin-top:25px">
 
 
 <div class="feedback-note">
@@ -1648,7 +1849,10 @@ class="msg">
 
 </form>
 
+</div>
+
 </section>
+
 
 </main>
 
@@ -1665,44 +1869,28 @@ class="msg">
 
 Find • Rent • Stay
 
-<br>
+<br><br>
 
-<a
-href="#home"
-style="color:#93c5fd;text-decoration:none">
-
+<a href="#home">
 Home
-
 </a>
 
 &nbsp;|&nbsp;
 
-<a
-href="#rooms"
-style="color:#93c5fd;text-decoration:none">
-
+<a href="#rooms">
 Rooms
-
 </a>
 
 &nbsp;|&nbsp;
 
-<a
-href="#post"
-style="color:#93c5fd;text-decoration:none">
-
+<a href="#post">
 Post Room
-
 </a>
 
 &nbsp;|&nbsp;
 
-<a
-href="#feedback"
-style="color:#93c5fd;text-decoration:none">
-
-सुझाव & शिकायत
-
+<a href="#more">
+☰ More
 </a>
 
 <br><br>
@@ -1713,6 +1901,8 @@ style="color:#93c5fd;text-decoration:none">
 
 </footer>
 
+
+<!-- FIREBASE -->
 
 <script type="module">
 
@@ -1813,6 +2003,132 @@ let lng = null;
 let selectedRating = 5;
 
 
+/* ELEMENTS */
+
+const firebaseStatus =
+document.getElementById("firebaseStatus");
+
+const emailInput =
+document.getElementById("email");
+
+const passwordInput =
+document.getElementById("password");
+
+const loggedOutBox =
+document.getElementById("loggedOut");
+
+const loggedInBox =
+document.getElementById("loggedIn");
+
+const form =
+document.getElementById("form");
+
+const needLogin =
+document.getElementById("needLogin");
+
+const who =
+document.getElementById("who");
+
+const save =
+document.getElementById("save");
+
+const cancel =
+document.getElementById("cancel");
+
+const nameInput =
+document.getElementById("name");
+
+const mobileInput =
+document.getElementById("mobile");
+
+const stateInput =
+document.getElementById("state");
+
+const cityInput =
+document.getElementById("city");
+
+const villageInput =
+document.getElementById("village");
+
+const addressInput =
+document.getElementById("address");
+
+const typeInput =
+document.getElementById("type");
+
+const furnishingInput =
+document.getElementById("furnishing");
+
+const rentInput =
+document.getElementById("rent");
+
+const fileInput =
+document.getElementById("file");
+
+const preview =
+document.getElementById("preview");
+
+const descriptionInput =
+document.getElementById("description");
+
+const locStatus =
+document.getElementById("locStatus");
+
+const list =
+document.getElementById("list");
+
+const count =
+document.getElementById("count");
+
+const sstate =
+document.getElementById("sstate");
+
+const scity =
+document.getElementById("scity");
+
+const svillage =
+document.getElementById("svillage");
+
+const stype =
+document.getElementById("stype");
+
+const sRent =
+document.getElementById("sRent");
+
+const quickState =
+document.getElementById("quickState");
+
+const quickCity =
+document.getElementById("quickCity");
+
+const quickVillage =
+document.getElementById("quickVillage");
+
+const feedbackForm =
+document.getElementById("feedbackForm");
+
+const feedbackType =
+document.getElementById("feedbackType");
+
+const feedbackName =
+document.getElementById("feedbackName");
+
+const feedbackMobile =
+document.getElementById("feedbackMobile");
+
+const feedbackSubject =
+document.getElementById("feedbackSubject");
+
+const feedbackMessage =
+document.getElementById("feedbackMessage");
+
+const feedbackMsg =
+document.getElementById("feedbackMsg");
+
+const feedbackBox =
+document.getElementById("feedbackBox");
+
+
 firebaseStatus.textContent =
 "✅ Firebase connected successfully";
 
@@ -1855,14 +2171,15 @@ e.style.display =
 
 /* SIGNUP */
 
-window.signup = async function(){
+window.signup =
+async function(){
 
 try{
 
 await createUserWithEmailAndPassword(
 auth,
-email.value.trim(),
-password.value
+emailInput.value.trim(),
+passwordInput.value
 );
 
 message(
@@ -1871,9 +2188,10 @@ message(
 true
 );
 
-password.value = "";
+passwordInput.value = "";
 
 }
+
 catch(e){
 
 message(
@@ -1889,14 +2207,15 @@ false
 
 /* LOGIN */
 
-window.login = async function(){
+window.login =
+async function(){
 
 try{
 
 await signInWithEmailAndPassword(
 auth,
-email.value.trim(),
-password.value
+emailInput.value.trim(),
+passwordInput.value
 );
 
 message(
@@ -1905,9 +2224,10 @@ message(
 true
 );
 
-password.value = "";
+passwordInput.value = "";
 
 }
+
 catch(e){
 
 message(
@@ -1924,7 +2244,11 @@ false
 /* LOGOUT */
 
 window.logout =
-()=>signOut(auth);
+function(){
+
+signOut(auth);
+
+};
 
 
 /* AUTH STATE */
@@ -1935,10 +2259,10 @@ u=>{
 
 user = u;
 
-loggedOut.style.display =
+loggedOutBox.style.display =
 u ? "none" : "block";
 
-loggedIn.style.display =
+loggedInBox.style.display =
 u ? "block" : "none";
 
 form.style.display =
@@ -1977,27 +2301,34 @@ new Image();
 
 image.onload = ()=>{
 
-let w = image.width;
+let w =
+image.width;
 
-let h = image.height;
+let h =
+image.height;
 
-const max = 900;
+const max =
+900;
 
 
 if(w > max){
 
-h = h * max / w;
+h =
+h * max / w;
 
-w = max;
+w =
+max;
 
 }
 
 
 if(h > max){
 
-w = w * max / h;
+w =
+w * max / h;
 
-h = max;
+h =
+max;
 
 }
 
@@ -2005,9 +2336,11 @@ h = max;
 const canvas =
 document.createElement("canvas");
 
-canvas.width = w;
+canvas.width =
+w;
 
-canvas.height = h;
+canvas.height =
+h;
 
 
 canvas
@@ -2021,7 +2354,8 @@ h
 );
 
 
-let quality = .75;
+let quality =
+.75;
 
 
 let data =
@@ -2058,7 +2392,8 @@ event.target.result;
 };
 
 
-reader.onerror = reject;
+reader.onerror =
+reject;
 
 reader.readAsDataURL(file);
 
@@ -2069,14 +2404,18 @@ reader.readAsDataURL(file);
 
 /* PHOTO */
 
-file.onchange =
+fileInput.onchange =
 async function(){
 
-if(!file.files[0])
+if(!fileInput.files[0])
 return;
 
+try{
+
 imgData =
-await compress(file.files[0]);
+await compress(
+fileInput.files[0]
+);
 
 preview.src =
 imgData;
@@ -2084,16 +2423,29 @@ imgData;
 preview.style.display =
 "block";
 
+}
+
+catch(e){
+
+alert(
+"Photo load नहीं हुई।"
+);
+
+}
+
 };
 
 
 /* GPS */
 
-window.gps = function(){
+window.gps =
+function(){
 
 if(!navigator.geolocation){
 
-alert("GPS उपलब्ध नहीं है।");
+alert(
+"GPS उपलब्ध नहीं है।"
+);
 
 return;
 
@@ -2166,14 +2518,17 @@ e.preventDefault();
 
 if(!user){
 
-alert("पहले Login करें");
+alert(
+"पहले Login करें"
+);
 
 return;
 
 }
 
 
-save.disabled = true;
+save.disabled =
+true;
 
 
 try{
@@ -2181,34 +2536,34 @@ try{
 let data = {
 
 name:
-name.value.trim(),
+nameInput.value.trim(),
 
 mobile:
-mobile.value.trim(),
+mobileInput.value.trim(),
 
 state:
-state.value,
+stateInput.value,
 
 city:
-city.value.trim(),
+cityInput.value.trim(),
 
 village:
-village.value.trim(),
+villageInput.value.trim(),
 
 address:
-address.value.trim(),
+addressInput.value.trim(),
 
 type:
-type.value,
+typeInput.value,
 
 furnishing:
-furnishing.value,
+furnishingInput.value,
 
 rent:
-Number(rent.value),
+Number(rentInput.value),
 
 description:
-description.value.trim(),
+descriptionInput.value.trim(),
 
 updatedAt:
 serverTimestamp()
@@ -2216,10 +2571,12 @@ serverTimestamp()
 };
 
 
-if(imgData)
+if(imgData){
 
 data.image =
 imgData;
+
+}
 
 
 if(lat !== null){
@@ -2294,7 +2651,8 @@ false
 
 finally{
 
-save.disabled = false;
+save.disabled =
+false;
 
 }
 
@@ -2308,16 +2666,23 @@ function(){
 
 form.reset();
 
-editId = null;
+editId =
+null;
 
-imgData = "";
+imgData =
+"";
 
-lat = null;
+lat =
+null;
 
-lng = null;
+lng =
+null;
 
 preview.style.display =
 "none";
+
+preview.src =
+"";
 
 locStatus.textContent =
 "Location not selected";
@@ -2391,6 +2756,9 @@ list.innerHTML =
 esc(e.message)+
 '</div>';
 
+count.textContent =
+"❌ Rooms load नहीं हुए";
+
 }
 
 }
@@ -2400,11 +2768,21 @@ esc(e.message)+
 
 function favourites(){
 
+try{
+
 return JSON.parse(
 localStorage.getItem(
 "dreamHouseFavourites"
 ) || "[]"
 );
+
+}
+
+catch(e){
+
+return [];
+
+}
 
 }
 
@@ -2452,10 +2830,12 @@ String(mobile || "")
 .replace(/\D/g,"");
 
 
-if(p.startsWith("0"))
+if(p.startsWith("0")){
 
 p =
 p.substring(1);
+
+}
 
 
 return p;
@@ -2587,9 +2967,11 @@ if(navigator.share){
 
 await navigator.share({
 
-title:"Dream House Rental",
+title:
+"Dream House Rental",
 
-text:text
+text:
+text
 
 });
 
@@ -2606,9 +2988,298 @@ alert(
 }
 
 }
+
 catch(e){}
 
 };
+
+
+/* STATE ALIAS */
+
+function normalizeStateQuery(q){
+
+const s =
+String(q || "")
+.trim()
+.toLowerCase()
+.replace(/\./g,"");
+
+
+const aliases = {
+
+"mp":
+"madhya pradesh",
+
+"m p":
+"madhya pradesh",
+
+"madhya pradesh":
+"madhya pradesh",
+
+"up":
+"uttar pradesh",
+
+"u p":
+"uttar pradesh",
+
+"uttar pradesh":
+"uttar pradesh",
+
+"cg":
+"chhattisgarh",
+
+"c g":
+"chhattisgarh",
+
+"chhattisgarh":
+"chhattisgarh",
+
+"mh":
+"maharashtra",
+
+"m h":
+"maharashtra",
+
+"maharashtra":
+"maharashtra",
+
+"rj":
+"rajasthan",
+
+"r j":
+"rajasthan",
+
+"rajasthan":
+"rajasthan",
+
+"gj":
+"gujarat",
+
+"g j":
+"gujarat",
+
+"gujarat":
+"gujarat",
+
+"dl":
+"delhi",
+
+"d l":
+"delhi",
+
+"delhi":
+"delhi",
+
+"br":
+"bihar",
+
+"b r":
+"bihar",
+
+"bihar":
+"bihar",
+
+"jh":
+"jharkhand",
+
+"j h":
+"jharkhand",
+
+"jharkhand":
+"jharkhand",
+
+"od":
+"odisha",
+
+"o d":
+"odisha",
+
+"odisha":
+"odisha"
+
+};
+
+
+return aliases[s] || s;
+
+}
+
+
+/* INFER OLD STATE */
+
+function inferredState(room){
+
+if(room.state &&
+String(room.state).trim()){
+
+return room.state;
+
+}
+
+
+const raw =
+`${room.city || ""} ${room.village || ""} ${room.address || ""}`
+.toLowerCase();
+
+
+/* MADHYA PRADESH */
+
+const mpPlaces = [
+
+"betul",
+"multai",
+"indore",
+"bhopal",
+"itarsi",
+"hoshangabad",
+"narmadapuram",
+"jabalpur",
+"seoni",
+"chhindwara",
+"nagpur"
+
+];
+
+
+for(const place of mpPlaces){
+
+if(raw.includes(place)){
+
+return "Madhya Pradesh";
+
+}
+
+}
+
+
+if(
+raw.includes("m.p") ||
+raw.includes("mp")
+){
+
+return "Madhya Pradesh";
+
+}
+
+
+/* UTTAR PRADESH */
+
+const upPlaces = [
+
+"lucknow",
+"kanpur",
+"varanasi",
+"prayagraj",
+"allahabad",
+"agra",
+"meerut",
+"noida",
+"ghaziabad",
+"gorakhpur"
+
+];
+
+
+for(const place of upPlaces){
+
+if(raw.includes(place)){
+
+return "Uttar Pradesh";
+
+}
+
+}
+
+
+/* CHHATTISGARH */
+
+const cgPlaces = [
+
+"raipur",
+"bilaspur",
+"durg",
+"bhilai",
+"korba",
+"rajnandgaon"
+
+];
+
+
+for(const place of cgPlaces){
+
+if(raw.includes(place)){
+
+return "Chhattisgarh";
+
+}
+
+}
+
+
+return room.state || "";
+
+}
+
+
+/* LOCATION SEARCH TEXT */
+
+function locationText(room){
+
+return (
+
+`${room.city || ""} ` +
+`${room.village || ""} ` +
+`${room.address || ""}`
+
+).toLowerCase();
+
+}
+
+
+/* TEXT MATCH */
+
+function matchesText(
+value,
+query
+){
+
+return !query ||
+String(value || "")
+.toLowerCase()
+.includes(
+query.toLowerCase()
+);
+
+}
+
+
+/* STATE MATCH */
+
+function matchesState(
+room,
+query
+){
+
+if(!query)
+return true;
+
+
+const wanted =
+normalizeStateQuery(query);
+
+
+const actual =
+normalizeStateQuery(
+inferredState(room)
+);
+
+
+return (
+actual.includes(wanted) ||
+wanted.includes(actual)
+);
+
+}
 
 
 /* RENDER */
@@ -2652,6 +3323,10 @@ Date.now() -
 604800000;
 
 
+const displayState =
+inferredState(room);
+
+
 return `
 
 <article class="card">
@@ -2666,17 +3341,14 @@ onerror="this.src='${fallback}'">
 
 <span class="badge">
 
-${esc(room.state || "Property")}
+${esc(displayState || "Property")}
 
 </span>
 
 
 ${isNew ?
-
 '<span class="new">NEW</span>'
-
 :
-
 ""}
 
 </div>
@@ -2746,9 +3418,7 @@ room.city ||
 
 ${
 room.village
-
 ?
-
 `
 
 <div class="info">
@@ -2760,11 +3430,8 @@ ${esc(room.village)}
 </div>
 
 `
-
 :
-
 ""
-
 }
 
 
@@ -2794,9 +3461,7 @@ room.furnishing ||
 
 ${
 room.description
-
 ?
-
 `
 
 <div class="desc">
@@ -2810,11 +3475,8 @@ room.description
 </div>
 
 `
-
 :
-
 ""
-
 }
 
 
@@ -2897,7 +3559,6 @@ isSaved
 
 ${
 own
-
 ?
 
 `
@@ -2922,7 +3583,6 @@ onclick="deleteRoom('${room.id}')">
 `
 
 :
-
 ""
 
 }
@@ -2941,44 +3601,21 @@ onclick="deleteRoom('${room.id}')">
 }
 
 
-/* TEXT MATCH */
-
-function matchesText(
-value,
-query
-){
-
-return !query ||
-String(value || "")
-.toLowerCase()
-.includes(
-query.toLowerCase()
-);
-
-}
-
-
 /* SEARCH */
 
 window.searchRooms =
 async function(){
 
 const stateQ =
-sstate.value
-.trim()
-.toLowerCase();
+sstate.value.trim();
 
 
 const cityQ =
-scity.value
-.trim()
-.toLowerCase();
+scity.value.trim().toLowerCase();
 
 
 const villageQ =
-svillage.value
-.trim()
-.toLowerCase();
+svillage.value.trim().toLowerCase();
 
 
 const typeQ =
@@ -2998,46 +3635,60 @@ await allRooms();
 const result =
 data.filter(room=>{
 
+
+/* STATE */
+
 const stateOK =
-matchesText(
-room.state,
+matchesState(
+room,
 stateQ
 );
 
 
-const cityOK =
-matchesText(
-room.city,
-cityQ
-);
+/* CITY
 
+Old records में city/address दोनों में search होगा.
+*/
+
+const searchable =
+locationText(room);
+
+
+const cityOK =
+!cityQ ||
+searchable.includes(cityQ);
+
+
+/* VILLAGE / AREA */
 
 const villageOK =
-matchesText(
-room.village,
-villageQ
-);
+!villageQ ||
+searchable.includes(villageQ);
 
+
+/* TYPE */
 
 const typeOK =
 !typeQ ||
 room.type === typeQ;
 
 
+/* RENT */
+
 const rentOK =
 !maxRent ||
-Number(
-room.rent || 0
-)
+Number(room.rent || 0)
 <= maxRent;
 
 
 return (
+
 stateOK &&
 cityOK &&
 villageOK &&
 typeOK &&
 rentOK
+
 );
 
 });
@@ -3080,15 +3731,20 @@ searchRooms();
 window.clearSearch =
 function(){
 
-sstate.value = "";
+sstate.value =
+"";
 
-scity.value = "";
+scity.value =
+"";
 
-svillage.value = "";
+svillage.value =
+"";
 
-stype.value = "";
+stype.value =
+"";
 
-sRent.value = "";
+sRent.value =
+"";
 
 load();
 
@@ -3106,7 +3762,7 @@ await allRooms();
 
 const room =
 data.find(
-x=>x.id===id
+x=>x.id === id
 );
 
 
@@ -3128,37 +3784,38 @@ return;
 }
 
 
-editId = id;
+editId =
+id;
 
 
-name.value =
+nameInput.value =
 room.name || "";
 
-mobile.value =
+mobileInput.value =
 room.mobile || "";
 
-state.value =
-room.state || "";
+stateInput.value =
+room.state || inferredState(room) || "";
 
-city.value =
+cityInput.value =
 room.city || "";
 
-village.value =
+villageInput.value =
 room.village || "";
 
-address.value =
+addressInput.value =
 room.address || "";
 
-type.value =
+typeInput.value =
 room.type || "";
 
-furnishing.value =
+furnishingInput.value =
 room.furnishing || "";
 
-rent.value =
+rentInput.value =
 room.rent || "";
 
-description.value =
+descriptionInput.value =
 room.description || "";
 
 imgData =
@@ -3202,7 +3859,9 @@ cancel.style.display =
 "block";
 
 
-post.scrollIntoView({
+document
+.getElementById("post")
+.scrollIntoView({
 behavior:"smooth"
 });
 
@@ -3230,7 +3889,7 @@ await allRooms();
 
 const room =
 data.find(
-x=>x.id===id
+x=>x.id === id
 );
 
 
@@ -3271,6 +3930,23 @@ alert(
 );
 
 }
+
+};
+
+
+/* OPEN FEEDBACK */
+
+window.openFeedback =
+function(){
+
+feedbackBox.style.display =
+"block";
+
+
+feedbackBox.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
 
 };
 
@@ -3343,8 +4019,9 @@ e.preventDefault();
 
 
 const button =
-feedbackForm
-.querySelector("button");
+feedbackForm.querySelector(
+"button"
+);
 
 
 button.disabled =
