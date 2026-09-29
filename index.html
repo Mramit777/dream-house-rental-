@@ -11,187 +11,183 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+
 body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f7fb;
-  color:#182230
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f7fb;
+color:#182230
 }
+
 button,input,select,textarea{font:inherit}
-button{cursor:pointer;border:0;border-radius:10px;padding:11px;font-weight:700}
-.wrap{max-width:1150px;width:94%;margin:20px auto}
+
+button{
+cursor:pointer;
+border:0;
+border-radius:10px;
+padding:11px;
+font-weight:700
+}
+
+.wrap{
+max-width:1150px;
+width:94%;
+margin:20px auto
+}
 
 header{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  background:rgba(255,255,255,.97);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid #ddd
+position:sticky;
+top:0;
+z-index:1000;
+background:#fff;
+border-bottom:1px solid #ddd
 }
 
 .head{
-  max-width:1150px;
-  margin:auto;
-  padding:12px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px
+max-width:1150px;
+margin:auto;
+padding:12px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
 }
 
 .logo{
-  font-weight:800;
-  font-size:20px;
-  color:#172554
+font-weight:800;
+font-size:20px;
+color:#172554
 }
 
 .logo span{color:#2563eb}
 
 nav{
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap
+display:flex;
+gap:5px;
+flex-wrap:wrap
 }
 
 nav a{
-  padding:8px;
-  color:#475569;
-  text-decoration:none;
-  font-weight:700;
-  font-size:14px;
-  border-radius:8px
-}
-
-nav a:hover{
-  background:#eff6ff;
-  color:#2563eb
+padding:8px;
+color:#475569;
+text-decoration:none;
+font-weight:700;
+font-size:14px
 }
 
 .hero{
-  position:relative;
-  overflow:hidden;
-  padding:48px 20px;
-  text-align:center;
-  color:#fff;
-  border-radius:24px;
-  background:
-    radial-gradient(circle at 15% 20%,rgba(255,255,255,.18),transparent 25%),
-    radial-gradient(circle at 85% 80%,rgba(255,255,255,.12),transparent 30%),
-    linear-gradient(135deg,#172554,#2563eb,#4f46e5);
-  box-shadow:0 15px 40px rgba(37,99,235,.22)
+padding:45px 20px;
+text-align:center;
+color:#fff;
+border-radius:24px;
+background:linear-gradient(135deg,#172554,#2563eb,#4f46e5);
+box-shadow:0 15px 40px #2563eb33
 }
 
 .hero h1{
-  font-size:35px;
-  margin:12px 0
+font-size:34px;
+margin:12px
 }
 
 .hero p{
-  margin:10px 0 22px;
-  font-size:16px
+margin:10px 0 22px
 }
 
 .hero a{
-  display:inline-block;
-  background:#fff;
-  color:#1d4ed8;
-  padding:12px 18px;
-  border-radius:10px;
-  font-weight:800;
-  text-decoration:none
+display:inline-block;
+background:#fff;
+color:#1d4ed8;
+padding:12px 18px;
+border-radius:10px;
+font-weight:800;
+text-decoration:none
 }
 
 section{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  padding:20px;
-  margin:20px 0;
-  box-shadow:0 5px 22px rgba(15,23,42,.05)
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:18px;
+padding:20px;
+margin:20px 0;
+box-shadow:0 5px 22px #0f172a0b
 }
 
 .title{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  margin-bottom:16px
+display:flex;
+gap:10px;
+align-items:center;
+margin-bottom:16px
 }
 
 .title i{
-  background:#eff6ff;
-  color:#2563eb;
-  padding:12px;
-  border-radius:11px
+background:#eff6ff;
+color:#2563eb;
+padding:12px;
+border-radius:11px
 }
 
 .title h2{
-  color:#172554;
-  font-size:21px;
-  margin:0
+color:#172554;
+font-size:21px
 }
 
 .status,
 .loginreq{
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:15px;
-  background:#ecfdf5;
-  color:#166534;
-  border:1px solid #bbf7d0;
-  font-weight:700
+padding:12px;
+border-radius:10px;
+margin-bottom:15px;
+background:#ecfdf5;
+color:#166534;
+border:1px solid #bbf7d0;
+font-weight:700
 }
 
 .loginreq{
-  background:#fff7ed;
-  color:#9a3412;
-  border-color:#fed7aa
+background:#fff7ed;
+color:#9a3412;
+border-color:#fed7aa
 }
 
 label{
-  display:block;
-  margin:10px 0 5px;
-  font-weight:700;
-  font-size:14px
+display:block;
+margin:10px 0 5px;
+font-weight:700;
+font-size:14px
 }
 
-input,select,textarea{
-  width:100%;
-  padding:12px;
-  border:1px solid #d8dee8;
-  border-radius:10px;
-  background:#fff;
-  color:#182230;
-  outline:none
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:#60a5fa;
-  box-shadow:0 0 0 3px rgba(37,99,235,.08)
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+border:1px solid #d8dee8;
+border-radius:10px;
+background:#fff
 }
 
 textarea{
-  min-height:90px;
-  resize:vertical
+min-height:90px
 }
 
 .grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4px 14px
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:4px 14px
 }
 
-.full{grid-column:1/-1}
+.full{
+grid-column:1/-1
+}
 
 .btns{
-  display:flex;
-  gap:9px;
-  margin-top:14px
+display:flex;
+gap:9px;
+margin-top:14px
 }
 
-.btns>*{flex:1}
+.btns>*{
+flex:1
+}
 
 .blue{background:#2563eb;color:#fff}
 .green{background:#16a34a;color:#fff}
@@ -203,302 +199,180 @@ textarea{
 .wa{background:#25D366;color:#fff}
 
 .preview{
-  max-width:430px;
-  width:100%;
-  max-height:250px;
-  object-fit:cover;
-  margin-top:10px;
-  border-radius:12px;
-  display:none;
-  border:1px solid #e2e8f0
+max-width:430px;
+width:100%;
+max-height:250px;
+object-fit:cover;
+margin-top:10px;
+border-radius:12px;
+display:none
 }
 
 .loc{
-  margin-top:12px;
-  padding:14px;
-  border:1px solid #bbf7d0;
-  background:#f0fdf4;
-  border-radius:12px
-}
-
-.loc strong{
-  color:#166534
-}
-
-.searchbox{
-  background:linear-gradient(135deg,#f8fafc,#eff6ff);
-  padding:15px;
-  border-radius:14px;
-  border:1px solid #dbeafe
+margin-top:12px;
+padding:12px;
+border:1px solid #bbf7d0;
+background:#f0fdf4;
+border-radius:12px
 }
 
 .searchgrid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:12px
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:12px
 }
 
 .rooms{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px
 }
 
 .card{
-  background:#fff;
-  border:1px solid #e2e8f0;
-  border-radius:17px;
-  overflow:hidden;
-  box-shadow:0 5px 18px rgba(15,23,42,.07);
-  transition:.25s
-}
-
-.card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 12px 30px rgba(15,23,42,.12)
+background:#fff;
+border:1px solid #e2e8f0;
+border-radius:17px;
+overflow:hidden;
+box-shadow:0 5px 18px #0f172a12
 }
 
 .photo{
-  height:215px;
-  position:relative;
-  background:#e2e8f0
+height:215px;
+position:relative;
+background:#e2e8f0
 }
 
 .photo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block
+width:100%;
+height:100%;
+object-fit:cover
 }
 
 .badge{
-  position:absolute;
-  top:10px;
-  left:10px;
-  background:rgba(15,23,42,.75);
-  color:#fff;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:700
+position:absolute;
+top:10px;
+left:10px;
+background:#0f172abb;
+color:#fff;
+padding:5px 9px;
+border-radius:20px;
+font-size:12px
 }
 
 .new{
-  position:absolute;
-  right:10px;
-  top:10px;
-  background:#f59e0b;
-  color:#fff;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:700
+position:absolute;
+right:10px;
+top:10px;
+background:#f59e0b;
+color:#fff;
+padding:5px 9px;
+border-radius:20px;
+font-size:12px
 }
 
 .body{
-  padding:15px
+padding:15px
 }
 
 .type{
-  font-size:19px;
-  font-weight:800;
-  color:#172554
+font-size:19px;
+font-weight:800;
+color:#172554
 }
 
 .rent{
-  font-size:19px;
-  color:#15803d;
-  font-weight:800;
-  margin:7px 0 12px
-}
-
-.rent small{
-  color:#64748b;
-  font-size:12px;
-  font-weight:500
+font-size:19px;
+color:#15803d;
+font-weight:800;
+margin:7px 0 12px
 }
 
 .info{
-  font-size:13px;
-  color:#475569;
-  margin:7px 0;
-  line-height:1.5
-}
-
-.info i{
-  width:18px;
-  color:#2563eb
+font-size:13px;
+color:#475569;
+margin:7px 0
 }
 
 .desc{
-  background:#f8fafc;
-  padding:10px;
-  border-radius:9px;
-  font-size:13px;
-  margin-top:10px;
-  color:#475569
-}
-
-.location-box{
-  margin-top:10px;
-  padding:10px;
-  background:#eff6ff;
-  border-radius:10px;
-  font-size:12px;
-  color:#1e40af
+background:#f8fafc;
+padding:9px;
+border-radius:9px;
+font-size:13px;
+margin-top:10px
 }
 
 .cardbtn{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:13px
-}
-
-.cardbtn button{
-  min-height:42px
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin-top:13px
 }
 
 .empty{
-  text-align:center;
-  padding:30px;
-  border:1px dashed #cbd5e1;
-  border-radius:14px;
-  color:#64748b;
-  grid-column:1/-1
-}
-
-.msg{
-  display:none;
-  padding:10px;
-  margin-top:10px;
-  border-radius:9px;
-  font-weight:600
-}
-
-.ok{
-  display:block;
-  background:#ecfdf5;
-  color:#166534
-}
-
-.err{
-  display:block;
-  background:#fef2f2;
-  color:#991b1b
+text-align:center;
+padding:30px;
+border:1px dashed #cbd5e1;
+border-radius:14px;
+color:#64748b;
+grid-column:1/-1
 }
 
 footer{
-  text-align:center;
-  background:#0f172a;
-  color:#cbd5e1;
-  padding:28px 15px;
-  margin-top:30px
+text-align:center;
+background:#0f172a;
+color:#cbd5e1;
+padding:25px
 }
 
-.footer-title{
-  color:#fff;
-  font-size:19px;
-  font-weight:800
+.msg{
+display:none;
+padding:10px;
+margin-top:10px;
+border-radius:9px
 }
 
-.feature-row{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:18px
+.ok{
+display:block;
+background:#ecfdf5;
+color:#166534
 }
 
-.feature{
-  background:#fff;
-  border:1px solid #e2e8f0;
-  padding:15px 10px;
-  border-radius:14px;
-  text-align:center
-}
-
-.feature i{
-  color:#2563eb;
-  font-size:22px;
-  margin-bottom:7px
-}
-
-.feature b{
-  display:block;
-  color:#172554;
-  font-size:13px
+.err{
+display:block;
+background:#fef2f2;
+color:#991b1b
 }
 
 @media(max-width:900px){
-  .rooms{
-    grid-template-columns:1fr 1fr
-  }
-
-  .feature-row{
-    grid-template-columns:1fr 1fr
-  }
+.rooms{
+grid-template-columns:1fr 1fr
+}
 }
 
 @media(max-width:700px){
 
-  .head{
-    flex-direction:column
-  }
-
-  .grid,
-  .searchgrid,
-  .rooms{
-    grid-template-columns:1fr
-  }
-
-  .full{
-    grid-column:auto
-  }
-
-  .hero{
-    padding:38px 16px
-  }
-
-  .hero h1{
-    font-size:28px
-  }
-
-  .btns{
-    flex-direction:column
-  }
-
-  .feature-row{
-    grid-template-columns:1fr 1fr
-  }
+.head{
+flex-direction:column
 }
 
-@media(max-width:480px){
+.grid,
+.searchgrid,
+.rooms{
+grid-template-columns:1fr
+}
 
-  .wrap{
-    width:96%;
-    margin:14px auto
-  }
+.full{
+grid-column:auto
+}
 
-  section{
-    padding:16px
-  }
+.hero h1{
+font-size:27px
+}
 
-  nav a{
-    font-size:13px;
-    padding:7px
-  }
+.btns{
+flex-direction:column
+}
 
-  .hero h1{
-    font-size:25px
-  }
-
-  .photo{
-    height:220px
-  }
-
-  .feature{
-    padding:12px 6px
-  }
 }
 </style>
 </head>
@@ -506,6 +380,7 @@ footer{
 <body>
 
 <header>
+
 <div class="head">
 
 <div class="logo">
@@ -520,60 +395,30 @@ footer{
 </nav>
 
 </div>
+
 </header>
 
 
 <main class="wrap">
 
-<!-- HERO -->
 
 <section id="home" class="hero">
 
-<div style="font-size:13px;font-weight:700;opacity:.9">
-<i class="fa-solid fa-location-dot"></i>
-SMART PROPERTY SEARCH
-</div>
+<b>🏠 Smart Property Search</b>
 
-<h1>🏠 Dream House Rental</h1>
+<h1>Dream House Rental</h1>
 
 <p>
-Room, BHK, Flat, House, PG aur Shop खोजें —
-और location से सीधे property तक पहुँचें।
+Room, BHK, Flat, House, PG aur Shop खोजें
+और सीधे location तक पहुँचें।
 </p>
 
 <a href="#rooms">
-<i class="fa-solid fa-magnifying-glass"></i>
-&nbsp; Find a Room
+🔍 Find a Room
 </a>
-
-<div class="feature-row">
-
-<div class="feature">
-<i class="fa-solid fa-location-crosshairs"></i>
-<b>Live Location</b>
-</div>
-
-<div class="feature">
-<i class="fa-solid fa-map-location-dot"></i>
-<b>Google Directions</b>
-</div>
-
-<div class="feature">
-<i class="fa-solid fa-heart"></i>
-<b>Save Property</b>
-</div>
-
-<div class="feature">
-<i class="fa-solid fa-share-nodes"></i>
-<b>Easy Share</b>
-</div>
-
-</div>
 
 </section>
 
-
-<!-- FIREBASE -->
 
 <div id="firebaseStatus" class="status">
 ⏳ Firebase connecting...
@@ -585,42 +430,47 @@ Room, BHK, Flat, House, PG aur Shop खोजें —
 <section id="auth">
 
 <div class="title">
+
 <i class="fa-solid fa-user-lock"></i>
+
 <h2>Login / Signup</h2>
+
 </div>
+
 
 <div id="loggedOut">
 
 <label>Email</label>
+
 <input
 id="email"
 type="email"
 placeholder="example@gmail.com"
-autocomplete="email"
 >
 
+
 <label>Password</label>
+
 <input
 id="password"
 type="password"
 placeholder="Minimum 6 characters"
-autocomplete="current-password"
 >
+
 
 <div class="btns">
 
 <button
 class="green"
-type="button"
 onclick="signup()"
 >
 <i class="fa-solid fa-user-plus"></i>
 Signup
 </button>
 
+
 <button
 class="blue"
-type="button"
 onclick="login()"
 >
 <i class="fa-solid fa-right-to-bracket"></i>
@@ -629,27 +479,62 @@ Login
 
 </div>
 
+
+<!-- FORGOT PASSWORD -->
+
+<div style="
+text-align:center;
+margin-top:12px;
+">
+
+<button
+type="button"
+onclick="forgotPassword()"
+style="
+background:none;
+color:#2563eb;
+padding:6px;
+font-weight:700;
+"
+>
+
+<i class="fa-solid fa-key"></i>
+Forgot Password?
+
+</button>
+
+</div>
+
+
 <div id="authMsg" class="msg"></div>
 
 </div>
 
 
-<div id="loggedIn" style="display:none">
+<div
+id="loggedIn"
+style="display:none"
+>
 
 <div class="status">
-<i class="fa-solid fa-circle-check"></i>
-Logged in as:
-<br>
+
+✅ Logged in as
+
 <b id="who"></b>
+
 </div>
+
 
 <button
 class="red"
 style="width:100%"
 onclick="logout()"
 >
+
 <i class="fa-solid fa-right-from-bracket"></i>
+
 Logout
+
 </button>
 
 </div>
@@ -662,55 +547,95 @@ Logout
 <section id="post">
 
 <div class="title">
+
 <i class="fa-solid fa-house-circle-plus"></i>
+
 <h2>Post Your Room</h2>
+
 </div>
 
 
-<div id="needLogin" class="loginreq">
-<i class="fa-solid fa-lock"></i>
-Room post करने के लिए पहले Login करें।
+<div
+id="needLogin"
+class="loginreq"
+>
+
+🔒 Room post करने के लिए पहले Login करें।
+
 </div>
 
 
-<form id="form" style="display:none">
+<form
+id="form"
+style="display:none"
+>
 
 <div class="grid">
 
-<div>
-<label>Owner Name</label>
-<input id="name" required placeholder="Owner Name">
-</div>
 
 <div>
+
+<label>Owner Name</label>
+
+<input
+id="name"
+required
+>
+
+</div>
+
+
+<div>
+
 <label>Mobile Number</label>
+
 <input
 id="mobile"
 required
-placeholder="10 digit mobile number"
+placeholder="10 digit"
 >
+
 </div>
 
+
 <div>
+
 <label>City</label>
-<input id="city" required placeholder="City">
+
+<input
+id="city"
+required
+>
+
 </div>
 
+
 <div>
+
 <label>Address</label>
+
 <input
 id="address"
 required
 placeholder="Full Address"
 >
+
 </div>
 
+
 <div>
+
 <label>Property Type</label>
 
-<select id="type" required>
+<select
+id="type"
+required
+>
 
-<option value="">Select Property</option>
+<option value="">
+Select
+</option>
+
 <option>Room</option>
 <option>1 BHK</option>
 <option>2 BHK</option>
@@ -721,24 +646,34 @@ placeholder="Full Address"
 <option>Shop</option>
 
 </select>
+
 </div>
 
 
 <div>
+
 <label>Furnishing</label>
 
-<select id="furnishing" required>
+<select
+id="furnishing"
+required
+>
 
-<option value="">Select Furnishing</option>
+<option value="">
+Select
+</option>
+
 <option>Unfurnished</option>
 <option>Semi Furnished</option>
 <option>Fully Furnished</option>
 
 </select>
+
 </div>
 
 
 <div>
+
 <label>Monthly Rent</label>
 
 <input
@@ -746,12 +681,13 @@ id="rent"
 type="number"
 min="1"
 required
-placeholder="Monthly Rent ₹"
 >
+
 </div>
 
 
 <div>
+
 <label>Room Photo</label>
 
 <input
@@ -768,12 +704,12 @@ accept="image/*"
 <img
 id="preview"
 class="preview"
-alt="Photo Preview"
 >
 
+<br>
+
 <small>
-<i class="fa-solid fa-compress"></i>
-Photo automatically compress होगी।
+📸 Photo automatically compress होगी।
 </small>
 
 </div>
@@ -785,7 +721,7 @@ Photo automatically compress होगी।
 
 <textarea
 id="description"
-placeholder="Room की पूरी जानकारी लिखें..."
+placeholder="Room की जानकारी"
 ></textarea>
 
 </div>
@@ -795,15 +731,17 @@ placeholder="Room की पूरी जानकारी लिखें..."
 
 <div class="full loc">
 
-<strong>
-<i class="fa-solid fa-location-dot"></i>
-Property Location
-</strong>
+<b>
+📍 Property Location
+</b>
 
-<p style="font-size:12px;color:#475569">
-Current GPS location save करें ताकि renter
-Google Maps से सीधे property तक पहुँच सके।
+<p style="font-size:12px">
+
+GPS save करने पर renter सीधे
+Google Maps directions ले सकेगा।
+
 </p>
+
 
 <div class="btns">
 
@@ -812,26 +750,33 @@ type="button"
 class="green"
 onclick="gps()"
 >
-<i class="fa-solid fa-location-crosshairs"></i>
-Use Current Location
+
+📍 Use Current Location
+
 </button>
+
 
 <button
 type="button"
 class="gray"
 onclick="clearGPS()"
 >
-<i class="fa-solid fa-xmark"></i>
-Clear Location
+
+Clear
+
 </button>
 
 </div>
 
+
 <small id="locStatus">
-📍 Location not selected
+
+Location not selected
+
 </small>
 
 </div>
+
 
 </div>
 
@@ -841,11 +786,12 @@ Clear Location
 <button
 id="save"
 class="blue"
-type="submit"
 >
-<i class="fa-solid fa-house-circle-plus"></i>
-Post Room
+
+🏠 Post Room
+
 </button>
+
 
 <button
 id="cancel"
@@ -854,21 +800,27 @@ class="gray"
 style="display:none"
 onclick="resetForm()"
 >
-<i class="fa-solid fa-xmark"></i>
+
 Cancel
+
 </button>
 
 </div>
 
 
-<div id="postMsg" class="msg"></div>
+<div
+id="postMsg"
+class="msg"
+>
+</div>
+
 
 </form>
 
 </section>
 
 
-<!-- SEARCH -->
+<!-- ROOMS -->
 
 <section id="rooms">
 
@@ -881,20 +833,26 @@ Cancel
 </div>
 
 
-<div class="searchbox">
+<div
+style="
+background:#eff6ff;
+padding:15px;
+border-radius:14px
+"
+>
 
 <div class="searchgrid">
+
 
 <div>
 
 <label>
-<i class="fa-solid fa-location-dot"></i>
-City
+📍 City
 </label>
 
 <input
 id="scity"
-placeholder="Enter city"
+placeholder="City"
 >
 
 </div>
@@ -903,14 +861,13 @@ placeholder="Enter city"
 <div>
 
 <label>
-<i class="fa-solid fa-building"></i>
-Property Type
+🏢 Type
 </label>
 
 <select id="stype">
 
 <option value="">
-All Property Types
+All Types
 </option>
 
 <option>Room</option>
@@ -930,18 +887,16 @@ All Property Types
 <div>
 
 <label>
-<i class="fa-solid fa-indian-rupee-sign"></i>
-Maximum Rent
+₹ Max Rent
 </label>
 
 <input
 id="sRent"
 type="number"
-min="0"
-placeholder="Maximum Rent ₹"
 >
 
 </div>
+
 
 </div>
 
@@ -952,16 +907,19 @@ placeholder="Maximum Rent ₹"
 class="blue"
 onclick="searchRooms()"
 >
-<i class="fa-solid fa-magnifying-glass"></i>
-Search
+
+🔍 Search
+
 </button>
+
 
 <button
 class="gray"
 onclick="clearSearch()"
 >
-<i class="fa-solid fa-broom"></i>
-Clear
+
+🧹 Clear
+
 </button>
 
 </div>
@@ -971,9 +929,14 @@ Clear
 
 <div
 id="count"
-style="font-weight:800;margin:18px 0 12px"
+style="
+font-weight:800;
+margin:18px 0 12px
+"
 >
-⏳ Rooms loading...
+
+⏳ Loading...
+
 </div>
 
 
@@ -981,6 +944,7 @@ style="font-weight:800;margin:18px 0 12px"
 id="list"
 class="rooms"
 >
+
 </div>
 
 </section>
@@ -990,17 +954,19 @@ class="rooms"
 
 <footer>
 
-<div class="footer-title">
+<b>
 🏠 Dream House Rental
-</div>
+</b>
 
-<div>
+<br>
+
 Find • Rent • Live
-</div>
 
-<div style="margin-top:8px;font-size:12px">
+<br>
+
+<small>
 © 2026 All Rights Reserved
-</div>
+</small>
 
 </footer>
 
@@ -1032,6 +998,7 @@ import {
 getAuth,
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
+sendPasswordResetEmail,
 signOut,
 onAuthStateChanged
 }
@@ -1039,7 +1006,7 @@ from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-/* ================= FIREBASE ================= */
+/* ================= FIREBASE CONFIG ================= */
 
 const firebaseConfig = {
 
@@ -1076,66 +1043,46 @@ getFirestore(app,"default");
 const auth =
 getAuth(app);
 
-const roomCollection =
+const rooms =
 collection(db,"room");
 
 
-const FALLBACK_IMAGE =
+const fallback =
 "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=85";
 
 
-let currentUser = null;
+let user = null;
 
-let editingId = null;
+let editId = null;
 
-let currentPhotoData = "";
+let imgData = "";
 
-let latitude = null;
+let lat = null;
 
-let longitude = null;
+let lng = null;
 
 
-document
-.getElementById("firebaseStatus")
-.innerText =
+firebaseStatus.textContent =
 "✅ Firebase connected successfully";
 
 
-/* ================= HELPERS ================= */
+/* ================= MESSAGE ================= */
 
-function escapeHtml(value){
-
-return String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-function escapeJs(value){
-
-return String(value ?? "")
-.replace(/\\/g,"\\\\")
-.replace(/'/g,"\\'")
-.replace(/\r/g,"")
-.replace(/\n/g," ");
-
-}
-
-
-function showMessage(id,text,good){
+function message(
+id,
+text,
+good
+){
 
 const el =
 document.getElementById(id);
 
-el.innerText =
+el.textContent =
 text;
 
 el.className =
-"msg " + (good ? "ok" : "err");
+"msg " +
+(good ? "ok" : "err");
 
 el.style.display =
 "block";
@@ -1143,9 +1090,9 @@ el.style.display =
 }
 
 
-/* ================= SIGNUP ================= */
+/* ================= FORGOT PASSWORD ================= */
 
-window.signup =
+window.forgotPassword =
 async function(){
 
 const emailValue =
@@ -1154,32 +1101,18 @@ document
 .value
 .trim();
 
-const passwordValue =
+
+if(!emailValue){
+
+message(
+"authMsg",
+"पहले अपना registered Email डालें।",
+false
+);
+
 document
-.getElementById("password")
-.value;
-
-
-if(!emailValue || !passwordValue){
-
-showMessage(
-"authMsg",
-"Email और Password भरें।",
-false
-);
-
-return;
-
-}
-
-
-if(passwordValue.length < 6){
-
-showMessage(
-"authMsg",
-"Password कम से कम 6 characters का होना चाहिए।",
-false
-);
+.getElementById("email")
+.focus();
 
 return;
 
@@ -1188,42 +1121,101 @@ return;
 
 try{
 
-await createUserWithEmailAndPassword(
+await sendPasswordResetEmail(
 auth,
-emailValue,
-passwordValue
+emailValue
 );
 
-showMessage(
+
+message(
 "authMsg",
-"✅ Signup successful!",
+"✅ Password reset link आपके email पर भेज दिया गया है। Inbox/Spam folder भी check करें।",
 true
 );
 
-document
-.getElementById("password")
-.value = "";
 
 }catch(error){
 
 console.error(error);
 
-let message =
-error.message;
 
 if(
 error.code ===
-"auth/email-already-in-use"
+"auth/user-not-found"
 ){
 
-message =
-"यह email पहले से registered है। Login करें।";
+message(
+"authMsg",
+"❌ इस email से account नहीं मिला।",
+false
+);
+
+}else if(
+error.code ===
+"auth/invalid-email"
+){
+
+message(
+"authMsg",
+"❌ Email address सही नहीं है।",
+false
+);
+
+}else{
+
+message(
+"authMsg",
+"❌ Password reset नहीं हो पाया।",
+false
+);
 
 }
 
-showMessage(
+}
+
+};
+
+
+/* ================= SIGNUP ================= */
+
+window.signup =
+async function(){
+
+try{
+
+await createUserWithEmailAndPassword(
+auth,
+document
+.getElementById("email")
+.value
+.trim(),
+
+document
+.getElementById("password")
+.value
+);
+
+
+message(
 "authMsg",
-"❌ " + message,
+"✅ Signup successful!",
+true
+);
+
+
+document
+.getElementById("password")
+.value =
+"";
+
+
+}catch(error){
+
+console.error(error);
+
+message(
+"authMsg",
+"❌ " + error.message,
 false
 );
 
@@ -1237,54 +1229,40 @@ false
 window.login =
 async function(){
 
-const emailValue =
-document
-.getElementById("email")
-.value
-.trim();
-
-const passwordValue =
-document
-.getElementById("password")
-.value;
-
-
-if(!emailValue || !passwordValue){
-
-showMessage(
-"authMsg",
-"Email और Password भरें।",
-false
-);
-
-return;
-
-}
-
-
 try{
 
 await signInWithEmailAndPassword(
 auth,
-emailValue,
-passwordValue
+
+document
+.getElementById("email")
+.value
+.trim(),
+
+document
+.getElementById("password")
+.value
 );
 
-showMessage(
+
+message(
 "authMsg",
 "✅ Login successful!",
 true
 );
 
+
 document
 .getElementById("password")
-.value = "";
+.value =
+"";
+
 
 }catch(error){
 
 console.error(error);
 
-showMessage(
+message(
 "authMsg",
 "❌ Email या Password गलत है।",
 false
@@ -1298,17 +1276,9 @@ false
 /* ================= LOGOUT ================= */
 
 window.logout =
-async function(){
+function(){
 
-try{
-
-await signOut(auth);
-
-}catch(error){
-
-console.error(error);
-
-}
+signOut(auth);
 
 };
 
@@ -1317,81 +1287,70 @@ console.error(error);
 
 onAuthStateChanged(
 auth,
-function(user){
+function(current){
 
-currentUser =
-user || null;
-
-
-const loggedOut =
-document.getElementById(
-"loggedOut"
-);
-
-const loggedIn =
-document.getElementById(
-"loggedIn"
-);
-
-const form =
-document.getElementById(
-"form"
-);
-
-const needLogin =
-document.getElementById(
-"needLogin"
-);
+user =
+current;
 
 
-if(user){
-
-loggedOut.style.display =
+document
+.getElementById("loggedOut")
+.style.display =
+current
+?
+"none"
+:
 "block";
 
-loggedOut.style.display =
+
+document
+.getElementById("loggedIn")
+.style.display =
+current
+?
+"block"
+:
 "none";
 
-loggedIn.style.display =
-"block";
 
-form.style.display =
-"block";
-
-needLogin.style.display =
+document
+.getElementById("form")
+.style.display =
+current
+?
+"block"
+:
 "none";
+
+
+document
+.getElementById("needLogin")
+.style.display =
+current
+?
+"none"
+:
+"block";
+
+
+if(current){
 
 document
 .getElementById("who")
-.innerText =
-user.email || "";
-
-}else{
-
-loggedOut.style.display =
-"block";
-
-loggedIn.style.display =
-"none";
-
-form.style.display =
-"none";
-
-needLogin.style.display =
-"block";
+.textContent =
+current.email;
 
 }
 
 
-loadRooms();
+load();
 
-}
-);
+});
 
 
 /* ================= IMAGE COMPRESS ================= */
 
-function compressImage(file){
+function compress(file){
 
 return new Promise(
 function(resolve,reject){
@@ -1399,52 +1358,45 @@ function(resolve,reject){
 const reader =
 new FileReader();
 
+
 reader.onload =
 function(event){
 
-const img =
+const image =
 new Image();
 
-img.onload =
+
+image.onload =
 function(){
 
-const maxSide =
-900;
-
 let width =
-img.width;
+image.width;
 
 let height =
-img.height;
+image.height;
+
+const max =
+900;
 
 
-if(width > height){
-
-if(width > maxSide){
+if(width > max){
 
 height =
-Math.round(
-height * maxSide / width
-);
+height * max / width;
 
 width =
-maxSide;
+max;
 
 }
 
-}else{
 
-if(height > maxSide){
+if(height > max){
 
 width =
-Math.round(
-width * maxSide / height
-);
+width * max / height;
 
 height =
-maxSide;
-
-}
+max;
 
 }
 
@@ -1461,11 +1413,10 @@ canvas.height =
 height;
 
 
-const ctx =
-canvas.getContext("2d");
-
-ctx.drawImage(
-img,
+canvas
+.getContext("2d")
+.drawImage(
+image,
 0,
 0,
 width,
@@ -1476,7 +1427,7 @@ height
 let quality =
 0.75;
 
-let dataUrl =
+let data =
 canvas.toDataURL(
 "image/jpeg",
 quality
@@ -1484,13 +1435,13 @@ quality
 
 
 while(
-dataUrl.length > 420000 &&
+data.length > 420000 &&
 quality > 0.35
 ){
 
 quality -= 0.05;
 
-dataUrl =
+data =
 canvas.toDataURL(
 "image/jpeg",
 quality
@@ -1499,40 +1450,22 @@ quality
 }
 
 
-resolve(dataUrl);
+resolve(data);
 
 };
 
 
-img.onerror =
-function(){
+image.onerror =
+reject;
 
-reject(
-new Error(
-"Photo load नहीं हुई"
-)
-);
-
-};
-
-
-img.src =
+image.src =
 event.target.result;
 
 };
 
 
 reader.onerror =
-function(){
-
-reject(
-new Error(
-"Photo read नहीं हुई"
-)
-);
-
-};
-
+reject;
 
 reader.readAsDataURL(file);
 
@@ -1545,48 +1478,44 @@ reader.readAsDataURL(file);
 
 document
 .getElementById("file")
-.addEventListener(
-"change",
+.onchange =
 async function(){
 
-const file =
-this.files[0];
-
-if(!file){
-
-return;
-
-}
-
+if(
+this.files[0]
+){
 
 try{
 
-currentPhotoData =
-await compressImage(file);
-
-
-const preview =
-document.getElementById(
-"preview"
+imgData =
+await compress(
+this.files[0]
 );
 
-preview.src =
-currentPhotoData;
 
-preview.style.display =
+document
+.getElementById("preview")
+.src =
+imgData;
+
+
+document
+.getElementById("preview")
+.style.display =
 "block";
+
 
 }catch(error){
 
 alert(
-"Photo process नहीं हुई: " +
-error.message
+"Photo process नहीं हुई।"
 );
 
 }
 
 }
-);
+
+};
 
 
 /* ================= GPS ================= */
@@ -1594,10 +1523,12 @@ error.message
 window.gps =
 function(){
 
-if(!navigator.geolocation){
+if(
+!navigator.geolocation
+){
 
 alert(
-"इस browser में GPS उपलब्ध नहीं है।"
+"GPS उपलब्ध नहीं है।"
 );
 
 return;
@@ -1607,42 +1538,43 @@ return;
 
 document
 .getElementById("locStatus")
-.innerText =
+.textContent =
 "⏳ Location खोजी जा रही है...";
 
 
-navigator.geolocation.getCurrentPosition(
+navigator
+.geolocation
+.getCurrentPosition(
 
 function(position){
 
-latitude =
+lat =
 position.coords.latitude;
 
-longitude =
+lng =
 position.coords.longitude;
 
 
 document
 .getElementById("locStatus")
-.innerText =
+.textContent =
 "✅ Location saved: " +
-latitude.toFixed(6) +
+lat.toFixed(6) +
 ", " +
-longitude.toFixed(6);
+lng.toFixed(6);
 
 },
 
-function(error){
-
-console.error(error);
+function(){
 
 document
 .getElementById("locStatus")
-.innerText =
+.textContent =
 "❌ Location नहीं मिली";
 
+
 alert(
-"Location permission Allow करें और फिर दोबारा कोशिश करें।"
+"Browser में Location permission Allow करें।"
 );
 
 },
@@ -1663,35 +1595,33 @@ maximumAge:0
 window.clearGPS =
 function(){
 
-latitude =
-null;
+lat = null;
 
-longitude =
-null;
+lng = null;
+
 
 document
 .getElementById("locStatus")
-.innerText =
-"📍 Location not selected";
+.textContent =
+"Location not selected";
 
 };
 
 
-/* ================= FORM ================= */
+/* ================= SAVE ROOM ================= */
 
 document
 .getElementById("form")
-.addEventListener(
-"submit",
+.onsubmit =
 async function(event){
 
 event.preventDefault();
 
 
-if(!currentUser){
+if(!user){
 
 alert(
-"Room post करने के लिए पहले Login करें।"
+"पहले Login करें।"
 );
 
 return;
@@ -1699,16 +1629,12 @@ return;
 }
 
 
-const saveButton =
-document.getElementById(
-"save"
-);
+const save =
+document.getElementById("save");
 
-saveButton.disabled =
+
+save.disabled =
 true;
-
-saveButton.innerHTML =
-'<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
 
 try{
@@ -1768,84 +1694,67 @@ serverTimestamp()
 };
 
 
-if(
-!data.name ||
-!data.mobile ||
-!data.city ||
-!data.address ||
-!data.type ||
-!data.furnishing ||
-!data.rent
-){
-
-throw new Error(
-"सभी जरूरी fields भरें।"
-);
-
-}
-
-
-if(currentPhotoData){
+if(imgData){
 
 data.image =
-currentPhotoData;
+imgData;
 
 }
 
 
 if(
-latitude !== null &&
-longitude !== null
+lat !== null &&
+lng !== null
 ){
 
 data.latitude =
-latitude;
+lat;
 
 data.longitude =
-longitude;
+lng;
 
 }
 
 
-if(!editingId){
+if(editId){
+
+await updateDoc(
+doc(
+db,
+"room",
+editId
+),
+data
+);
+
+
+message(
+"postMsg",
+"✅ Room updated!",
+true
+);
+
+}else{
 
 data.ownerId =
-currentUser.uid;
+user.uid;
 
 data.ownerEmail =
-currentUser.email;
+user.email;
 
 data.createdAt =
 serverTimestamp();
 
 
 await addDoc(
-roomCollection,
+rooms,
 data
 );
 
 
-showMessage(
+message(
 "postMsg",
 "✅ Room successfully posted!",
-true
-);
-
-}else{
-
-await updateDoc(
-doc(
-db,
-"room",
-editingId
-),
-data
-);
-
-
-showMessage(
-"postMsg",
-"✅ Room successfully updated!",
 true
 );
 
@@ -1854,50 +1763,28 @@ true
 
 resetForm();
 
-await loadRooms();
-
-
-setTimeout(
-function(){
-
-document
-.getElementById("rooms")
-.scrollIntoView({
-behavior:"smooth"
-});
-
-},
-300
-);
+await load();
 
 
 }catch(error){
 
 console.error(error);
 
-showMessage(
+message(
 "postMsg",
-"❌ Save failed: " +
-error.message,
+"❌ " + error.message,
 false
 );
 
+
 }finally{
 
-saveButton.disabled =
+save.disabled =
 false;
 
-saveButton.innerHTML =
-editingId
-?
-"✏️ Update Room"
-:
-"🏠 Post Room";
-
 }
 
-}
-);
+};
 
 
 /* ================= RESET ================= */
@@ -1909,35 +1796,30 @@ document
 .getElementById("form")
 .reset();
 
-editingId =
+
+editId =
 null;
 
-currentPhotoData =
+imgData =
 "";
 
-latitude =
+lat =
 null;
 
-longitude =
+lng =
 null;
 
 
-const preview =
-document.getElementById(
-"preview"
-);
-
-preview.src =
-"";
-
-preview.style.display =
+document
+.getElementById("preview")
+.style.display =
 "none";
 
 
 document
 .getElementById("locStatus")
-.innerText =
-"📍 Location not selected";
+.textContent =
+"Location not selected";
 
 
 document
@@ -1948,98 +1830,86 @@ document
 
 document
 .getElementById("save")
-.innerHTML =
+.textContent =
 "🏠 Post Room";
 
 };
 
 
-/* ================= GET ROOMS ================= */
+/* ================= GET ALL ROOMS ================= */
 
-async function getAllRooms(){
+async function all(){
 
 const snapshot =
-await getDocs(
-roomCollection
-);
+await getDocs(rooms);
 
-const rooms = [];
+const array = [];
 
 
 snapshot.forEach(
-function(docSnap){
+function(item){
 
-rooms.push({
+array.push({
 
 id:
-docSnap.id,
+item.id,
 
-...docSnap.data()
-
-});
+...item.data()
 
 });
 
+});
 
-rooms.sort(
+
+array.sort(
 function(a,b){
 
-const aTime =
-a.createdAt?.seconds || 0;
-
-const bTime =
-b.createdAt?.seconds || 0;
-
-return bTime - aTime;
-
-}
+return (
+(b.createdAt?.seconds || 0)
+-
+(a.createdAt?.seconds || 0)
 );
 
+});
 
-return rooms;
+
+return array;
 
 }
 
 
 /* ================= LOAD ================= */
 
-async function loadRooms(){
+async function load(){
 
-const container =
-document.getElementById(
-"list"
-);
-
-container.innerHTML =
+document
+.getElementById("list")
+.innerHTML =
 `
 <div class="empty">
-<i class="fa-solid fa-spinner fa-spin"></i>
-<br><br>
-Rooms loading...
+⏳ Rooms loading...
 </div>
 `;
 
 
 try{
 
-const rooms =
-await getAllRooms();
+const data =
+await all();
 
-renderRooms(rooms);
+render(data);
+
 
 }catch(error){
 
 console.error(error);
 
 document
-.getElementById("count")
-.innerText =
-"❌ Rooms load नहीं हुए";
-
-container.innerHTML =
+.getElementById("list")
+.innerHTML =
 `
 <div class="empty">
-❌ ${escapeHtml(error.message)}
+❌ ${error.message}
 </div>
 `;
 
@@ -2056,7 +1926,7 @@ try{
 
 return JSON.parse(
 localStorage.getItem(
-"dreamHouseFavorites"
+"dreamFavs"
 ) || "[]"
 );
 
@@ -2069,43 +1939,43 @@ return [];
 }
 
 
-window.toggleFavorite =
+window.fav =
 function(id){
 
-let favorites =
+let array =
 getFavorites();
 
 
 if(
-favorites.includes(id)
+array.includes(id)
 ){
 
-favorites =
-favorites.filter(
+array =
+array.filter(
 x => x !== id
 );
 
 }else{
 
-favorites.push(id);
+array.push(id);
 
 }
 
 
 localStorage.setItem(
-"dreamHouseFavorites",
-JSON.stringify(favorites)
+"dreamFavs",
+JSON.stringify(array)
 );
 
 
-loadRooms();
+load();
 
 };
 
 
 /* ================= DIRECTIONS ================= */
 
-window.openDirections =
+window.directions =
 function(
 latitude,
 longitude,
@@ -2131,15 +2001,12 @@ longitude;
 
 }else{
 
-const destination =
-(address || "") +
-", " +
-(city || "");
-
 url =
 "https://www.google.com/maps/dir/?api=1&destination=" +
 encodeURIComponent(
-destination
+(address || "") +
+", " +
+(city || "")
 );
 
 }
@@ -2155,7 +2022,7 @@ url,
 
 /* ================= SHARE ================= */
 
-window.shareProperty =
+window.share =
 async function(
 type,
 city,
@@ -2165,11 +2032,13 @@ rent
 const text =
 "🏠 " +
 type +
-"\n📍 " +
+" in " +
 city +
 "\n💰 ₹" +
-Number(rent || 0).toLocaleString("en-IN") +
-" / Month\n\nDream House Rental";
+Number(rent)
+.toLocaleString("en-IN") +
+"/Month\n" +
+"Dream House Rental";
 
 
 try{
@@ -2211,54 +2080,55 @@ console.log(error);
 
 /* ================= PHONE ================= */
 
-function normalizePhone(mobile){
+function phone(
+mobile
+){
 
-let phone =
+let p =
 String(mobile || "")
 .replace(/\D/g,"");
 
 
 if(
-phone.startsWith("0")
+p.startsWith("0")
 ){
 
-phone =
-phone.substring(1);
+p =
+p.slice(1);
 
 }
 
 
 if(
-phone.length === 10
+p.length === 10
 ){
 
-phone =
-"91" + phone;
+p =
+"91" + p;
 
 }
 
 
-return phone;
+return p;
 
 }
 
 
 /* ================= CALL ================= */
 
-window.callOwner =
+window.call =
 function(mobile){
 
-const phone =
-normalizePhone(mobile);
+const p =
+phone(mobile);
 
 
 if(
-phone.length !== 12 ||
-!phone.startsWith("91")
+p.length !== 12
 ){
 
 alert(
-"Mobile number सही नहीं है।"
+"Mobile number सही नहीं है"
 );
 
 return;
@@ -2266,31 +2136,27 @@ return;
 }
 
 
-window.location.href =
-"tel:+" + phone;
+location.href =
+"tel:+" + p;
 
 };
 
 
 /* ================= WHATSAPP ================= */
 
-window.whatsappOwner =
-function(
-mobile,
-name
-){
+window.wa =
+function(mobile){
 
-const phone =
-normalizePhone(mobile);
+const p =
+phone(mobile);
 
 
 if(
-phone.length !== 12 ||
-!phone.startsWith("91")
+p.length !== 12
 ){
 
 alert(
-"Mobile number सही नहीं है।"
+"Mobile number सही नहीं है"
 );
 
 return;
@@ -2298,70 +2164,61 @@ return;
 }
 
 
-const message =
-"Hello " +
-(name || "Owner") +
-", I found your property on Dream House Rental. I am interested in this property.";
-
-
-const url =
-"https://wa.me/" +
-phone +
-"?text=" +
-encodeURIComponent(
-message
-);
-
-
 window.open(
-url,
+"https://wa.me/" +
+p,
 "_blank"
 );
 
 };
 
 
+/* ================= ESCAPE ================= */
+
+function escapeHtml(value){
+
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+function escapeJs(value){
+
+return String(value ?? "")
+.replace(/\\/g,"\\\\")
+.replace(/'/g,"\\'")
+.replace(/\n/g," ");
+
+}
+
+
 /* ================= RENDER ================= */
 
-function renderRooms(rooms){
+function render(array){
 
-const container =
-document.getElementById(
-"list"
-);
-
-const count =
-document.getElementById(
-"count"
-);
-
-
-count.innerText =
+document
+.getElementById("count")
+.textContent =
 "🏠 कुल " +
-rooms.length +
+array.length +
 " room मिले";
 
 
 if(
-rooms.length === 0
+array.length === 0
 ){
 
-container.innerHTML =
+document
+.getElementById("list")
+.innerHTML =
 `
 <div class="empty">
-
-<div style="font-size:38px">
-🏠
-</div>
-
-<strong>
-कोई room नहीं मिला
-</strong>
-
-<br>
-
-Search बदलकर फिर कोशिश करें।
-
+🏠 कोई room नहीं मिला
 </div>
 `;
 
@@ -2374,111 +2231,37 @@ const favorites =
 getFavorites();
 
 
-container.innerHTML =
-rooms.map(
+document
+.getElementById("list")
+.innerHTML =
+array
+.map(
 function(room){
 
-const isOwner =
-currentUser &&
-room.ownerId &&
+const owner =
+user &&
 room.ownerId ===
-currentUser.uid;
+user.uid;
 
 
-const isFavorite =
+const favorite =
 favorites.includes(
 room.id
 );
 
 
-const createdSeconds =
+const created =
 room.createdAt?.seconds || 0;
 
 
 const isNew =
-createdSeconds &&
+created &&
 (
 Date.now() -
-(createdSeconds * 1000)
+created * 1000
 <
-7 * 24 * 60 * 60 * 1000
+604800000
 );
-
-
-const image =
-room.image ||
-FALLBACK_IMAGE;
-
-
-const safeType =
-escapeHtml(
-room.type ||
-"Property"
-);
-
-
-const safeName =
-escapeHtml(
-room.name ||
-"Owner"
-);
-
-
-const safeMobile =
-escapeHtml(
-room.mobile ||
-""
-);
-
-
-const safeCity =
-escapeHtml(
-room.city ||
-""
-);
-
-
-const safeAddress =
-escapeHtml(
-room.address ||
-""
-);
-
-
-const safeFurnishing =
-escapeHtml(
-room.furnishing ||
-""
-);
-
-
-const safeDescription =
-escapeHtml(
-room.description ||
-""
-);
-
-
-const rent =
-Number(
-room.rent || 0
-);
-
-
-const lat =
-room.latitude !== undefined
-?
-room.latitude
-:
-null;
-
-
-const lng =
-room.longitude !== undefined
-?
-room.longitude
-:
-null;
 
 
 return `
@@ -2488,24 +2271,24 @@ return `
 <div class="photo">
 
 <img
-src="${image}"
+src="${room.image || fallback}"
 alt="Property Photo"
-onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
+onerror="this.src='${fallback}'"
 >
 
-<div class="badge">
-<i class="fa-solid fa-camera"></i>
-Property
-</div>
+
+<span class="badge">
+📸 Property
+</span>
+
 
 ${
 isNew
 ?
 `
-<div class="new">
-<i class="fa-solid fa-star"></i>
+<span class="new">
 NEW
-</div>
+</span>
 `
 :
 ""
@@ -2516,17 +2299,25 @@ NEW
 
 <div class="body">
 
+
 <div class="type">
-${safeType}
+
+${escapeHtml(
+room.type || "Property"
+)}
+
 </div>
 
 
 <div class="rent">
 
-₹${rent.toLocaleString("en-IN")}
+₹${
+Number(room.rent || 0)
+.toLocaleString("en-IN")
+}
 
 <small>
-/ Month
+ / Month
 </small>
 
 </div>
@@ -2534,78 +2325,72 @@ ${safeType}
 
 <div class="info">
 
-<i class="fa-solid fa-user"></i>
-
+👤
 <b>Owner:</b>
-${safeName}
+
+${escapeHtml(
+room.name || "Owner"
+)}
 
 </div>
 
 
 <div class="info">
 
-<i class="fa-solid fa-phone"></i>
+📞
 
-${safeMobile}
+${escapeHtml(
+room.mobile || ""
+)}
 
 </div>
 
 
 <div class="info">
 
-<i class="fa-solid fa-location-dot"></i>
-
+📍
 <b>City:</b>
-${safeCity}
+
+${escapeHtml(
+room.city || ""
+)}
 
 </div>
 
 
 <div class="info">
 
-<i class="fa-solid fa-map-location-dot"></i>
+🗺️
 
-${safeAddress}
+${escapeHtml(
+room.address || ""
+)}
 
 </div>
 
 
 <div class="info">
 
-<i class="fa-solid fa-couch"></i>
+🛋️
 
-${safeFurnishing}
+${escapeHtml(
+room.furnishing || ""
+)}
 
 </div>
 
 
 ${
-safeDescription
+room.description
 ?
 `
 <div class="desc">
 
-<i class="fa-solid fa-circle-info"></i>
+ℹ️
 
-${safeDescription}
-
-</div>
-`
-:
-""
-}
-
-
-${
-lat !== null &&
-lng !== null
-?
-`
-<div class="location-box">
-
-<i class="fa-solid fa-location-dot"></i>
-
-GPS location available
+${escapeHtml(
+room.description
+)}
 
 </div>
 `
@@ -2619,21 +2404,21 @@ GPS location available
 
 <button
 class="blue"
-onclick="callOwner('${escapeJs(room.mobile || "")}')"
+onclick="call('${escapeJs(room.mobile)}')"
 >
 
-<i class="fa-solid fa-phone"></i>
-Call
+📞 Call
 
 </button>
 
 
 <button
 class="wa"
-onclick="whatsappOwner('${escapeJs(room.mobile || "")}','${escapeJs(room.name || "Owner")}')"
+onclick="wa('${escapeJs(room.mobile)}')"
 >
 
 <i class="fa-brands fa-whatsapp"></i>
+
 WhatsApp
 
 </button>
@@ -2641,48 +2426,46 @@ WhatsApp
 
 <button
 class="purple"
-onclick="openDirections(
-${lat !== null ? lat : "null"},
-${lng !== null ? lng : "null"},
-'${escapeJs(room.address || "")}',
-'${escapeJs(room.city || "")}'
+onclick="directions(
+${room.latitude ?? "null"},
+${room.longitude ?? "null"},
+'${escapeJs(room.address)}',
+'${escapeJs(room.city)}'
 )"
 >
 
-<i class="fa-solid fa-route"></i>
-Directions
+🗺️ Directions
 
 </button>
 
 
 <button
 class="teal"
-onclick="shareProperty(
-'${escapeJs(room.type || "Property")}',
-'${escapeJs(room.city || "")}',
-'${escapeJs(room.rent || 0)}'
+onclick="share(
+'${escapeJs(room.type)}',
+'${escapeJs(room.city)}',
+'${escapeJs(room.rent)}'
 )"
 >
 
-<i class="fa-solid fa-share-nodes"></i>
-Share
+📤 Share
 
 </button>
 
 
 <button
 class="${
-isFavorite
+favorite
 ?
 "red"
 :
 "orange"
 }"
-onclick="toggleFavorite('${escapeJs(room.id)}')"
+onclick="fav('${escapeJs(room.id)}')"
 >
 
 ${
-isFavorite
+favorite
 ?
 "❤️ Saved"
 :
@@ -2693,28 +2476,26 @@ isFavorite
 
 
 ${
-isOwner
+owner
 ?
 `
 
 <button
 class="orange"
-onclick="editRoom('${escapeJs(room.id)}')"
+onclick="edit('${escapeJs(room.id)}')"
 >
 
-<i class="fa-solid fa-pen"></i>
-Edit
+✏️ Edit
 
 </button>
 
 
 <button
 class="red"
-onclick="deleteRoom('${escapeJs(room.id)}')"
+onclick="del('${escapeJs(room.id)}')"
 >
 
-<i class="fa-solid fa-trash"></i>
-Delete
+🗑️ Delete
 
 </button>
 
@@ -2726,6 +2507,7 @@ Delete
 
 </div>
 
+
 </div>
 
 </article>
@@ -2733,7 +2515,8 @@ Delete
 `;
 
 }
-).join("");
+)
+.join("");
 
 }
 
@@ -2765,30 +2548,12 @@ document
 );
 
 
-const container =
-document.getElementById(
-"list"
-);
-
-
-container.innerHTML =
-`
-<div class="empty">
-<i class="fa-solid fa-spinner fa-spin"></i>
-<br><br>
-Searching...
-</div>
-`;
-
-
-try{
-
-const rooms =
-await getAllRooms();
+const data =
+await all();
 
 
 const filtered =
-rooms.filter(
+data.filter(
 function(room){
 
 const roomCity =
@@ -2798,55 +2563,35 @@ room.city || ""
 .toLowerCase();
 
 
-const cityMatch =
+return (
+
+(
 !city ||
-roomCity.includes(
-city
-);
+roomCity.includes(city)
+)
 
+&&
 
-const typeMatch =
+(
 !type ||
-room.type === type;
+room.type === type
+)
 
+&&
 
-const rentMatch =
+(
 !maxRent ||
 Number(room.rent || 0)
-<= maxRent;
+<= maxRent
+)
 
-
-return (
-cityMatch &&
-typeMatch &&
-rentMatch
 );
 
 }
 );
 
 
-renderRooms(
-filtered
-);
-
-}catch(error){
-
-console.error(error);
-
-document
-.getElementById("count")
-.innerText =
-"❌ Search failed";
-
-container.innerHTML =
-`
-<div class="empty">
-❌ ${escapeHtml(error.message)}
-</div>
-`;
-
-}
+render(filtered);
 
 };
 
@@ -2861,45 +2606,35 @@ document
 .value =
 "";
 
+
 document
 .getElementById("stype")
 .value =
 "";
+
 
 document
 .getElementById("sRent")
 .value =
 "";
 
-loadRooms();
+
+load();
 
 };
 
 
 /* ================= EDIT ================= */
 
-window.editRoom =
+window.edit =
 async function(id){
 
-if(!currentUser){
-
-alert(
-"Edit करने के लिए Login करें।"
-);
-
-return;
-
-}
-
-
-try{
-
-const rooms =
-await getAllRooms();
+const data =
+await all();
 
 
 const room =
-rooms.find(
+data.find(
 x => x.id === id
 );
 
@@ -2916,13 +2651,13 @@ return;
 
 
 if(
-!room.ownerId ||
+!user ||
 room.ownerId !==
-currentUser.uid
+user.uid
 ){
 
 alert(
-"❌ आप केवल अपना room edit कर सकते हैं।"
+"❌ केवल अपना room edit कर सकते हैं।"
 );
 
 return;
@@ -2930,7 +2665,7 @@ return;
 }
 
 
-editingId =
+editId =
 id;
 
 
@@ -2982,69 +2717,62 @@ document
 room.description || "";
 
 
-currentPhotoData =
+imgData =
 room.image || "";
 
 
-latitude =
-room.latitude !== undefined
-?
-room.latitude
-:
+lat =
+room.latitude ??
 null;
 
 
-longitude =
-room.longitude !== undefined
-?
-room.longitude
-:
+lng =
+room.longitude ??
 null;
 
 
-if(room.image){
+if(imgData){
 
-const preview =
-document.getElementById(
-"preview"
-);
+document
+.getElementById("preview")
+.src =
+imgData;
 
-preview.src =
-room.image;
-
-preview.style.display =
+document
+.getElementById("preview")
+.style.display =
 "block";
 
 }
 
 
 if(
-latitude !== null &&
-longitude !== null
+lat !== null &&
+lng !== null
 ){
 
 document
 .getElementById("locStatus")
-.innerText =
+.textContent =
 "✅ Location saved: " +
-latitude.toFixed(6) +
+lat.toFixed(6) +
 ", " +
-longitude.toFixed(6);
+lng.toFixed(6);
 
 }else{
 
 document
 .getElementById("locStatus")
-.innerText =
-"📍 Location not selected";
+.textContent =
+"Location not selected";
 
 }
 
 
 document
 .getElementById("save")
-.innerHTML =
-'<i class="fa-solid fa-pen"></i> Update Room';
+.textContent =
+"✏️ Update Room";
 
 
 document
@@ -3059,67 +2787,15 @@ document
 behavior:"smooth"
 });
 
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Edit failed: " +
-error.message
-);
-
-}
-
 };
 
 
 /* ================= DELETE ================= */
 
-window.deleteRoom =
+window.del =
 async function(id){
 
-if(!currentUser){
-
-alert(
-"Delete करने के लिए Login करें।"
-);
-
-return;
-
-}
-
-
-const confirmDelete =
-confirm(
-"क्या आप यह room delete करना चाहते हैं?"
-);
-
-
-if(!confirmDelete){
-
-return;
-
-}
-
-
-try{
-
-const rooms =
-await getAllRooms();
-
-
-const room =
-rooms.find(
-x => x.id === id
-);
-
-
-if(!room){
-
-alert(
-"Room नहीं मिला।"
-);
+if(!user){
 
 return;
 
@@ -3127,19 +2803,42 @@ return;
 
 
 if(
-!room.ownerId ||
+!confirm(
+"क्या आप यह room delete करना चाहते हैं?"
+)
+){
+
+return;
+
+}
+
+
+const data =
+await all();
+
+
+const room =
+data.find(
+x => x.id === id
+);
+
+
+if(
+!room ||
 room.ownerId !==
-currentUser.uid
+user.uid
 ){
 
 alert(
-"❌ आप केवल अपना room delete कर सकते हैं।"
+"❌ केवल अपना room delete कर सकते हैं"
 );
 
 return;
 
 }
 
+
+try{
 
 await deleteDoc(
 doc(
@@ -3155,14 +2854,13 @@ alert(
 );
 
 
-await loadRooms();
+load();
+
 
 }catch(error){
 
-console.error(error);
-
 alert(
-"Delete failed: " +
+"❌ Delete failed: " +
 error.message
 );
 
@@ -3171,9 +2869,9 @@ error.message
 };
 
 
-/* ================= INITIAL ================= */
+/* ================= START ================= */
 
-loadRooms();
+load();
 
 </script>
 
