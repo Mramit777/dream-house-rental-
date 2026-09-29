@@ -1,225 +1,176 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>Dream House Rental</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 <style>
-*{box-sizing:border-box}
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f7fb;
-  color:#182230;
+font-family:Arial,sans-serif;
+background:#f5f7fb;
+color:#182230;
 }
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;border-radius:10px;padding:12px;font-weight:700}
 
-button,input,select,textarea{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-  border:0;
-  border-radius:10px;
-  padding:11px;
-  font-weight:700;
-}
-
-.wrap{
-  max-width:1150px;
-  width:94%;
-  margin:20px auto;
-}
-
-/* HEADER */
 header{
-  position:sticky;
-  top:0;
-  z-index:99;
-  background:#fff;
-  border-bottom:1px solid #e2e8f0;
-  box-shadow:0 3px 15px #0f172a12;
+position:sticky;
+top:0;
+z-index:100;
+background:#fff;
+border-bottom:1px solid #ddd;
+box-shadow:0 2px 12px #00000012
 }
 
 .head{
-  max-width:1150px;
-  margin:auto;
-  padding:13px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
+max-width:1150px;
+margin:auto;
+padding:12px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
 }
 
 .logo{
-  font-weight:900;
-  font-size:20px;
-  color:#172554;
+font-weight:800;
+font-size:21px;
+color:#172554
 }
-
-.logo span{
-  color:#2563eb;
-}
+.logo span{color:#2563eb}
 
 nav{
-  display:flex;
-  gap:4px;
-  flex-wrap:wrap;
+display:flex;
+gap:4px;
+flex-wrap:wrap
 }
-
 nav a{
-  padding:8px 10px;
-  color:#475569;
-  text-decoration:none;
-  font-weight:700;
-  font-size:14px;
-  border-radius:8px;
+padding:9px;
+color:#475569;
+text-decoration:none;
+font-weight:700;
+font-size:14px
 }
 
-nav a:hover{
-  background:#eff6ff;
-  color:#2563eb;
+.wrap{
+max-width:1150px;
+width:94%;
+margin:20px auto
 }
 
-/* HERO */
 .hero{
-  padding:55px 20px;
-  text-align:center;
-  color:#fff;
-  border-radius:25px;
-  background:
-  linear-gradient(135deg,#172554,#2563eb,#4f46e5);
-  box-shadow:0 15px 40px #2563eb33;
+padding:50px 20px;
+text-align:center;
+color:#fff;
+border-radius:24px;
+background:linear-gradient(135deg,#172554,#2563eb,#4f46e5);
+box-shadow:0 15px 40px #2563eb33
 }
 
 .hero h1{
-  font-size:38px;
-  margin:12px;
+font-size:36px;
+margin:14px
 }
 
 .hero p{
-  margin:10px auto 25px;
-  max-width:700px;
-  line-height:1.6;
+margin:10px 0 25px;
+font-size:16px
 }
 
 .hero a{
-  display:inline-block;
-  background:#fff;
-  color:#1d4ed8;
-  padding:13px 20px;
-  border-radius:11px;
-  font-weight:800;
-  text-decoration:none;
+display:inline-block;
+background:#fff;
+color:#1d4ed8;
+padding:13px 20px;
+border-radius:10px;
+font-weight:800;
+text-decoration:none
 }
 
-/* SECTIONS */
 section{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  padding:20px;
-  margin:20px 0;
-  box-shadow:0 5px 22px #0f172a0b;
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:18px;
+padding:20px;
+margin:20px 0;
+box-shadow:0 5px 22px #0f172a0b
 }
 
 .title{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  margin-bottom:16px;
+display:flex;
+gap:10px;
+align-items:center;
+margin-bottom:17px
 }
 
 .title i{
-  background:#eff6ff;
-  color:#2563eb;
-  padding:12px;
-  border-radius:11px;
+background:#eff6ff;
+color:#2563eb;
+padding:12px;
+border-radius:11px
 }
 
 .title h2{
-  color:#172554;
-  font-size:21px;
-  margin:0;
+color:#172554;
+font-size:21px
 }
 
-/* STATUS */
-.status,
-.loginreq{
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:15px;
-  background:#ecfdf5;
-  color:#166534;
-  border:1px solid #bbf7d0;
-  font-weight:700;
+.status{
+padding:12px;
+border-radius:10px;
+margin-bottom:15px;
+background:#ecfdf5;
+color:#166534;
+border:1px solid #bbf7d0;
+font-weight:700
 }
 
 .loginreq{
-  background:#fff7ed;
-  color:#9a3412;
-  border-color:#fed7aa;
+padding:12px;
+border-radius:10px;
+margin-bottom:15px;
+background:#fff7ed;
+color:#9a3412;
+border:1px solid #fed7aa;
+font-weight:700
 }
 
-/* FORM */
 label{
-  display:block;
-  margin:10px 0 5px;
-  font-weight:700;
-  font-size:14px;
+display:block;
+margin:10px 0 5px;
+font-weight:700;
+font-size:14px
 }
 
-input,
-select,
-textarea{
-  width:100%;
-  padding:12px;
-  border:1px solid #d8dee8;
-  border-radius:10px;
-  background:#fff;
-  outline:none;
+input,select,textarea{
+width:100%;
+padding:12px;
+border:1px solid #d8dee8;
+border-radius:10px;
+background:#fff
 }
 
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:#2563eb;
-  box-shadow:0 0 0 3px #2563eb18;
-}
-
-textarea{
-  min-height:100px;
-  resize:vertical;
-}
+textarea{min-height:110px}
 
 .grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4px 14px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:4px 14px
 }
 
-.full{
-  grid-column:1/-1;
-}
+.full{grid-column:1/-1}
 
 .btns{
-  display:flex;
-  gap:9px;
-  margin-top:14px;
+display:flex;
+gap:9px;
+margin-top:14px
 }
 
-.btns>*{
-  flex:1;
-}
+.btns>*{flex:1}
 
 .blue{background:#2563eb;color:#fff}
 .green{background:#16a34a;color:#fff}
@@ -230,266 +181,218 @@ textarea{
 .orange{background:#f59e0b;color:#fff}
 .wa{background:#25D366;color:#fff}
 
-/* PHOTO */
 .preview{
-  max-width:430px;
-  width:100%;
-  max-height:250px;
-  object-fit:cover;
-  margin-top:10px;
-  border-radius:12px;
-  display:none;
+max-width:430px;
+width:100%;
+max-height:250px;
+object-fit:cover;
+margin-top:10px;
+border-radius:12px;
+display:none
 }
 
-/* LOCATION */
 .loc{
-  margin-top:12px;
-  padding:12px;
-  border:1px solid #bbf7d0;
-  background:#f0fdf4;
-  border-radius:12px;
+margin-top:12px;
+padding:12px;
+border:1px solid #bbf7d0;
+background:#f0fdf4;
+border-radius:12px
 }
 
-/* SEARCH */
 .searchbox{
-  background:#eff6ff;
-  padding:16px;
-  border-radius:14px;
+background:#eff6ff;
+padding:15px;
+border-radius:14px
 }
 
 .searchgrid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:12px;
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:12px
 }
 
-/* ROOMS */
 .rooms{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px
 }
 
 .card{
-  background:#fff;
-  border:1px solid #e2e8f0;
-  border-radius:17px;
-  overflow:hidden;
-  box-shadow:0 5px 18px #0f172a12;
-  transition:.2s;
-}
-
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 12px 28px #0f172a18;
+background:#fff;
+border:1px solid #e2e8f0;
+border-radius:17px;
+overflow:hidden;
+box-shadow:0 5px 18px #0f172a12
 }
 
 .photo{
-  height:215px;
-  position:relative;
-  background:#e2e8f0;
+height:215px;
+position:relative;
+background:#e2e8f0
 }
 
 .photo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:100%;
+height:100%;
+object-fit:cover
 }
 
 .badge{
-  position:absolute;
-  top:10px;
-  left:10px;
-  background:#0f172abb;
-  color:#fff;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:12px;
+position:absolute;
+top:10px;
+left:10px;
+background:#0f172acc;
+color:#fff;
+padding:5px 9px;
+border-radius:20px;
+font-size:12px
 }
 
 .new{
-  position:absolute;
-  right:10px;
-  top:10px;
-  background:#f59e0b;
-  color:#fff;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:12px;
+position:absolute;
+right:10px;
+top:10px;
+background:#f59e0b;
+color:#fff;
+padding:5px 9px;
+border-radius:20px;
+font-size:12px
 }
 
-.body{
-  padding:15px;
-}
+.body{padding:15px}
 
 .type{
-  font-size:19px;
-  font-weight:800;
-  color:#172554;
+font-size:19px;
+font-weight:800;
+color:#172554
 }
 
 .rent{
-  font-size:19px;
-  color:#15803d;
-  font-weight:800;
-  margin:7px 0 12px;
+font-size:19px;
+color:#15803d;
+font-weight:800;
+margin:7px 0 12px
 }
 
 .info{
-  font-size:13px;
-  color:#475569;
-  margin:7px 0;
+font-size:13px;
+color:#475569;
+margin:7px 0
 }
 
 .desc{
-  background:#f8fafc;
-  padding:9px;
-  border-radius:9px;
-  font-size:13px;
-  margin-top:10px;
+background:#f8fafc;
+padding:9px;
+border-radius:9px;
+font-size:13px;
+margin-top:10px
 }
 
 .cardbtn{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:13px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin-top:13px
 }
 
 .empty{
-  text-align:center;
-  padding:30px;
-  border:1px dashed #cbd5e1;
-  border-radius:14px;
-  color:#64748b;
-  grid-column:1/-1;
-}
-
-/* FEEDBACK */
-.feedback-wrap{
-  background:
-    linear-gradient(135deg,#f8fafc,#eff6ff);
-  border:1px solid #dbeafe;
-}
-
-.feedback-types{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-bottom:10px;
-}
-
-.type-box{
-  border:2px solid #e2e8f0;
-  border-radius:13px;
-  padding:15px;
-  cursor:pointer;
-  background:#fff;
-  text-align:center;
-  font-weight:800;
-}
-
-.type-box.active{
-  border-color:#2563eb;
-  background:#eff6ff;
-  color:#1d4ed8;
+text-align:center;
+padding:30px;
+border:1px dashed #cbd5e1;
+border-radius:14px;
+color:#64748b;
+grid-column:1/-1
 }
 
 .rating{
-  display:flex;
-  gap:8px;
-  margin:10px 0;
+display:flex;
+gap:6px;
+font-size:25px;
+margin-top:5px
 }
 
-.rating button{
-  background:#f1f5f9;
-  font-size:20px;
+.rating span{
+cursor:pointer;
+opacity:.35
 }
 
-.rating button.active{
-  background:#fef3c7;
+.rating span.active{
+opacity:1
+}
+
+.feedback-note{
+background:#f8fafc;
+padding:14px;
+border-radius:12px;
+margin-bottom:15px;
+line-height:1.6
 }
 
 .msg{
-  display:none;
-  padding:10px;
-  margin-top:10px;
-  border-radius:9px;
+display:none;
+padding:11px;
+margin-top:10px;
+border-radius:9px
 }
 
 .ok{
-  display:block;
-  background:#ecfdf5;
-  color:#166534;
+display:block;
+background:#ecfdf5;
+color:#166534
 }
 
 .err{
-  display:block;
-  background:#fef2f2;
-  color:#991b1b;
+display:block;
+background:#fef2f2;
+color:#991b1b
 }
 
-/* FOOTER */
 footer{
-  text-align:center;
-  background:#0f172a;
-  color:#cbd5e1;
-  padding:28px;
-  margin-top:30px;
+text-align:center;
+background:#0f172a;
+color:#cbd5e1;
+padding:28px;
+margin-top:30px
 }
 
-.footer-links{
-  margin:12px 0;
+footer b{
+font-size:18px
 }
 
-.footer-links a{
-  color:#cbd5e1;
-  margin:0 8px;
-  text-decoration:none;
-}
-
-/* MOBILE */
 @media(max-width:900px){
-  .rooms{
-    grid-template-columns:1fr 1fr;
-  }
+.rooms{grid-template-columns:1fr 1fr}
 }
 
 @media(max-width:700px){
-  .head{
-    flex-direction:column;
-  }
+.head{
+flex-direction:column
+}
 
-  .grid,
-  .searchgrid,
-  .rooms,
-  .feedback-types{
-    grid-template-columns:1fr;
-  }
+nav{
+justify-content:center
+}
 
-  .full{
-    grid-column:auto;
-  }
+.grid,
+.searchgrid,
+.rooms{
+grid-template-columns:1fr
+}
 
-  .hero{
-    padding:40px 16px;
-  }
+.full{
+grid-column:auto
+}
 
-  .hero h1{
-    font-size:28px;
-  }
+.hero h1{
+font-size:28px
+}
 
-  .btns{
-    flex-direction:column;
-  }
+.btns{
+flex-direction:column
+}
 
-  nav{
-    justify-content:center;
-  }
-
-  nav a{
-    font-size:13px;
-  }
+.hero{
+padding:40px 15px
+}
 }
 </style>
 </head>
@@ -518,6 +421,7 @@ footer{
 <main class="wrap">
 
 <!-- HOME -->
+
 <section id="home" class="hero">
 
 <b>🏠 Smart Property Search</b>
@@ -529,68 +433,41 @@ Room, BHK, Flat, House, PG aur Shop खोजें,
 सीधे Owner से Contact करें और अपने लिए सही Property खोजें।
 </p>
 
-<a href="#rooms">
-🔍 Find a Room
-</a>
+<a href="#rooms">🔍 Find a Room</a>
 
 </section>
 
 
-<!-- FIREBASE STATUS -->
 <div id="firebaseStatus" class="status">
 ⏳ Firebase connecting...
 </div>
 
 
 <!-- LOGIN -->
+
 <section id="auth">
 
 <div class="title">
-<i class="fa-solid fa-user-lock"></i>
+<div>🔐</div>
 <h2>Login / Signup</h2>
 </div>
 
 <div id="loggedOut">
 
 <label>Email</label>
-<input
-id="email"
-type="email"
-placeholder="example@gmail.com"
->
+<input id="email" type="email" placeholder="example@gmail.com">
 
 <label>Password</label>
-<input
-id="password"
-type="password"
-placeholder="Minimum 6 characters"
->
+<input id="password" type="password" placeholder="Minimum 6 characters">
 
 <div class="btns">
 
-<button
-class="green"
-onclick="signup()">
+<button class="green" onclick="signup()">
 📝 Signup
 </button>
 
-<button
-class="blue"
-onclick="login()">
+<button class="blue" onclick="login()">
 🔐 Login
-</button>
-
-</div>
-
-<div style="text-align:center;margin-top:10px">
-
-<button
-type="button"
-onclick="forgotPassword()"
-style="background:none;color:#2563eb;padding:5px;font-weight:700">
-
-🔑 Forgot Password?
-
 </button>
 
 </div>
@@ -603,17 +480,11 @@ style="background:none;color:#2563eb;padding:5px;font-weight:700">
 <div id="loggedIn" style="display:none">
 
 <div class="status">
-✅ Logged in as
-<b id="who"></b>
+✅ Logged in as <b id="who"></b>
 </div>
 
-<button
-class="red"
-style="width:100%"
-onclick="logout()">
-
-🚪 Logout
-
+<button class="red" style="width:100%" onclick="logout()">
+Logout
 </button>
 
 </div>
@@ -622,21 +493,16 @@ onclick="logout()">
 
 
 <!-- POST ROOM -->
+
 <section id="post">
 
 <div class="title">
-
-<i class="fa-solid fa-house-circle-plus"></i>
-
+<div>🏠</div>
 <h2>Post Your Room</h2>
-
 </div>
 
-
 <div id="needLogin" class="loginreq">
-
 🔒 Room post करने के लिए पहले Login करें।
-
 </div>
 
 
@@ -649,36 +515,25 @@ onclick="logout()">
 <input id="name" required>
 </div>
 
-
 <div>
 <label>Mobile Number</label>
-<input
-id="mobile"
-required
-placeholder="10 digit">
+<input id="mobile" required placeholder="10 digit">
 </div>
-
 
 <div>
 <label>City</label>
 <input id="city" required>
 </div>
 
-
 <div>
 <label>Address</label>
-<input
-id="address"
-required
-placeholder="Full Address">
+<input id="address" required placeholder="Full Address">
 </div>
-
 
 <div>
 <label>Property Type</label>
 
 <select id="type" required>
-
 <option value="">Select</option>
 <option>Room</option>
 <option>1 BHK</option>
@@ -688,65 +543,46 @@ placeholder="Full Address">
 <option>House</option>
 <option>PG</option>
 <option>Shop</option>
-
 </select>
 
 </div>
-
 
 <div>
 
 <label>Furnishing</label>
 
 <select id="furnishing" required>
-
 <option value="">Select</option>
 <option>Unfurnished</option>
 <option>Semi Furnished</option>
 <option>Fully Furnished</option>
-
 </select>
 
 </div>
 
-
 <div>
 
 <label>Monthly Rent</label>
-
-<input
-id="rent"
-type="number"
-min="1"
-required>
+<input id="rent" type="number" min="1" required>
 
 </div>
-
 
 <div>
 
 <label>Room Photo</label>
-
-<input
-id="file"
-type="file"
-accept="image/*">
+<input id="file" type="file" accept="image/*">
 
 </div>
 
-
 <div class="full">
 
-<img
-id="preview"
-class="preview">
+<img id="preview" class="preview">
 
 <small>
 📸 Photo automatically compress होगी।
 </small>
 
 </div>
-
 
 <div class="full">
 
@@ -759,12 +595,11 @@ placeholder="Room की जानकारी">
 
 </div>
 
-
 <div class="full loc">
 
 <b>📍 Property Location</b>
 
-<p style="font-size:12px">
+<p style="font-size:12px;margin-top:5px">
 GPS save करने पर renter सीधे Google Maps directions ले सकेगा।
 </p>
 
@@ -774,18 +609,14 @@ GPS save करने पर renter सीधे Google Maps directions ले �
 type="button"
 class="green"
 onclick="gps()">
-
 📍 Use Current Location
-
 </button>
 
 <button
 type="button"
 class="gray"
 onclick="clearGPS()">
-
 Clear
-
 </button>
 
 </div>
@@ -801,12 +632,8 @@ Location not selected
 
 <div class="btns">
 
-<button
-id="save"
-class="blue">
-
+<button id="save" class="blue">
 🏠 Post Room
-
 </button>
 
 <button
@@ -815,9 +642,7 @@ type="button"
 class="gray"
 style="display:none"
 onclick="resetForm()">
-
 Cancel
-
 </button>
 
 </div>
@@ -829,15 +654,13 @@ Cancel
 </section>
 
 
-<!-- SEARCH -->
+<!-- ROOMS -->
+
 <section id="rooms">
 
 <div class="title">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
+<div>🔍</div>
 <h2>Find Your Room</h2>
-
 </div>
 
 
@@ -846,15 +669,9 @@ Cancel
 <div class="searchgrid">
 
 <div>
-
 <label>📍 City</label>
-
-<input
-id="scity"
-placeholder="City">
-
+<input id="scity" placeholder="City">
 </div>
-
 
 <div>
 
@@ -862,10 +679,7 @@ placeholder="City">
 
 <select id="stype">
 
-<option value="">
-All Types
-</option>
-
+<option value="">All Types</option>
 <option>Room</option>
 <option>1 BHK</option>
 <option>2 BHK</option>
@@ -879,15 +693,10 @@ All Types
 
 </div>
 
-
 <div>
 
 <label>₹ Maximum Rent</label>
-
-<input
-id="sRent"
-type="number"
-placeholder="Example 10000">
+<input id="sRent" type="number" placeholder="Example: 10000">
 
 </div>
 
@@ -896,20 +705,12 @@ placeholder="Example 10000">
 
 <div class="btns">
 
-<button
-class="blue"
-onclick="searchRooms()">
-
+<button class="blue" onclick="searchRooms()">
 🔍 Search
-
 </button>
 
-<button
-class="gray"
-onclick="clearSearch()">
-
+<button class="gray" onclick="clearSearch()">
 🧹 Clear
-
 </button>
 
 </div>
@@ -917,98 +718,84 @@ onclick="clearSearch()">
 </div>
 
 
-<div
-id="count"
-style="font-weight:800;margin:18px 0 12px">
-
+<div id="count" style="font-weight:800;margin:18px 0 12px">
 ⏳ Loading...
-
 </div>
 
-
-<div
-id="list"
-class="rooms">
-
-</div>
+<div id="list" class="rooms"></div>
 
 </section>
 
 
-<!-- SUGGESTION / COMPLAINT -->
-<section id="feedback" class="feedback-wrap">
+<!-- FEEDBACK -->
+
+<section id="feedback">
 
 <div class="title">
-
-<i class="fa-solid fa-comments"></i>
-
+<div>💡</div>
 <h2>सुझाव & शिकायत</h2>
-
 </div>
 
+<div class="feedback-note">
 
-<p style="color:#475569;line-height:1.6">
+आपका सुझाव हमारे लिए बहुत महत्वपूर्ण है। ❤️
 
-आपका सुझाव हमारे लिए बहुत महत्वपूर्ण है।
+<br>
+
 Website या किसी Property से संबंधित कोई समस्या,
 शिकायत या नया सुझाव हो तो हमें जरूर बताएं।
 
-</p>
+<br><br>
 
-
-<div class="feedback-types">
-
-<div
-id="suggestionType"
-class="type-box active"
-onclick="setFeedbackType('सुझाव')">
-
-💡<br>
-सुझाव
-
-</div>
-
-
-<div
-id="complaintType"
-class="type-box"
-onclick="setFeedbackType('शिकायत')">
-
-⚠️<br>
-शिकायत
-
-</div>
+<strong>
+हम आपके Feedback को बेहतर सेवा के लिए इस्तेमाल करेंगे।
+</strong>
 
 </div>
 
 
 <form id="feedbackForm">
 
-<input
-type="hidden"
-id="feedbackType"
-value="सुझाव">
+<label>आप किस प्रकार का Feedback देना चाहते हैं?</label>
+
+<select id="feedbackType" required>
+
+<option value="सुझाव">
+💡 सुझाव
+</option>
+
+<option value="शिकायत">
+⚠️ शिकायत
+</option>
+
+</select>
 
 
 <label>आपका नाम</label>
 
 <input
 id="feedbackName"
-placeholder="अपना नाम">
+required
+maxlength="80"
+placeholder="अपना नाम लिखें">
 
 
 <label>मोबाइल नंबर</label>
 
 <input
 id="feedbackMobile"
-placeholder="10 digit mobile number">
+required
+maxlength="15"
+placeholder="मोबाइल नंबर">
 
 
 <label>विषय</label>
 
 <input
 id="feedbackSubject"
-placeholder="जैसे: Search में समस्या">
+required
+maxlength="150"
+placeholder="Feedback का विषय">
 
 
 <label>आपकी बात</label>
@@ -1016,61 +803,32 @@ placeholder="जैसे: Search में समस्या">
 <textarea
 id="feedbackMessage"
 required
-placeholder="अपना सुझाव या शिकायत यहाँ लिखें...">
+maxlength="1000"
+placeholder="अपना सुझाव या शिकायत लिखें...">
 </textarea>
 
 
 <label>Rating</label>
 
-<div class="rating">
+<div class="rating" id="rating">
 
-<button
-type="button"
-data-rating="1"
-onclick="setRating(1)">
-⭐
-</button>
-
-<button
-type="button"
-data-rating="2"
-onclick="setRating(2)">
-⭐
-</button>
-
-<button
-type="button"
-data-rating="3"
-onclick="setRating(3)">
-⭐
-</button>
-
-<button
-type="button"
-data-rating="4"
-onclick="setRating(4)">
-⭐
-</button>
-
-<button
-type="button"
-data-rating="5"
-onclick="setRating(5)">
-⭐
-</button>
+<span data-rate="1">⭐</span>
+<span data-rate="2">⭐</span>
+<span data-rate="3">⭐</span>
+<span data-rate="4">⭐</span>
+<span data-rate="5">⭐</span>
 
 </div>
 
 
 <button
+type="submit"
 class="blue"
-style="width:100%"
-id="feedbackButton">
+style="width:100%;margin-top:15px">
 
 📩 सुझाव / शिकायत भेजें
 
 </button>
-
 
 <div id="feedbackMsg" class="msg"></div>
 
@@ -1081,7 +839,6 @@ id="feedbackButton">
 </main>
 
 
-<!-- FOOTER -->
 <footer>
 
 <b>🏠 Dream House Rental</b>
@@ -1090,14 +847,39 @@ id="feedbackButton">
 
 Find • Rent • Live
 
-<div class="footer-links">
+<br>
 
-<a href="#home">Home</a>
-<a href="#rooms">Rooms</a>
-<a href="#post">Post Room</a>
-<a href="#feedback">सुझाव & शिकायत</a>
+<a
+href="#home"
+style="color:#93c5fd;text-decoration:none">
+Home
+</a>
 
-</div>
+&nbsp; | &nbsp;
+
+<a
+href="#rooms"
+style="color:#93c5fd;text-decoration:none">
+Rooms
+</a>
+
+&nbsp; | &nbsp;
+
+<a
+href="#post"
+style="color:#93c5fd;text-decoration:none">
+Post Room
+</a>
+
+&nbsp; | &nbsp;
+
+<a
+href="#feedback"
+style="color:#93c5fd;text-decoration:none">
+सुझाव & शिकायत
+</a>
+
+<br><br>
 
 <small>
 © 2026 Dream House Rental • All Rights Reserved
@@ -1133,7 +915,6 @@ import {
 getAuth,
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
-sendPasswordResetEmail,
 signOut,
 onAuthStateChanged
 }
@@ -1169,15 +950,17 @@ measurementId:
 };
 
 
-/* FIREBASE */
+const app =
+initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
+const db =
+getFirestore(app,"default");
 
-const db = getFirestore(app,"default");
+const auth =
+getAuth(app);
 
-const auth = getAuth(app);
-
-const rooms = collection(db,"room");
+const rooms =
+collection(db,"room");
 
 const feedbackCollection =
 collection(db,"feedback");
@@ -1188,44 +971,33 @@ const fallback =
 
 
 let user = null;
-
 let editId = null;
-
 let imgData = "";
-
 let lat = null;
-
 let lng = null;
+let selectedRating = 5;
 
-let feedbackRating = 0;
-
-
-/* STATUS */
 
 firebaseStatus.textContent =
 "✅ Firebase connected successfully";
 
 
-/* ESCAPE HTML */
+/* SAFE TEXT */
 
-const esc = x =>
-String(x ?? "")
-.replace(/[&<>"']/g,m => ({
+function esc(x){
+
+return String(x ?? "")
+.replace(/[&<>"']/g,m=>({
+
 "&":"&amp;",
 "<":"&lt;",
 ">":"&gt;",
 '"':"&quot;",
 "'":"&#039;"
+
 }[m]));
 
-
-/* SAFE JS STRING */
-
-const js = x =>
-String(x ?? "")
-.replace(/\\/g,"\\\\")
-.replace(/'/g,"\\'")
-.replace(/\n/g," ");
+}
 
 
 /* MESSAGE */
@@ -1245,57 +1017,9 @@ e.style.display = "block";
 }
 
 
-/* FORGOT PASSWORD */
-
-window.forgotPassword =
-async function(){
-
-const em =
-document.getElementById("email")
-.value.trim();
-
-if(!em){
-
-message(
-"authMsg",
-"पहले अपना registered Email डालें।",
-false
-);
-
-return;
-
-}
-
-try{
-
-await sendPasswordResetEmail(
-auth,
-em
-);
-
-message(
-"authMsg",
-"✅ Password reset link आपके email पर भेज दिया गया है। Inbox/Spam भी check करें।",
-true
-);
-
-}catch(e){
-
-message(
-"authMsg",
-"❌ Password reset नहीं हो पाया।",
-false
-);
-
-}
-
-};
-
-
 /* SIGNUP */
 
-window.signup =
-async function(){
+window.signup = async function(){
 
 try{
 
@@ -1313,7 +1037,8 @@ true
 
 password.value = "";
 
-}catch(e){
+}
+catch(e){
 
 message(
 "authMsg",
@@ -1328,8 +1053,7 @@ false
 
 /* LOGIN */
 
-window.login =
-async function(){
+window.login = async function(){
 
 try{
 
@@ -1347,7 +1071,8 @@ true
 
 password.value = "";
 
-}catch(e){
+}
+catch(e){
 
 message(
 "authMsg",
@@ -1363,18 +1088,14 @@ false
 /* LOGOUT */
 
 window.logout =
-function(){
-
-signOut(auth);
-
-};
+()=>signOut(auth);
 
 
 /* AUTH STATE */
 
 onAuthStateChanged(
 auth,
-u => {
+u=>{
 
 user = u;
 
@@ -1413,37 +1134,28 @@ const reader =
 new FileReader();
 
 reader.onload =
-e => {
+event=>{
 
 const image =
 new Image();
 
-image.onload =
-() => {
+image.onload = ()=>{
 
-let w =
-image.width;
+let w = image.width;
+let h = image.height;
 
-let h =
-image.height;
-
-const max =
-900;
+const max = 900;
 
 if(w > max){
 
-h =
-h * max / w;
-
+h = h * max / w;
 w = max;
 
 }
 
 if(h > max){
 
-w =
-w * max / h;
-
+w = w * max / h;
 h = max;
 
 }
@@ -1451,24 +1163,14 @@ h = max;
 const canvas =
 document.createElement("canvas");
 
-canvas.width =
-w;
-
-canvas.height =
-h;
+canvas.width = w;
+canvas.height = h;
 
 canvas
 .getContext("2d")
-.drawImage(
-image,
-0,
-0,
-w,
-h
-);
+.drawImage(image,0,0,w,h);
 
-let quality =
-0.75;
+let quality = .75;
 
 let data =
 canvas.toDataURL(
@@ -1478,10 +1180,10 @@ quality
 
 while(
 data.length > 420000 &&
-quality > 0.35
+quality > .35
 ){
 
-quality -= 0.05;
+quality -= .05;
 
 data =
 canvas.toDataURL(
@@ -1496,12 +1198,11 @@ resolve(data);
 };
 
 image.src =
-e.target.result;
+event.target.result;
 
 };
 
-reader.onerror =
-reject;
+reader.onerror = reject;
 
 reader.readAsDataURL(file);
 
@@ -1515,12 +1216,11 @@ reader.readAsDataURL(file);
 file.onchange =
 async function(){
 
-if(file.files[0]){
+if(!file.files[0])
+return;
 
 imgData =
-await compress(
-file.files[0]
-);
+await compress(file.files[0]);
 
 preview.src =
 imgData;
@@ -1528,21 +1228,16 @@ imgData;
 preview.style.display =
 "block";
 
-}
-
 };
 
 
 /* GPS */
 
-window.gps =
-function(){
+window.gps = function(){
 
 if(!navigator.geolocation){
 
-alert(
-"GPS उपलब्ध नहीं है।"
-);
+alert("GPS उपलब्ध नहीं है।");
 
 return;
 
@@ -1553,22 +1248,20 @@ locStatus.textContent =
 
 navigator.geolocation.getCurrentPosition(
 
-p => {
+position=>{
 
 lat =
-p.coords.latitude;
+position.coords.latitude;
 
 lng =
-p.coords.longitude;
+position.coords.longitude;
 
 locStatus.textContent =
-`✅ Location saved:
-${lat.toFixed(6)},
-${lng.toFixed(6)}`;
+`✅ Location saved: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
 },
 
-() => {
+()=>{
 
 locStatus.textContent =
 "❌ Location नहीं मिली";
@@ -1596,7 +1289,6 @@ window.clearGPS =
 function(){
 
 lat = null;
-
 lng = null;
 
 locStatus.textContent =
@@ -1614,9 +1306,7 @@ e.preventDefault();
 
 if(!user){
 
-alert(
-"पहले Login करें"
-);
+alert("पहले Login करें");
 
 return;
 
@@ -1628,26 +1318,19 @@ try{
 
 let data = {
 
-name:
-name.value.trim(),
+name:name.value.trim(),
 
-mobile:
-mobile.value.trim(),
+mobile:mobile.value.trim(),
 
-city:
-city.value.trim(),
+city:city.value.trim(),
 
-address:
-address.value.trim(),
+address:address.value.trim(),
 
-type:
-type.value,
+type:type.value,
 
-furnishing:
-furnishing.value,
+furnishing:furnishing.value,
 
-rent:
-Number(rent.value),
+rent:Number(rent.value),
 
 description:
 description.value.trim(),
@@ -1658,26 +1341,17 @@ serverTimestamp()
 };
 
 
-if(imgData){
-
-data.image =
-imgData;
-
-}
+if(imgData)
+data.image = imgData;
 
 
 if(lat !== null){
 
-data.latitude =
-lat;
-
-data.longitude =
-lng;
+data.latitude = lat;
+data.longitude = lng;
 
 }
 
-
-/* UPDATE */
 
 if(editId){
 
@@ -1693,9 +1367,6 @@ true
 );
 
 }
-
-
-/* NEW ROOM */
 
 else{
 
@@ -1726,7 +1397,9 @@ resetForm();
 
 await load();
 
-}catch(e){
+}
+
+catch(e){
 
 message(
 "postMsg",
@@ -1738,15 +1411,14 @@ false
 
 finally{
 
-save.disabled =
-false;
+save.disabled = false;
 
 }
 
 };
 
 
-/* RESET FORM */
+/* RESET */
 
 window.resetForm =
 function(){
@@ -1758,7 +1430,6 @@ editId = null;
 imgData = "";
 
 lat = null;
-
 lng = null;
 
 preview.style.display =
@@ -1776,35 +1447,36 @@ save.textContent =
 };
 
 
-/* GET ALL ROOMS */
+/* GET ROOMS */
 
-async function all(){
+async function allRooms(){
 
 const snap =
 await getDocs(rooms);
 
-let arr = [];
+let data = [];
 
 snap.forEach(
-x => {
+item=>{
 
-arr.push({
-id:x.id,
-...x.data()
+data.push({
+id:item.id,
+...item.data()
 });
 
 });
 
-return arr.sort(
-(a,b) =>
-(b.createdAt?.seconds || 0) -
+return data.sort(
+(a,b)=>
+(b.createdAt?.seconds || 0)
+-
 (a.createdAt?.seconds || 0)
 );
 
 }
 
 
-/* LOAD ROOMS */
+/* LOAD */
 
 async function load(){
 
@@ -1813,29 +1485,32 @@ list.innerHTML =
 
 try{
 
-render(
-await all()
-);
+const data =
+await allRooms();
 
-}catch(e){
+render(data);
+
+}
+
+catch(e){
 
 list.innerHTML =
-'<div class="empty">❌ ' +
-esc(e.message) +
-"</div>";
+'<div class="empty">❌ '+
+esc(e.message)+
+'</div>';
 
 }
 
 }
 
 
-/* FAVORITES */
+/* FAVOURITES */
 
-function favs(){
+function favourites(){
 
 return JSON.parse(
 localStorage.getItem(
-"dreamFavs"
+"dreamHouseFavourites"
 ) || "[]"
 );
 
@@ -1845,17 +1520,24 @@ localStorage.getItem(
 window.fav =
 function(id){
 
-let arr =
-favs();
+let data =
+favourites();
 
-arr =
-arr.includes(id)
-? arr.filter(x=>x!==id)
-: arr.concat(id);
+if(data.includes(id)){
+
+data =
+data.filter(x=>x!==id);
+
+}
+else{
+
+data.push(id);
+
+}
 
 localStorage.setItem(
-"dreamFavs",
-JSON.stringify(arr)
+"dreamHouseFavourites",
+JSON.stringify(data)
 );
 
 load();
@@ -1863,35 +1545,96 @@ load();
 };
 
 
-/* DIRECTIONS */
+/* PHONE */
 
-window.directions =
-function(
-latitude,
-longitude,
-address,
-city
-){
+function phoneNumber(mobile){
 
-let url;
+let p =
+String(mobile || "")
+.replace(/\D/g,"");
 
-if(
-latitude !== null &&
-longitude !== null
-){
+if(p.startsWith("0"))
+p = p.substring(1);
 
-url =
-`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+if(p.length === 10)
+return "91"+p;
 
-}else{
+return p;
 
-url =
-`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address + ", " + city)}`;
+}
+
+
+window.call =
+function(mobile){
+
+const p =
+phoneNumber(mobile);
+
+if(p.length !== 12){
+
+alert("Mobile number सही नहीं है");
+
+return;
+
+}
+
+location.href =
+"tel:+"+p;
+
+};
+
+
+/* WHATSAPP */
+
+window.wa =
+function(mobile){
+
+const p =
+phoneNumber(mobile);
+
+if(p.length !== 12){
+
+alert("Mobile number सही नहीं है");
+
+return;
 
 }
 
 window.open(
-url,
+"https://wa.me/"+p,
+"_blank"
+);
+
+};
+
+
+/* MAP */
+
+window.directions =
+function(latitude,longitude,address,city){
+
+if(
+latitude !== null &&
+latitude !== undefined &&
+longitude !== null &&
+longitude !== undefined
+){
+
+window.open(
+"https://www.google.com/maps/dir/?api=1&destination="+
+latitude+","+longitude,
+"_blank"
+);
+
+return;
+
+}
+
+window.open(
+"https://www.google.com/maps/dir/?api=1&destination="+
+encodeURIComponent(
+address+", "+city
+),
 "_blank"
 );
 
@@ -1901,129 +1644,49 @@ url,
 /* SHARE */
 
 window.share =
-async function(
-type,
-city,
-rent
-){
+async function(type,city,rent){
 
 const text =
 `🏠 Dream House Rental
 
-${type} in ${city}
+${type}
+📍 ${city}
+💰 ₹${Number(rent).toLocaleString("en-IN")}/Month
 
-💰 ₹${Number(rent)
-.toLocaleString("en-IN")}/Month`;
+Find your property on Dream House Rental`;
 
 try{
 
 if(navigator.share){
 
 await navigator.share({
-
-title:
-"Dream House Rental",
-
+title:"Dream House Rental",
 text:text
-
 });
 
-}else{
+}
+else{
 
-await navigator.clipboard
-.writeText(text);
+await navigator.clipboard.writeText(text);
 
-alert(
-"Property details copied!"
-);
+alert("Property details copied!");
 
 }
 
-}catch(e){}
-
-};
-
-
-/* PHONE */
-
-function phone(m){
-
-let p =
-String(m || "")
-.replace(/\D/g,"");
-
-if(p.startsWith("0")){
-
-p =
-p.slice(1);
-
 }
-
-return p.length === 10
-? "91" + p
-: p;
-
-}
-
-
-/* CALL */
-
-window.call =
-function(m){
-
-const p =
-phone(m);
-
-if(p.length !== 12){
-
-alert(
-"Mobile number सही नहीं है"
-);
-
-return;
-
-}
-
-location.href =
-"tel:+" + p;
-
-};
-
-
-/* WHATSAPP */
-
-window.wa =
-function(m){
-
-const p =
-phone(m);
-
-if(p.length !== 12){
-
-alert(
-"Mobile number सही नहीं है"
-);
-
-return;
-
-}
-
-window.open(
-"https://wa.me/" + p,
-"_blank"
-);
+catch(e){}
 
 };
 
 
 /* RENDER ROOMS */
 
-function render(arr){
+function render(data){
 
 count.textContent =
-`🏠 कुल ${arr.length} room मिले`;
+`🏠 कुल ${data.length} room मिले`;
 
-if(!arr.length){
+if(!data.length){
 
 list.innerHTML =
 '<div class="empty">🏠 कोई room नहीं मिला</div>';
@@ -2033,21 +1696,21 @@ return;
 }
 
 const saved =
-favs();
+favourites();
 
 list.innerHTML =
-arr.map(r => {
+data.map(room=>{
 
 const own =
 user &&
-r.ownerId === user.uid;
+room.ownerId === user.uid;
 
-const isFav =
-saved.includes(r.id);
+const isSaved =
+saved.includes(room.id);
 
 const isNew =
 Date.now() -
-((r.createdAt?.seconds || 0) * 1000)
+((room.createdAt?.seconds || 0)*1000)
 <
 604800000;
 
@@ -2059,7 +1722,7 @@ return `
 <div class="photo">
 
 <img
-src="${r.image || fallback}"
+src="${room.image || fallback}"
 alt="Property Photo"
 onerror="this.src='${fallback}'">
 
@@ -2067,9 +1730,10 @@ onerror="this.src='${fallback}'">
 📸 Property
 </span>
 
-${isNew
-? '<span class="new">NEW</span>'
-: ""}
+${isNew ?
+'<span class="new">NEW</span>'
+:
+""}
 
 </div>
 
@@ -2077,60 +1741,50 @@ ${isNew
 <div class="body">
 
 <div class="type">
-
-${esc(
-r.type || "Property"
-)}
-
+${esc(room.type || "Property")}
 </div>
 
-
 <div class="rent">
-
-₹${Number(
-r.rent || 0
-).toLocaleString("en-IN")}
-
-<small>
- / Month
-</small>
-
+₹${Number(room.rent || 0).toLocaleString("en-IN")}
+<small>/ Month</small>
 </div>
 
 
 <div class="info">
 👤 <b>Owner:</b>
-${esc(r.name || "Owner")}
+${esc(room.name || "Owner")}
 </div>
 
 
 <div class="info">
-📞 ${esc(r.mobile || "")}
+📞 ${esc(room.mobile || "")}
 </div>
 
 
 <div class="info">
 📍 <b>City:</b>
-${esc(r.city || "")}
+${esc(room.city || "")}
 </div>
 
 
 <div class="info">
-🗺️ ${esc(r.address || "")}
+🗺️ ${esc(room.address || "")}
 </div>
 
 
 <div class="info">
-🛋️ ${esc(r.furnishing || "")}
+🛋️ ${esc(room.furnishing || "")}
 </div>
 
 
 ${
-r.description
+room.description
 ?
-`<div class="desc">
-ℹ️ ${esc(r.description)}
-</div>`
+`
+<div class="desc">
+ℹ️ ${esc(room.description)}
+</div>
+`
 :
 ""
 }
@@ -2141,57 +1795,46 @@ r.description
 
 <button
 class="blue"
-onclick="call('${js(r.mobile)}')">
-
+onclick="call('${esc(room.mobile)}')">
 📞 Call
-
 </button>
 
 
 <button
 class="wa"
-onclick="wa('${js(r.mobile)}')">
-
-<i class="fa-brands fa-whatsapp"></i>
-WhatsApp
-
+onclick="wa('${esc(room.mobile)}')">
+💬 WhatsApp
 </button>
 
 
 <button
 class="purple"
 onclick="directions(
-${r.latitude ?? "null"},
-${r.longitude ?? "null"},
-'${js(r.address)}',
-'${js(r.city)}'
+${room.latitude ?? "null"},
+${room.longitude ?? "null"},
+'${String(room.address || "").replace(/'/g,"\\'")}',
+'${String(room.city || "").replace(/'/g,"\\'")}'
 )">
-
 🗺️ Directions
-
 </button>
 
 
 <button
 class="teal"
 onclick="share(
-'${js(r.type)}',
-'${js(r.city)}',
-'${js(r.rent)}'
+'${String(room.type || "").replace(/'/g,"\\'")}',
+'${String(room.city || "").replace(/'/g,"\\'")}',
+'${room.rent || ""}'
 )">
-
 📤 Share
-
 </button>
 
 
 <button
-class="${isFav ? "red" : "orange"}"
-onclick="fav('${js(r.id)}')">
+class="${isSaved ? "red":"orange"}"
+onclick="fav('${room.id}')">
 
-${isFav
-? "❤️ Saved"
-: "♡ Save"}
+${isSaved ? "❤️ Saved" : "♡ Save"}
 
 </button>
 
@@ -2200,24 +1843,17 @@ ${
 own
 ?
 `
-
 <button
 class="orange"
-onclick="edit('${js(r.id)}')">
-
+onclick="editRoom('${room.id}')">
 ✏️ Edit
-
 </button>
-
 
 <button
 class="red"
-onclick="del('${js(r.id)}')">
-
+onclick="deleteRoom('${room.id}')">
 🗑️ Delete
-
 </button>
-
 `
 :
 ""
@@ -2242,38 +1878,43 @@ onclick="del('${js(r.id)}')">
 window.searchRooms =
 async function(){
 
-const c =
+const city =
 scity.value.trim().toLowerCase();
 
-const t =
+const propertyType =
 stype.value;
 
-const max =
+const maxRent =
 Number(sRent.value);
 
-const arr =
-await all();
+const data =
+await allRooms();
 
-render(
-arr.filter(r =>
+const result =
+data.filter(room=>{
 
-(!c ||
-String(r.city || "")
+const cityOK =
+!city ||
+String(room.city || "")
 .toLowerCase()
-.includes(c))
+.includes(city);
 
-&&
+const typeOK =
+!propertyType ||
+room.type === propertyType;
 
-(!t ||
-r.type === t)
+const rentOK =
+!maxRent ||
+Number(room.rent || 0)
+<= maxRent;
 
-&&
+return cityOK &&
+typeOK &&
+rentOK;
 
-(!max ||
-Number(r.rent || 0) <= max)
+});
 
-)
-);
+render(result);
 
 };
 
@@ -2284,9 +1925,7 @@ window.clearSearch =
 function(){
 
 scity.value = "";
-
 stype.value = "";
-
 sRent.value = "";
 
 load();
@@ -2296,23 +1935,19 @@ load();
 
 /* EDIT */
 
-window.edit =
+window.editRoom =
 async function(id){
 
-const arr =
-await all();
+const data =
+await allRooms();
 
-const r =
-arr.find(x =>
-x.id === id
-);
+const room =
+data.find(x=>x.id===id);
 
-if(!r)return;
+if(!room)
+return;
 
-if(
-!user ||
-r.ownerId !== user.uid
-){
+if(!user || room.ownerId !== user.uid){
 
 alert(
 "❌ केवल अपना room edit कर सकते हैं"
@@ -2322,42 +1957,40 @@ return;
 
 }
 
-
-editId =
-id;
+editId = id;
 
 name.value =
-r.name || "";
+room.name || "";
 
 mobile.value =
-r.mobile || "";
+room.mobile || "";
 
 city.value =
-r.city || "";
+room.city || "";
 
 address.value =
-r.address || "";
+room.address || "";
 
 type.value =
-r.type || "";
+room.type || "";
 
 furnishing.value =
-r.furnishing || "";
+room.furnishing || "";
 
 rent.value =
-r.rent || "";
+room.rent || "";
 
 description.value =
-r.description || "";
+room.description || "";
 
 imgData =
-r.image || "";
+room.image || "";
 
 lat =
-r.latitude ?? null;
+room.latitude ?? null;
 
 lng =
-r.longitude ?? null;
+room.longitude ?? null;
 
 
 if(imgData){
@@ -2372,11 +2005,9 @@ preview.style.display =
 
 
 locStatus.textContent =
-lat != null
+lat !== null
 ?
-`✅ Location saved:
-${lat.toFixed(6)},
-${lng.toFixed(6)}`
+`✅ Location saved: ${lat.toFixed(6)}, ${lng.toFixed(6)}`
 :
 "Location not selected";
 
@@ -2387,7 +2018,6 @@ save.textContent =
 cancel.style.display =
 "block";
 
-
 post.scrollIntoView({
 behavior:"smooth"
 });
@@ -2397,30 +2027,25 @@ behavior:"smooth"
 
 /* DELETE */
 
-window.del =
+window.deleteRoom =
 async function(id){
 
-if(!user)return;
+if(!user)
+return;
 
-if(
-!confirm(
+if(!confirm(
 "क्या आप यह room delete करना चाहते हैं?"
-)
-)return;
+))
+return;
 
+const data =
+await allRooms();
 
-const arr =
-await all();
+const room =
+data.find(x=>x.id===id);
 
-const r =
-arr.find(x =>
-x.id === id
-);
-
-if(
-!r ||
-r.ownerId !== user.uid
-){
+if(!room ||
+room.ownerId !== user.uid){
 
 alert(
 "❌ केवल अपना room delete कर सकते हैं"
@@ -2429,7 +2054,6 @@ alert(
 return;
 
 }
-
 
 try{
 
@@ -2443,11 +2067,11 @@ alert(
 
 load();
 
-}catch(e){
+}
+catch(e){
 
 alert(
-"❌ Delete failed: " +
-e.message
+"❌ "+e.message
 );
 
 }
@@ -2455,96 +2079,66 @@ e.message
 };
 
 
-/* =========================
-   SUGGESTION / COMPLAINT
-========================= */
-
-
-/* FEEDBACK TYPE */
-
-window.setFeedbackType =
-function(type){
-
-feedbackType.value =
-type;
-
-
-suggestionType.classList.remove(
-"active"
-);
-
-complaintType.classList.remove(
-"active"
-);
-
-
-if(type === "सुझाव"){
-
-suggestionType.classList.add(
-"active"
-);
-
-}else{
-
-complaintType.classList.add(
-"active"
-);
-
-}
-
-};
-
-
-/* RATING */
-
-window.setRating =
-function(number){
-
-feedbackRating =
-number;
-
+/* FEEDBACK RATING */
 
 document
-.querySelectorAll(".rating button")
-.forEach(btn => {
+.querySelectorAll("#rating span")
+.forEach(star=>{
 
-btn.classList.remove(
-"active"
+star.addEventListener(
+"click",
+function(){
+
+selectedRating =
+Number(this.dataset.rate);
+
+document
+.querySelectorAll("#rating span")
+.forEach(s=>{
+
+s.classList.toggle(
+"active",
+Number(s.dataset.rate)
+<= selectedRating
 );
-
-if(
-Number(btn.dataset.rating)
-<= number
-){
-
-btn.classList.add(
-"active"
-);
-
-}
 
 });
 
-};
+}
+
+);
+
+});
 
 
-/* FEEDBACK SUBMIT */
+/* DEFAULT 5 STAR */
+
+document
+.querySelectorAll("#rating span")
+.forEach(star=>{
+
+star.classList.add("active");
+
+});
+
+
+/* FEEDBACK SAVE */
 
 feedbackForm.onsubmit =
 async function(e){
 
 e.preventDefault();
 
-feedbackButton.disabled =
-true;
+const button =
+feedbackForm.querySelector("button");
 
-feedbackButton.textContent =
-"⏳ भेजा जा रहा है...";
-
+button.disabled = true;
 
 try{
 
-const feedbackData = {
+await addDoc(
+feedbackCollection,
+{
 
 type:
 feedbackType.value,
@@ -2562,26 +2156,12 @@ message:
 feedbackMessage.value.trim(),
 
 rating:
-feedbackRating,
-
-userId:
-user ? user.uid : "",
-
-userEmail:
-user ? user.email : "",
-
-status:
-"New",
+selectedRating,
 
 createdAt:
 serverTimestamp()
 
-};
-
-
-await addDoc(
-feedbackCollection,
-feedbackData
+}
 );
 
 
@@ -2592,33 +2172,23 @@ true
 );
 
 
-/* RESET */
-
 feedbackForm.reset();
 
-feedbackType.value =
-"सुझाव";
-
-feedbackRating =
-0;
+selectedRating = 5;
 
 document
-.querySelectorAll(".rating button")
-.forEach(btn =>
-btn.classList.remove("active")
+.querySelectorAll("#rating span")
+.forEach(star=>
+star.classList.add("active")
 );
 
-setFeedbackType("सुझाव");
+}
 
-
-}catch(e){
-
-console.error(e);
+catch(e){
 
 message(
 "feedbackMsg",
-"❌ Feedback save नहीं हुआ: " +
-e.message,
+"❌ Feedback save नहीं हुआ: "+e.message,
 false
 );
 
@@ -2626,11 +2196,7 @@ false
 
 finally{
 
-feedbackButton.disabled =
-false;
-
-feedbackButton.textContent =
-"📩 सुझाव / शिकायत भेजें";
+button.disabled = false;
 
 }
 
