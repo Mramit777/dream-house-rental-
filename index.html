@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>Dream House Rental</title>
 
 <style>
@@ -17,9 +18,9 @@ html{
 }
 
 body{
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   background:#f5f7fb;
-  color:#172033;
+  color:#20242b;
 }
 
 a{
@@ -31,29 +32,27 @@ button,
 input,
 select,
 textarea{
-  font-family:inherit;
-}
-
-button{
-  cursor:pointer;
+  font:inherit;
 }
 
 .container{
-  width:min(1120px,92%);
+  width:94%;
+  max-width:1180px;
   margin:auto;
 }
 
+/* HEADER */
+
 header{
+  background:#fff;
+  border-bottom:1px solid #e5e8ef;
   position:sticky;
   top:0;
   z-index:1000;
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid #e8ecf4;
 }
 
-.nav{
-  min-height:72px;
+.navbar{
+  min-height:70px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -67,76 +66,72 @@ header{
 }
 
 .logo-icon{
-  width:45px;
-  height:45px;
+  width:48px;
+  height:48px;
   border-radius:14px;
+  background:linear-gradient(135deg,#182a8c,#168fd5);
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(135deg,#173b9c,#1677e8);
-  color:#fff;
-  font-size:24px;
-  box-shadow:0 8px 20px rgba(35,93,190,.22);
+  color:white;
+  font-size:25px;
+  box-shadow:0 8px 20px rgba(27,70,170,.22);
 }
 
 .logo-text strong{
   display:block;
-  font-size:19px;
-  color:#123d9a;
+  color:#182a8c;
+  font-size:18px;
 }
 
 .logo-text span{
-  display:block;
   font-size:11px;
-  color:#68738a;
-  margin-top:2px;
+  color:#667085;
 }
 
 .nav-links{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:7px;
+  flex-wrap:wrap;
 }
 
-.nav-links a,
-.nav-btn{
+.nav-links button{
   border:0;
   background:transparent;
-  padding:10px 12px;
-  border-radius:10px;
-  font-size:14px;
-  color:#34415a;
+  color:#303846;
+  padding:10px 13px;
+  border-radius:9px;
+  cursor:pointer;
 }
 
-.nav-links a:hover,
-.nav-btn:hover{
-  background:#eef4ff;
-  color:#1555b5;
+.nav-links button:hover{
+  background:#eef3ff;
+  color:#17318d;
 }
+
+.menu-btn{
+  display:none;
+}
+
+/* HERO */
 
 .hero{
-  padding:35px 0 25px;
-  background:
-    radial-gradient(circle at 90% 20%,rgba(57,133,255,.18),transparent 35%),
-    linear-gradient(135deg,#eef5ff,#fff);
-}
-
-.hero-box{
+  margin-top:20px;
+  border-radius:25px;
   min-height:420px;
-  border-radius:28px;
-  padding:45px;
-  overflow:hidden;
-  position:relative;
+  padding:45px 30px;
   background:
-    linear-gradient(90deg,rgba(13,43,102,.94),rgba(21,84,170,.72),rgba(20,83,155,.18)),
-    url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1500&q=80")
+    linear-gradient(90deg,rgba(10,25,70,.93),rgba(10,25,70,.55),rgba(10,25,70,.12)),
+    url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=85")
     center/cover;
   color:#fff;
-  box-shadow:0 18px 45px rgba(31,64,120,.18);
+  display:flex;
+  align-items:center;
 }
 
 .hero-content{
-  max-width:680px;
+  max-width:650px;
 }
 
 .badge{
@@ -145,279 +140,207 @@ header{
   border:1px solid rgba(255,255,255,.25);
   padding:8px 14px;
   border-radius:30px;
+  margin-bottom:15px;
   font-size:13px;
-  margin-bottom:18px;
 }
 
 .hero h1{
-  font-size:clamp(32px,5vw,58px);
-  line-height:1.08;
-  margin-bottom:15px;
-}
-
-.hero h1 span{
-  color:#80d9ff;
+  font-size:45px;
+  line-height:1.1;
+  margin-bottom:14px;
 }
 
 .hero p{
   font-size:17px;
   line-height:1.6;
-  color:#edf5ff;
-  max-width:650px;
+  margin-bottom:22px;
 }
 
-.quick-search{
-  margin-top:28px;
+.search-box{
   background:#fff;
+  border-radius:16px;
   padding:10px;
-  border-radius:18px;
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr auto;
+  display:flex;
   gap:8px;
-  box-shadow:0 15px 35px rgba(0,0,0,.16);
+  flex-wrap:wrap;
+  box-shadow:0 12px 35px rgba(0,0,0,.2);
 }
 
-.quick-search input{
-  min-width:0;
+.search-box input{
+  flex:1;
+  min-width:160px;
   border:0;
   outline:0;
   padding:14px;
-  border-radius:12px;
   color:#222;
-  background:#f4f7fb;
 }
 
-.primary{
-  border:0;
-  background:linear-gradient(135deg,#1264d8,#1689ef);
+.primary-btn{
+  background:#1769e0;
   color:#fff;
-  border-radius:12px;
+  border:0;
   padding:13px 20px;
+  border-radius:11px;
+  cursor:pointer;
   font-weight:bold;
 }
 
-.section{
+.primary-btn:hover{
+  background:#1058c4;
+}
+
+/* SECTIONS */
+
+section{
   padding:45px 0;
 }
 
 .section-title{
-  font-size:28px;
-  margin-bottom:22px;
+  text-align:center;
+  margin-bottom:25px;
 }
+
+.section-title h2{
+  color:#182a8c;
+  font-size:30px;
+  margin-bottom:7px;
+}
+
+.section-title p{
+  color:#667085;
+}
+
+/* STATUS */
+
+.status{
+  margin-top:15px;
+  padding:12px 15px;
+  border-radius:10px;
+  background:#edf8ef;
+  color:#18752b;
+  font-size:14px;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:25px;
+}
+
+.stat{
+  background:#fff;
+  padding:23px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 5px 20px rgba(20,40,80,.06);
+}
+
+.stat strong{
+  display:block;
+  color:#182a8c;
+  font-size:28px;
+}
+
+.stat span{
+  color:#667085;
+  font-size:14px;
+}
+
+/* CATEGORIES */
 
 .categories{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:12px;
-}
-
-.category{
-  background:#fff;
-  border:1px solid #e7ebf3;
-  border-radius:18px;
-  padding:20px 10px;
-  text-align:center;
-  transition:.2s;
-}
-
-.category:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(30,60,120,.08);
-}
-
-.category .icon{
-  font-size:29px;
-  margin-bottom:8px;
-}
-
-.category span{
-  display:block;
-  font-size:13px;
-  font-weight:bold;
-}
-
-.info-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:15px;
 }
 
-.info-card{
+.category{
   background:#fff;
+  padding:25px 15px;
   border-radius:18px;
-  padding:22px;
-  border:1px solid #e7ebf3;
-}
-
-.info-card b{
-  display:block;
-  font-size:25px;
-  margin:8px 0 3px;
-  color:#1757b8;
-}
-
-.info-card span{
-  color:#68738a;
-  font-size:13px;
-}
-
-.filter-box{
-  background:#fff;
-  padding:20px;
-  border-radius:20px;
-  border:1px solid #e6eaf2;
-  margin-bottom:25px;
-}
-
-.filters{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:10px;
-}
-
-.filters input,
-.filters select,
-.form-grid input,
-.form-grid select,
-.form-grid textarea,
-.feedback-box input,
-.feedback-box select,
-.feedback-box textarea{
-  width:100%;
-  border:1px solid #dfe5ef;
-  background:#fafbfd;
-  padding:13px;
-  border-radius:11px;
-  outline:0;
-}
-
-.filters input:focus,
-.filters select:focus,
-.form-grid input:focus,
-.form-grid select:focus,
-.form-grid textarea:focus,
-.feedback-box input:focus,
-.feedback-box select:focus,
-.feedback-box textarea:focus{
-  border-color:#3984e8;
-}
-
-.filter-buttons{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.secondary{
-  border:1px solid #d7deea;
-  background:#fff;
-  padding:12px 18px;
-  border-radius:11px;
-}
-
-.rooms{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-}
-
-.room-card{
-  background:#fff;
-  border-radius:20px;
-  overflow:hidden;
-  border:1px solid #e5e9f1;
-  box-shadow:0 8px 25px rgba(25,50,90,.06);
-}
-
-.room-photo{
-  width:100%;
-  height:190px;
-  object-fit:cover;
-  display:block;
-  background:#e9eef7;
-}
-
-.room-body{
-  padding:18px;
-}
-
-.room-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center;
-}
-
-.room-type{
-  background:#eaf3ff;
-  color:#145bb7;
-  padding:6px 9px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-.room-price{
-  font-size:22px;
-  font-weight:bold;
-  color:#105dbb;
-  margin:10px 0;
-}
-
-.room-info{
-  color:#5e687c;
-  font-size:13px;
-  line-height:1.8;
-}
-
-.room-desc{
-  margin-top:10px;
-  padding-top:10px;
-  border-top:1px solid #edf0f5;
-  font-size:13px;
-  color:#505b6d;
-}
-
-.room-actions{
-  display:flex;
-  gap:7px;
-  margin-top:14px;
-}
-
-.room-actions a,
-.room-actions button{
-  flex:1;
-  border:0;
-  padding:10px 7px;
-  border-radius:9px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-.call-btn{
-  background:#e8f8ef;
-  color:#087b40;
-}
-
-.share-btn{
-  background:#edf4ff;
-  color:#1759b4;
-}
-
-.empty{
-  background:#fff;
-  padding:35px;
   text-align:center;
-  border-radius:18px;
-  color:#6c7689;
-  grid-column:1/-1;
+  box-shadow:0 5px 20px rgba(20,40,80,.06);
+  cursor:pointer;
 }
 
-.form-section{
+.category .icon{
+  font-size:35px;
+  margin-bottom:10px;
+}
+
+.category h3{
+  font-size:16px;
+  color:#27324a;
+}
+
+/* LOGIN */
+
+.auth-box{
+  max-width:500px;
+  margin:auto;
   background:#fff;
-  border-radius:22px;
   padding:25px;
-  border:1px solid #e5e9f1;
+  border-radius:20px;
+  box-shadow:0 8px 30px rgba(20,40,80,.08);
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:6px;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  border:1px solid #dce1ea;
+  border-radius:10px;
+  padding:12px;
+  outline:none;
+}
+
+.form-group textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border-color:#1769e0;
+}
+
+.auth-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.secondary-btn{
+  background:#eef2f8;
+  border:0;
+  color:#26334b;
+  padding:12px 18px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* POST */
+
+.form-card{
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 8px 30px rgba(20,40,80,.07);
 }
 
 .form-grid{
@@ -426,150 +349,205 @@ header{
   gap:15px;
 }
 
-.form-group label{
-  display:block;
-  margin-bottom:7px;
-  font-size:13px;
-  font-weight:bold;
-  color:#455169;
+/* FILTER */
+
+.filter-box{
+  background:#fff;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 5px 20px rgba(20,40,80,.06);
+  margin-bottom:25px;
 }
 
-.full{
-  grid-column:1/-1;
-}
-
-.form-grid textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-.form-actions{
-  display:flex;
+.filter-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
   gap:10px;
-  margin-top:20px;
 }
 
-.status{
-  margin-top:12px;
-  font-size:14px;
+.filter-grid input,
+.filter-grid select{
+  width:100%;
+  padding:12px;
+  border:1px solid #dce1ea;
+  border-radius:10px;
+  outline:none;
+}
+
+/* ROOMS */
+
+.rooms-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.room-card{
+  background:#fff;
+  border-radius:19px;
+  overflow:hidden;
+  box-shadow:0 8px 28px rgba(20,40,80,.08);
+  border:1px solid #edf0f5;
+}
+
+.room-img{
+  height:190px;
+  width:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.room-body{
+  padding:18px;
+}
+
+.room-type{
+  color:#1769e0;
   font-weight:bold;
+  font-size:15px;
 }
 
-.success{
-  color:#078443;
+.room-rent{
+  font-size:23px;
+  font-weight:bold;
+  color:#182a8c;
+  margin:7px 0;
 }
 
-.error{
-  color:#d52e2e;
+.room-info{
+  color:#596273;
+  font-size:14px;
+  line-height:1.7;
 }
 
-.login-box{
-  max-width:520px;
-  margin:auto;
+.room-owner{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid #edf0f5;
+  font-size:14px;
+}
+
+.room-actions{
+  display:flex;
+  gap:8px;
+  margin-top:15px;
+}
+
+.room-actions a,
+.room-actions button{
+  flex:1;
+  text-align:center;
+  border:0;
+  border-radius:9px;
+  padding:10px;
+  cursor:pointer;
+  background:#eef3ff;
+  color:#17318d;
+}
+
+/* WHY */
+
+.why-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.why-card{
   background:#fff;
   padding:25px;
-  border-radius:22px;
-  border:1px solid #e4e8f0;
+  border-radius:18px;
+  box-shadow:0 5px 20px rgba(20,40,80,.06);
 }
 
-.login-box h2{
-  margin-bottom:18px;
-}
-
-.login-box input{
-  width:100%;
-  padding:13px;
+.why-card .icon{
+  font-size:32px;
   margin-bottom:10px;
-  border:1px solid #dce3ef;
-  border-radius:10px;
 }
 
-.more-page{
-  display:none;
-  min-height:calc(100vh - 72px);
-  padding:35px 0 60px;
-  background:
-    radial-gradient(circle at 90% 5%,rgba(30,120,255,.13),transparent 30%),
-    #f5f7fb;
-}
-
-.more-header{
-  background:linear-gradient(135deg,#113b91,#1676df);
-  color:#fff;
-  padding:28px;
-  border-radius:24px;
-  margin-bottom:20px;
-}
-
-.more-header h1{
+.why-card h3{
   margin-bottom:7px;
+}
+
+.why-card p{
+  color:#667085;
+  line-height:1.6;
+}
+
+/* MORE PAGE */
+
+#morePage{
+  display:none;
+}
+
+.more-hero{
+  background:linear-gradient(135deg,#182a8c,#168fd5);
+  color:white;
+  border-radius:24px;
+  padding:40px 25px;
+  text-align:center;
+}
+
+.more-hero h1{
+  font-size:35px;
+  margin-bottom:8px;
+}
+
+.more-hero p{
+  opacity:.9;
 }
 
 .more-grid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:16px;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:25px;
 }
 
 .more-card{
   background:#fff;
-  border:1px solid #e3e8f1;
   border-radius:20px;
-  padding:24px;
-  box-shadow:0 7px 22px rgba(30,55,100,.05);
+  padding:25px;
+  box-shadow:0 7px 25px rgba(20,40,80,.07);
+}
+
+.more-card .big-icon{
+  font-size:35px;
+  margin-bottom:12px;
 }
 
 .more-card h3{
-  margin-bottom:10px;
-  font-size:20px;
-}
-
-.more-card p{
-  color:#687286;
-  line-height:1.7;
-  font-size:14px;
-}
-
-.socials{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:15px;
-}
-
-.social-btn{
-  padding:12px 16px;
-  border-radius:12px;
-  background:#f1f5fb;
-  border:1px solid #e0e6f0;
-  font-weight:bold;
-  color:#25466f;
-}
-
-.feedback-box{
-  display:none;
-  margin-top:15px;
-  background:#f7f9fc;
-  border-radius:15px;
-  padding:15px;
-}
-
-.feedback-box textarea{
-  min-height:110px;
-  resize:vertical;
-  margin-top:8px;
-}
-
-.feedback-box input,
-.feedback-box select{
+  color:#182a8c;
   margin-bottom:8px;
 }
 
+.more-card p{
+  color:#667085;
+  line-height:1.6;
+}
+
+.social-buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+.social-buttons a{
+  padding:10px 14px;
+  border-radius:9px;
+  background:#eef3ff;
+  color:#17318d;
+  font-size:14px;
+}
+
+/* FOOTER */
+
 footer{
-  background:#101a2b;
-  color:#c8d0dd;
-  padding:35px 0;
+  background:#101a35;
+  color:#fff;
   margin-top:30px;
+  padding:35px 0 20px;
 }
 
 .footer-grid{
@@ -579,118 +557,89 @@ footer{
 }
 
 footer h3{
-  color:#fff;
   margin-bottom:12px;
 }
 
-footer p,
-footer a{
-  font-size:13px;
-  line-height:1.8;
+footer p{
+  color:#b9c1d3;
+  line-height:1.6;
 }
 
 .footer-links{
   display:flex;
   flex-direction:column;
   gap:8px;
+  color:#cbd2e1;
 }
 
 .copyright{
-  border-top:1px solid #2a3547;
+  border-top:1px solid rgba(255,255,255,.12);
   margin-top:25px;
   padding-top:18px;
   text-align:center;
-  font-size:12px;
+  color:#aeb8cd;
+  font-size:13px;
 }
 
-.back-home{
-  border:0;
-  background:#fff;
-  color:#1558b5;
-  padding:11px 18px;
-  border-radius:11px;
-  font-weight:bold;
-  margin-top:18px;
-}
+/* MOBILE */
 
-@media(max-width:850px){
-  .nav{
-    min-height:64px;
-  }
-
-  .logo-text strong{
-    font-size:16px;
-  }
+@media(max-width:900px){
 
   .nav-links{
     display:none;
+    position:absolute;
+    left:3%;
+    right:3%;
+    top:70px;
+    background:#fff;
+    padding:10px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
   }
 
-  .hero-box{
-    padding:30px 22px;
+  .nav-links.show{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
   }
 
-  .quick-search{
-    grid-template-columns:1fr;
+  .nav-links button{
+    text-align:left;
+  }
+
+  .menu-btn{
+    display:block;
+    background:#eef3ff;
+    border:0;
+    border-radius:9px;
+    padding:10px 13px;
+    cursor:pointer;
+    font-size:20px;
+  }
+
+  .hero{
+    min-height:500px;
+    padding:30px 20px;
+  }
+
+  .hero h1{
+    font-size:34px;
   }
 
   .categories{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .info-grid{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .filters{
-    grid-template-columns:1fr 1fr;
+  .rooms-grid{
+    grid-template-columns:1fr;
   }
 
-  .rooms{
-    grid-template-columns:1fr 1fr;
-  }
-
+  .why-grid,
   .more-grid{
     grid-template-columns:1fr;
   }
 
-  .footer-grid{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:560px){
-  .hero{
-    padding:18px 0;
-  }
-
-  .hero-box{
-    min-height:480px;
-    padding:25px 18px;
-    border-radius:20px;
-  }
-
-  .hero h1{
-    font-size:35px;
-  }
-
-  .hero p{
-    font-size:14px;
-  }
-
-  .categories{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .info-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .filters{
-    grid-template-columns:1fr;
-  }
-
-  .rooms{
+  .filter-grid{
     grid-template-columns:1fr;
   }
 
@@ -698,16 +647,12 @@ footer a{
     grid-template-columns:1fr;
   }
 
-  .full{
-    grid-column:auto;
+  .stats{
+    grid-template-columns:1fr;
   }
 
-  .section{
-    padding:32px 0;
-  }
-
-  .section-title{
-    font-size:23px;
+  .footer-grid{
+    grid-template-columns:1fr;
   }
 }
 </style>
@@ -715,775 +660,993 @@ footer a{
 
 <body>
 
-<!-- ================= HEADER ================= -->
-
 <header>
-  <div class="container nav">
+  <div class="container navbar">
 
-    <a href="#" class="logo" onclick="showHome();return false;">
+    <div class="logo">
       <div class="logo-icon">🏠</div>
+
       <div class="logo-text">
         <strong>Dream House Rental</strong>
         <span>Find • Rent • Stay</span>
       </div>
-    </a>
+    </div>
 
-    <nav class="nav-links">
-      <a href="#" onclick="showHome();return false;">🏠 Home</a>
-      <a href="#login" onclick="showHome();setTimeout(()=>document.getElementById('login').scrollIntoView(),100);return false;">🔐 Login</a>
-      <a href="#post" onclick="showHome();setTimeout(()=>document.getElementById('post').scrollIntoView(),100);return false;">➕ Post Room</a>
-      <a href="#rooms" onclick="showHome();setTimeout(()=>document.getElementById('rooms').scrollIntoView(),100);return false;">🏘️ Rooms</a>
-      <button class="nav-btn" onclick="showMore()">☰ More</button>
-    </nav>
+    <div class="nav-links" id="navLinks">
+      <button onclick="showHome();scrollToId('home')">Home</button>
+      <button onclick="scrollToId('login')">Login</button>
+      <button onclick="scrollToId('post')">Post Room</button>
+      <button onclick="scrollToId('rooms')">Rooms</button>
+      <button onclick="showMore()">More</button>
+    </div>
+
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
 
   </div>
 </header>
 
 
-<!-- ================= HOME PAGE ================= -->
+<main>
+
+<!-- ================= HOME ================= -->
 
 <div id="homePage">
 
-<!-- HERO -->
+<section id="home">
 
-<section class="hero">
-<div class="container">
+  <div class="container">
 
-<div class="hero-box">
+    <div class="hero">
 
-<div class="hero-content">
+      <div class="hero-content">
 
-<div class="badge">🏠 किराये पर घर खोजें</div>
+        <div class="badge">
+          🏠 Smart Property Search
+        </div>
 
-<h1>
-Find Your <span>Perfect Home</span>
-</h1>
+        <h1>
+          Find Your Perfect Home
+        </h1>
 
-<p>
-Room, BHK, Flat, House, PG और Shop खोजें।
-अपनी पसंद की property खोजें और सीधे owner से contact करें।
-</p>
+        <p>
+          Room, BHK, Flat, House, PG aur Shop
+          aasani se search karein.
+        </p>
 
-<div class="quick-search">
+        <div class="search-box">
 
-<input
-id="quickState"
-list="stateList"
-placeholder="राज्य जैसे MP / UP">
+          <input
+            id="heroLocation"
+            type="text"
+            placeholder="City / Village / Area"
+          >
 
-<input
-id="quickCity"
-placeholder="शहर / जिला">
+          <button
+            class="primary-btn"
+            onclick="heroSearch()"
+          >
+            🔎 Search
+          </button>
 
-<input
-id="quickArea"
-placeholder="गाँव / एरिया">
+        </div>
 
-<button class="primary" onclick="quickSearch()">
-🔍 Search
-</button>
+      </div>
 
-</div>
-
-</div>
-</div>
-
-</div>
-</section>
+    </div>
 
 
-<!-- FIREBASE STATUS -->
-
-<section class="container" style="padding-top:18px;">
-<div id="firebaseStatus"
-style="background:#eaf9f0;color:#087b40;padding:12px 15px;border-radius:12px;font-size:13px;">
-⏳ Firebase connect हो रहा है...
-</div>
-</section>
+    <div id="firebaseStatus" class="status">
+      ⏳ Firebase connecting...
+    </div>
 
 
-<!-- STATS -->
+    <div class="stats">
 
-<section class="section">
-<div class="container">
+      <div class="stat">
+        <strong id="roomCountTop">0</strong>
+        <span>Rooms Available</span>
+      </div>
 
-<div class="info-grid">
+      <div class="stat">
+        <strong>8+</strong>
+        <span>Property Types</span>
+      </div>
 
-<div class="info-card">
-<div>🏠</div>
-<b id="roomCountTop">0</b>
-<span>कमरे उपलब्ध</span>
-</div>
+      <div class="stat">
+        <strong>24×7</strong>
+        <span>Search Access</span>
+      </div>
 
-<div class="info-card">
-<div>🔒</div>
-<b>100%</b>
-<span>Simple Platform</span>
-</div>
+    </div>
 
-<div class="info-card">
-<div>👨‍👩‍👧</div>
-<b>Easy</b>
-<span>Owner से Contact</span>
-</div>
+  </div>
 
-<div class="info-card">
-<div>📱</div>
-<b>24×7</b>
-<span>Online Access</span>
-</div>
-
-</div>
-
-</div>
 </section>
 
 
 <!-- CATEGORIES -->
 
-<section class="section" style="padding-top:0;">
-<div class="container">
+<section>
 
-<h2 class="section-title">🏘️ Property Categories</h2>
+  <div class="container">
 
-<div class="categories">
+    <div class="section-title">
+      <h2>Property Categories</h2>
+      <p>Apni requirement ke according property search karein.</p>
+    </div>
 
-<div class="category">
-<div class="icon">🛏️</div>
-<span>Room</span>
-</div>
+    <div class="categories">
 
-<div class="category">
-<div class="icon">🏢</div>
-<span>1 BHK</span>
-</div>
+      <div class="category" onclick="selectType('Room')">
+        <div class="icon">🛏️</div>
+        <h3>Room</h3>
+      </div>
 
-<div class="category">
-<div class="icon">🏢</div>
-<span>2 BHK</span>
-</div>
+      <div class="category" onclick="selectType('1 BHK')">
+        <div class="icon">🏠</div>
+        <h3>1 BHK</h3>
+      </div>
 
-<div class="category">
-<div class="icon">🏠</div>
-<span>3 BHK</span>
-</div>
+      <div class="category" onclick="selectType('2 BHK')">
+        <div class="icon">🏡</div>
+        <h3>2 BHK</h3>
+      </div>
 
-<div class="category">
-<div class="icon">🏡</div>
-<span>House</span>
-</div>
+      <div class="category" onclick="selectType('3 BHK')">
+        <div class="icon">🏘️</div>
+        <h3>3 BHK</h3>
+      </div>
 
-<div class="category">
-<div class="icon">🏪</div>
-<span>Shop / Office</span>
-</div>
+      <div class="category" onclick="selectType('Flat')">
+        <div class="icon">🏢</div>
+        <h3>Flat</h3>
+      </div>
 
-</div>
+      <div class="category" onclick="selectType('House')">
+        <div class="icon">🏠</div>
+        <h3>House</h3>
+      </div>
 
-</div>
+      <div class="category" onclick="selectType('PG')">
+        <div class="icon">🛌</div>
+        <h3>PG</h3>
+      </div>
+
+      <div class="category" onclick="selectType('Shop')">
+        <div class="icon">🏪</div>
+        <h3>Shop</h3>
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
 <!-- LOGIN -->
 
-<section class="section" id="login">
-<div class="container">
+<section id="login">
 
-<h2 class="section-title">🔐 Login / Signup</h2>
+  <div class="container">
 
-<div class="login-box">
+    <div class="section-title">
+      <h2>Login / Signup</h2>
+      <p>Owner account ke liye email se login karein.</p>
+    </div>
 
-<input id="loginEmail"
-type="email"
-placeholder="Email">
+    <div class="auth-box">
 
-<input id="loginPassword"
-type="password"
-placeholder="Password">
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          id="authEmail"
+          type="email"
+          placeholder="your@email.com"
+        >
+      </div>
 
-<div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <div class="form-group">
+        <label>Password</label>
+        <input
+          id="authPassword"
+          type="password"
+          placeholder="Password"
+        >
+      </div>
 
-<button class="primary" onclick="loginUser()">
-Login
-</button>
+      <div class="auth-actions">
 
-<button class="secondary" onclick="signupUser()">
-Signup
-</button>
+        <button
+          class="primary-btn"
+          onclick="loginUser()"
+        >
+          Login
+        </button>
 
-</div>
+        <button
+          class="secondary-btn"
+          onclick="signupUser()"
+        >
+          Signup
+        </button>
 
-<div id="loginStatus" class="status"></div>
+        <button
+          class="secondary-btn"
+          onclick="logoutUser()"
+        >
+          Logout
+        </button>
 
-</div>
+      </div>
 
-</div>
+      <div id="authStatus" style="margin-top:15px;"></div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
 <!-- POST ROOM -->
 
-<section class="section" id="post">
-<div class="container">
+<section id="post">
 
-<h2 class="section-title">🏠 Post Your Room</h2>
+  <div class="container">
 
-<div class="form-section">
+    <div class="section-title">
+      <h2>Post Your Room</h2>
+      <p>Apni property ki details add karein.</p>
+    </div>
 
-<div class="form-grid">
+    <div class="form-card">
 
-<div class="form-group">
-<label>Owner Name</label>
-<input id="name" placeholder="Owner Name">
-</div>
+      <div class="form-grid">
 
-<div class="form-group">
-<label>Mobile Number</label>
-<input id="mobile" placeholder="Mobile Number">
-</div>
+        <div class="form-group">
+          <label>Owner Name</label>
+          <input id="name" placeholder="Owner name">
+        </div>
 
-<div class="form-group">
-<label>State</label>
-<input id="state" list="stateList" placeholder="जैसे Madhya Pradesh">
-</div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input id="mobile" placeholder="Mobile number">
+        </div>
 
-<div class="form-group">
-<label>City / District</label>
-<input id="city" placeholder="City / District">
-</div>
+        <div class="form-group">
+          <label>State</label>
+          <input
+            id="state"
+            list="stateList"
+            placeholder="Madhya Pradesh"
+          >
 
-<div class="form-group">
-<label>Village / Area</label>
-<input id="village" placeholder="Village / Area">
-</div>
+          <datalist id="stateList">
+            <option value="Madhya Pradesh">
+            <option value="Uttar Pradesh">
+            <option value="Maharashtra">
+            <option value="Chhattisgarh">
+            <option value="Rajasthan">
+            <option value="Gujarat">
+          </datalist>
+        </div>
 
-<div class="form-group">
-<label>Address</label>
-<input id="address" placeholder="Full Address">
-</div>
+        <div class="form-group">
+          <label>City / District</label>
+          <input id="city" placeholder="City / District">
+        </div>
 
-<div class="form-group">
-<label>Property Type</label>
-<select id="type">
-<option value="Room">Room</option>
-<option value="1 BHK">1 BHK</option>
-<option value="2 BHK">2 BHK</option>
-<option value="3 BHK">3 BHK</option>
-<option value="Flat">Flat</option>
-<option value="House">House</option>
-<option value="PG">PG</option>
-<option value="Shop">Shop</option>
-</select>
-</div>
+        <div class="form-group">
+          <label>Village / Area</label>
+          <input id="address" placeholder="Village / Area / Address">
+        </div>
 
-<div class="form-group">
-<label>Furnishing</label>
-<select id="furnishing">
-<option>Unfurnished</option>
-<option>Semi Furnished</option>
-<option>Fully Furnished</option>
-</select>
-</div>
+        <div class="form-group">
+          <label>Property Type</label>
 
-<div class="form-group">
-<label>Monthly Rent ₹</label>
-<input id="rent" type="number" min="1" placeholder="जैसे 5000">
-</div>
+          <select id="type">
 
-<div class="form-group">
-<label>Room Photo</label>
-<input id="image" type="file" accept="image/*">
-</div>
+            <option value="Room">Room</option>
+            <option value="1 BHK">1 BHK</option>
+            <option value="2 BHK">2 BHK</option>
+            <option value="3 BHK">3 BHK</option>
+            <option value="Flat">Flat</option>
+            <option value="House">House</option>
+            <option value="PG">PG</option>
+            <option value="Shop">Shop</option>
 
-<div class="form-group full">
-<label>Description</label>
-<textarea id="description"
-placeholder="Room के बारे में जानकारी लिखें..."></textarea>
-</div>
+          </select>
+        </div>
 
-</div>
+        <div class="form-group">
+          <label>Furnishing</label>
 
-<div class="form-actions">
+          <select id="furnishing">
 
-<button id="postButton"
-class="primary"
-onclick="postRoom()">
-Room Post करें
-</button>
+            <option value="Unfurnished">
+              Unfurnished
+            </option>
 
-<button
-id="cancelButton"
-class="secondary"
-style="display:none;"
-onclick="cancelEdit()">
-Cancel
-</button>
+            <option value="Semi Furnished">
+              Semi Furnished
+            </option>
 
-</div>
+            <option value="Fully Furnished">
+              Fully Furnished
+            </option>
 
-<div id="status" class="status"></div>
+          </select>
+        </div>
 
-</div>
+        <div class="form-group">
+          <label>Monthly Rent ₹</label>
+          <input
+            id="rent"
+            type="number"
+            placeholder="5000"
+          >
+        </div>
 
-</div>
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Description</label>
+
+        <textarea
+          id="description"
+          placeholder="Property ke baare mein details..."
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Photo</label>
+
+        <input
+          id="image"
+          type="file"
+          accept="image/*"
+          onchange="previewPhoto(event)"
+        >
+
+        <img
+          id="photoPreview"
+          style="
+          display:none;
+          max-width:220px;
+          max-height:160px;
+          margin-top:10px;
+          border-radius:12px;
+          object-fit:cover;
+          "
+        >
+
+      </div>
+
+
+      <div>
+
+        <button
+          id="postButton"
+          class="primary-btn"
+          onclick="postRoom()"
+        >
+          Post Room
+        </button>
+
+        <button
+          id="cancelButton"
+          class="secondary-btn"
+          onclick="cancelEdit()"
+          style="display:none;"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+
+      <div
+        id="postStatus"
+        style="margin-top:15px;"
+      ></div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
 <!-- ROOMS -->
 
-<section class="section" id="rooms">
-<div class="container">
+<section id="rooms">
 
-<h2 class="section-title">🏘️ Find Your Room</h2>
+  <div class="container">
 
-<div class="filter-box">
+    <div class="section-title">
 
-<div class="filters">
+      <h2>Find Your Room</h2>
 
-<input
-id="searchState"
-list="stateList"
-placeholder="State जैसे MP / UP">
+      <p>
+        Available properties search karein.
+      </p>
 
-<input
-id="searchCity"
-placeholder="City / District">
+    </div>
 
-<input
-id="searchVillage"
-placeholder="Village / Area">
 
-<select id="searchType">
-<option value="">All Property Types</option>
-<option>Room</option>
-<option>1 BHK</option>
-<option>2 BHK</option>
-<option>3 BHK</option>
-<option>Flat</option>
-<option>House</option>
-<option>PG</option>
-<option>Shop</option>
-</select>
+    <div class="filter-box">
 
-<input
-id="searchRent"
-type="number"
-placeholder="Maximum Rent">
+      <div class="filter-grid">
 
-</div>
+        <input
+          id="searchState"
+          placeholder="State"
+        >
 
-<div class="filter-buttons">
+        <input
+          id="searchCity"
+          placeholder="City / District"
+        >
 
-<button class="primary" onclick="searchRooms()">
-🔍 Search Rooms
-</button>
+        <input
+          id="searchArea"
+          placeholder="Village / Area"
+        >
 
-<button class="secondary" onclick="clearSearch()">
-Clear
-</button>
+        <select id="searchType">
 
-</div>
+          <option value="">All Property Types</option>
+          <option value="Room">Room</option>
+          <option value="1 BHK">1 BHK</option>
+          <option value="2 BHK">2 BHK</option>
+          <option value="3 BHK">3 BHK</option>
+          <option value="Flat">Flat</option>
+          <option value="House">House</option>
+          <option value="PG">PG</option>
+          <option value="Shop">Shop</option>
 
-</div>
+        </select>
 
-<div
-id="roomsContainer"
-class="rooms">
+        <input
+          id="maxRent"
+          type="number"
+          placeholder="Maximum Rent"
+        >
 
-<div class="empty">
-⏳ Rooms load हो रहे हैं...
-</div>
+      </div>
 
-</div>
+      <button
+        class="primary-btn"
+        style="margin-top:12px;"
+        onclick="filterRooms()"
+      >
+        🔎 Search Rooms
+      </button>
 
-</div>
+      <button
+        class="secondary-btn"
+        onclick="clearFilters()"
+      >
+        Clear
+      </button>
+
+    </div>
+
+
+    <div
+      id="roomsContainer"
+      class="rooms-grid"
+    >
+      <div style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:30px;
+      ">
+        ⏳ Rooms load हो रहे हैं...
+      </div>
+    </div>
+
+
+    <div
+      id="roomCount"
+      style="
+      text-align:center;
+      color:#667085;
+      margin-top:20px;
+      "
+    >
+      0 rooms
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- WHY US -->
+<!-- WHY -->
 
-<section class="section">
-<div class="container">
+<section>
 
-<h2 class="section-title">💙 Why Dream House Rental?</h2>
+  <div class="container">
 
-<div class="more-grid">
+    <div class="section-title">
 
-<div class="more-card">
-<h3>🏠 Easy Property Search</h3>
-<p>
-City, area, property type और rent के हिसाब से
-अपनी जरूरत की property खोजें।
-</p>
-</div>
+      <h2>Why Dream House Rental?</h2>
 
-<div class="more-card">
-<h3>📞 Direct Owner Contact</h3>
-<p>
-Available property में दिए गए mobile number
-से owner से सीधे contact कर सकते हैं।
-</p>
-</div>
+      <p>
+        Simple, fast aur convenient property search.
+      </p>
 
-<div class="more-card">
-<h3>📍 Location Based Search</h3>
-<p>
-State, district, city और village/area के अनुसार
-property ढूँढना आसान बनाया गया है।
-</p>
-</div>
+    </div>
 
-<div class="more-card">
-<h3>🤝 Simple Rental Platform</h3>
-<p>
-Owner अपनी property post कर सकता है और
-renter उपलब्ध property देख सकता है।
-</p>
-</div>
 
-</div>
+    <div class="why-grid">
 
-</div>
+      <div class="why-card">
+
+        <div class="icon">🔎</div>
+
+        <h3>Easy Search</h3>
+
+        <p>
+          City, area, property type aur rent ke
+          according room search karein.
+        </p>
+
+      </div>
+
+
+      <div class="why-card">
+
+        <div class="icon">🏠</div>
+
+        <h3>Multiple Properties</h3>
+
+        <p>
+          Room, BHK, Flat, House, PG aur Shop
+          ek hi jagah par.
+        </p>
+
+      </div>
+
+
+      <div class="why-card">
+
+        <div class="icon">📱</div>
+
+        <h3>Direct Contact</h3>
+
+        <p>
+          Property owner se direct contact karein.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 </div>
-<!-- END HOME PAGE -->
 
 
 <!-- ================= MORE PAGE ================= -->
 
-<section id="morePage" class="more-page">
+<div id="morePage">
 
-<div class="container">
+<section>
 
-<div class="more-header">
+  <div class="container">
 
-<h1>☰ More</h1>
+    <div class="more-hero">
 
-<p>
-Dream House Rental से जुड़ी सभी extra information यहाँ मिलेगी।
-</p>
+      <h1>More • Connect With Us</h1>
 
-<button class="back-home" onclick="showHome()">
-⬅️ Back to Home
-</button>
+      <p>
+        Dream House Rental ke saath jude rahiye.
+      </p>
 
-</div>
+    </div>
 
 
-<div class="more-grid">
+    <div class="more-grid">
 
 
-<!-- SOCIAL -->
+      <!-- SOCIAL -->
 
-<div class="more-card">
+      <div class="more-card">
 
-<h3>📱 Follow Us</h3>
+        <div class="big-icon">📱</div>
 
-<p>
-हमारे Social Media pages से जुड़ें।
-अभी links बाद में add किए जा सकते हैं।
-</p>
+        <h3>Follow Us</h3>
 
-<div class="socials">
+        <p>
+          Hamare social media pages ko follow karein.
+          Links marketing ke time add kiye ja sakte hain.
+        </p>
 
-<a class="social-btn"
-href="#"
-onclick="socialMessage('Instagram');return false;">
-📸 Instagram
-</a>
+        <div class="social-buttons">
 
-<a class="social-btn"
-href="#"
-onclick="socialMessage('YouTube');return false;">
-▶️ YouTube
-</a>
+          <a
+            href="#"
+            onclick="return false"
+          >
+            📸 Instagram
+          </a>
 
-<a class="social-btn"
-href="#"
-onclick="socialMessage('Facebook');return false;">
-👍 Facebook
-</a>
+          <a
+            href="#"
+            onclick="return false"
+          >
+            ▶️ YouTube
+          </a>
 
-</div>
+          <a
+            href="#"
+            onclick="return false"
+          >
+            👍 Facebook
+          </a>
 
-</div>
+        </div>
 
-
-<!-- FEEDBACK -->
-
-<div class="more-card">
-
-<h3>💬 सुझाव & शिकायत</h3>
-
-<p>
-Website को बेहतर बनाने के लिए अपना सुझाव या शिकायत भेजें।
-</p>
-
-<button class="primary"
-onclick="openFeedback()"
-style="margin-top:14px;">
-Feedback दें
-</button>
-
-<div id="feedbackBox" class="feedback-box">
-
-<select id="feedbackType">
-<option value="सुझाव">सुझाव</option>
-<option value="शिकायत">शिकायत</option>
-</select>
-
-<input
-id="feedbackName"
-placeholder="आपका नाम">
-
-<input
-id="feedbackMobile"
-placeholder="Mobile Number">
-
-<input
-id="feedbackSubject"
-placeholder="Subject">
-
-<textarea
-id="feedbackMessage"
-placeholder="अपना सुझाव / शिकायत लिखें..."></textarea>
-
-<select id="feedbackRating">
-<option value="5">⭐⭐⭐⭐⭐</option>
-<option value="4">⭐⭐⭐⭐</option>
-<option value="3">⭐⭐⭐</option>
-<option value="2">⭐⭐</option>
-<option value="1">⭐</option>
-</select>
-
-<button
-class="primary"
-onclick="submitFeedback()">
-Submit Feedback
-</button>
-
-<div id="feedbackStatus" class="status"></div>
-
-</div>
-
-</div>
+      </div>
 
 
-<!-- ABOUT -->
+      <!-- FEEDBACK -->
 
-<div class="more-card">
+      <div class="more-card">
 
-<h3>🏠 About Dream House Rental</h3>
+        <div class="big-icon">💬</div>
 
-<p>
-Dream House Rental एक simple rental platform है जहाँ
-property owner अपनी Room, BHK, Flat, House, PG या Shop
-की जानकारी post कर सकता है।
-</p>
+        <h3>सुझाव & शिकायत</h3>
 
-<p style="margin-top:10px;">
-Renter city, area, property type और rent के हिसाब से
-available properties search कर सकता है।
-</p>
+        <p>
+          Website ko better banane ke liye
+          apna feedback bhejiye.
+        </p>
 
-</div>
+        <button
+          class="primary-btn"
+          style="margin-top:15px;"
+          onclick="openFeedback()"
+        >
+          Feedback दें
+        </button>
 
-
-<!-- CONTACT -->
-
-<div class="more-card">
-
-<h3>📞 Contact Us</h3>
-
-<p>
-Dream House Rental से जुड़ी किसी भी जानकारी,
-सुझाव या समस्या के लिए Feedback section का उपयोग करें।
-</p>
-
-<p style="margin-top:12px;">
-📧 Email: <b>Coming Soon</b>
-</p>
-
-<p>
-📱 Support: <b>Coming Soon</b>
-</p>
-
-</div>
+      </div>
 
 
-<!-- FUTURE -->
+      <!-- ABOUT -->
 
-<div class="more-card">
+      <div class="more-card">
 
-<h3>🚀 Coming Soon</h3>
+        <div class="big-icon">🏠</div>
 
-<p>
-• Social Media Marketing<br>
-• Owner Login<br>
-• Renter Login<br>
-• Favourite Properties<br>
-• Better Location Search<br>
-• More Cities & States<br>
-• Property Verification
-</p>
+        <h3>About Dream House Rental</h3>
 
-</div>
+        <p>
+          Dream House Rental ek simple platform hai
+          jahan owner apni property post kar sakta hai
+          aur renter apni requirement ke according
+          property search kar sakta hai.
+        </p>
+
+      </div>
 
 
-</div>
+      <!-- CONTACT -->
 
-</div>
+      <div class="more-card">
+
+        <div class="big-icon">📞</div>
+
+        <h3>Contact Us</h3>
+
+        <p>
+          Website se related kisi bhi query,
+          suggestion ya support ke liye contact karein.
+        </p>
+
+        <p style="margin-top:12px;">
+          📧 Email: dreamhouserental@example.com
+        </p>
+
+      </div>
+
+
+      <!-- COMING SOON -->
+
+      <div class="more-card">
+
+        <div class="big-icon">🚀</div>
+
+        <h3>Coming Soon</h3>
+
+        <p>
+          GPS Nearby Search, better filters,
+          notifications aur aur bhi features
+          future updates mein add kiye ja sakte hain.
+        </p>
+
+      </div>
+
+
+      <!-- BACK -->
+
+      <div class="more-card">
+
+        <div class="big-icon">🏡</div>
+
+        <h3>Dream House Rental</h3>
+
+        <p>
+          Find • Rent • Stay
+        </p>
+
+        <button
+          class="primary-btn"
+          style="margin-top:15px;"
+          onclick="showHome()"
+        >
+          ← Home पर जाएं
+        </button>
+
+      </div>
+
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ================= STATE LIST ================= -->
+<!-- FEEDBACK FORM -->
 
-<datalist id="stateList">
+<section id="feedbackSection" style="display:none;">
 
-<option value="Madhya Pradesh">
-<option value="MP">
+  <div class="container">
 
-<option value="Uttar Pradesh">
-<option value="UP">
+    <div class="section-title">
 
-<option value="Chhattisgarh">
-<option value="CG">
+      <h2>सुझाव / शिकायत</h2>
 
-<option value="Maharashtra">
-<option value="MH">
+      <p>
+        आपका feedback हमारे लिए महत्वपूर्ण है।
+      </p>
 
-<option value="Rajasthan">
-<option value="RJ">
-
-<option value="Gujarat">
-<option value="GJ">
-
-<option value="Delhi">
-<option value="DL">
-
-<option value="Bihar">
-<option value="BR">
-
-<option value="Jharkhand">
-<option value="JH">
-
-<option value="Odisha">
-<option value="OD">
-
-</datalist>
+    </div>
 
 
-<!-- ================= FOOTER ================= -->
+    <div class="auth-box">
+
+      <div class="form-group">
+
+        <label>Type</label>
+
+        <select id="feedbackType">
+
+          <option value="सुझाव">
+            सुझाव
+          </option>
+
+          <option value="शिकायत">
+            शिकायत
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Name</label>
+
+        <input
+          id="feedbackName"
+          placeholder="आपका नाम"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Mobile</label>
+
+        <input
+          id="feedbackMobile"
+          placeholder="Mobile number"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Subject</label>
+
+        <input
+          id="feedbackSubject"
+          placeholder="Subject"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Message</label>
+
+        <textarea
+          id="feedbackMessage"
+          placeholder="अपना सुझाव / शिकायत लिखें..."
+        ></textarea>
+
+      </div>
+
+
+      <button
+        class="primary-btn"
+        onclick="submitFeedback()"
+      >
+        Submit Feedback
+      </button>
+
+
+      <button
+        class="secondary-btn"
+        onclick="closeFeedback()"
+      >
+        Cancel
+      </button>
+
+
+      <div
+        id="feedbackStatus"
+        style="margin-top:15px;"
+      ></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+</main>
+
+
+<!-- FOOTER -->
 
 <footer>
 
-<div class="container">
+  <div class="container">
 
-<div class="footer-grid">
+    <div class="footer-grid">
 
-<div>
-<h3>🏠 Dream House Rental</h3>
-<p>
-Find • Rent • Stay
-</p>
-<p>
-Room, BHK, Flat, House, PG और Shop खोजें।
-</p>
-</div>
+      <div>
 
-<div>
-<h3>Quick Links</h3>
+        <h3>🏠 Dream House Rental</h3>
 
-<div class="footer-links">
+        <p>
+          Find • Rent • Stay
+        </p>
 
-<a href="#" onclick="showHome();return false;">
-Home
-</a>
+        <p style="margin-top:8px;">
+          Room, BHK, Flat, House, PG aur Shop
+          search karein.
+        </p>
 
-<a href="#rooms"
-onclick="showHome();setTimeout(()=>document.getElementById('rooms').scrollIntoView(),100);return false;">
-Rooms
-</a>
+      </div>
 
-<a href="#post"
-onclick="showHome();setTimeout(()=>document.getElementById('post').scrollIntoView(),100);return false;">
-Post Room
-</a>
 
-<a href="#"
-onclick="showMore();return false;">
-More
-</a>
+      <div>
 
-</div>
+        <h3>Quick Links</h3>
 
-</div>
+        <div class="footer-links">
 
-<div>
-<h3>Connect</h3>
+          <button
+            onclick="showHome();scrollToId('home')"
+            style="background:none;border:0;color:#cbd2e1;text-align:left;cursor:pointer;"
+          >
+            Home
+          </button>
 
-<div class="footer-links">
+          <button
+            onclick="showHome();scrollToId('rooms')"
+            style="background:none;border:0;color:#cbd2e1;text-align:left;cursor:pointer;"
+          >
+            Rooms
+          </button>
 
-<a href="#" onclick="socialMessage('Instagram');return false;">
-📸 Instagram
-</a>
+          <button
+            onclick="showHome();scrollToId('post')"
+            style="background:none;border:0;color:#cbd2e1;text-align:left;cursor:pointer;"
+          >
+            Post Room
+          </button>
 
-<a href="#" onclick="socialMessage('YouTube');return false;">
-▶️ YouTube
-</a>
+          <button
+            onclick="showMore()"
+            style="background:none;border:0;color:#cbd2e1;text-align:left;cursor:pointer;"
+          >
+            More
+          </button>
 
-<a href="#" onclick="socialMessage('Facebook');return false;">
-👍 Facebook
-</a>
+        </div>
 
-</div>
+      </div>
 
-</div>
 
-</div>
+      <div>
 
-<div class="copyright">
-© 2026 Dream House Rental • Find • Rent • Stay
-</div>
+        <h3>Connect</h3>
 
-</div>
+        <div class="footer-links">
+
+          <span>📸 Instagram</span>
+          <span>▶️ YouTube</span>
+          <span>👍 Facebook</span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+      © 2026 Dream House Rental • Find • Rent • Stay
+
+    </div>
+
+  </div>
 
 </footer>
 
 
-<!-- ================= FIREBASE ================= -->
+<!-- FIREBASE -->
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
   getFirestore,
   collection,
-  addDoc,
   getDocs,
-  doc,
+  addDoc,
   updateDoc,
   deleteDoc,
-  query,
-  orderBy,
+  doc,
   serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
   onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-/* ================= FIREBASE CONFIG ================= */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
@@ -1507,39 +1670,59 @@ const firebaseConfig = {
 
   measurementId:
   "G-06LZEPB9NY"
+
 };
 
 
-/* ================= INIT ================= */
+/* INITIALIZE */
 
 const app = initializeApp(firebaseConfig);
 
-const db = getFirestore(app,"default");
+const db = getFirestore(app, "default");
 
 const auth = getAuth(app);
 
-const roomCollection = collection(db,"room");
+const roomCollection = collection(db, "room");
 
-const feedbackCollection = collection(db,"feedback");
+const feedbackCollection = collection(db, "feedback");
+
 
 let currentUser = null;
 
-let editingId = null;
-
 let currentRooms = [];
 
+let editingId = null;
 
-/* ================= FIREBASE STATUS ================= */
+let currentPhotoData = "";
+
+
+/* FIREBASE STATUS */
 
 document.getElementById("firebaseStatus").innerHTML =
-"✅ Firebase connected successfully";
+  "✅ Firebase connected successfully";
 
 
-/* ================= AUTH ================= */
+/* AUTH */
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth, (user) => {
 
   currentUser = user || null;
+
+  const status =
+    document.getElementById("authStatus");
+
+  if(user){
+
+    status.innerHTML =
+      "✅ Logged in: " +
+      escapeHtml(user.email);
+
+  }else{
+
+    status.innerHTML =
+      "ℹ️ अभी Login नहीं है.";
+
+  }
 
 });
 
@@ -1547,20 +1730,18 @@ onAuthStateChanged(auth,(user)=>{
 window.signupUser = async function(){
 
   const email =
-  document.getElementById("loginEmail").value.trim();
+    document.getElementById("authEmail").value.trim();
 
   const password =
-  document.getElementById("loginPassword").value;
+    document.getElementById("authPassword").value;
 
   const status =
-  document.getElementById("loginStatus");
+    document.getElementById("authStatus");
 
   if(!email || !password){
 
     status.innerHTML =
-    "❌ Email और Password डालें";
-
-    status.className="status error";
+      "❌ Email और Password भरें.";
 
     return;
   }
@@ -1574,16 +1755,13 @@ window.signupUser = async function(){
     );
 
     status.innerHTML =
-    "✅ Signup सफल हुआ।";
-
-    status.className="status success";
+      "✅ Signup successful.";
 
   }catch(error){
 
     status.innerHTML =
-    "❌ "+error.message;
-
-    status.className="status error";
+      "❌ " +
+      escapeHtml(error.message);
 
   }
 
@@ -1593,20 +1771,18 @@ window.signupUser = async function(){
 window.loginUser = async function(){
 
   const email =
-  document.getElementById("loginEmail").value.trim();
+    document.getElementById("authEmail").value.trim();
 
   const password =
-  document.getElementById("loginPassword").value;
+    document.getElementById("authPassword").value;
 
   const status =
-  document.getElementById("loginStatus");
+    document.getElementById("authStatus");
 
   if(!email || !password){
 
     status.innerHTML =
-    "❌ Email और Password डालें";
-
-    status.className="status error";
+      "❌ Email और Password भरें.";
 
     return;
   }
@@ -1620,232 +1796,441 @@ window.loginUser = async function(){
     );
 
     status.innerHTML =
-    "✅ Login successful.";
-
-    status.className="status success";
+      "✅ Login successful.";
 
   }catch(error){
 
     status.innerHTML =
-    "❌ "+error.message;
-
-    status.className="status error";
+      "❌ " +
+      escapeHtml(error.message);
 
   }
 
 };
 
 
-/* ================= IMAGE ================= */
+window.logoutUser = async function(){
 
-function compressImage(file){
+  try{
 
-  return new Promise((resolve,reject)=>{
+    await signOut(auth);
 
-    if(!file){
+    document.getElementById("authStatus").innerHTML =
+      "✅ Logout successful.";
 
-      resolve("");
+  }catch(error){
 
-      return;
-    }
+    document.getElementById("authStatus").innerHTML =
+      "❌ " +
+      escapeHtml(error.message);
 
-    const reader = new FileReader();
+  }
 
-    reader.onload = function(e){
-
-      const img = new Image();
-
-      img.onload = function(){
-
-        const maxSide = 700;
-
-        let width = img.width;
-
-        let height = img.height;
-
-        if(width > height){
-
-          if(width > maxSide){
-
-            height =
-            Math.round(height * maxSide / width);
-
-            width = maxSide;
-
-          }
-
-        }else{
-
-          if(height > maxSide){
-
-            width =
-            Math.round(width * maxSide / height);
-
-            height = maxSide;
-
-          }
-
-        }
-
-        const canvas =
-        document.createElement("canvas");
-
-        canvas.width = width;
-
-        canvas.height = height;
-
-        const ctx =
-        canvas.getContext("2d");
-
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          width,
-          height
-        );
-
-        resolve(
-          canvas.toDataURL(
-            "image/jpeg",
-            .72
-          )
-        );
-
-      };
-
-      img.onerror = reject;
-
-      img.src = e.target.result;
-
-    };
-
-    reader.onerror = reject;
-
-    reader.readAsDataURL(file);
-
-  });
-
-}
+};
 
 
-/* ================= POST ROOM ================= */
+/* LOAD ROOMS */
 
-window.postRoom = async function(){
+window.loadRooms = async function(){
 
-  const status =
-  document.getElementById("status");
+  const container =
+    document.getElementById("roomsContainer");
 
-  const button =
-  document.getElementById("postButton");
+  try{
 
-  if(!currentUser){
+    container.innerHTML = `
+      <div style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:30px;
+      ">
+        ⏳ Rooms load हो रहे हैं...
+      </div>
+    `;
 
-    status.innerHTML =
-    "❌ Room post करने के लिए पहले Login / Signup करें।";
 
-    status.className="status error";
+    /*
+      IMPORTANT:
+      orderBy() intentionally नहीं लगाया गया है.
+      इससे पुराने documents / missing createdAt
+      की वजह से rooms load problem नहीं होगी.
+    */
 
-    document.getElementById("login")
-    .scrollIntoView({
-      behavior:"smooth"
+    const snapshot =
+      await getDocs(roomCollection);
+
+
+    currentRooms = [];
+
+
+    snapshot.forEach((docSnap) => {
+
+      currentRooms.push({
+
+        id:docSnap.id,
+
+        ...docSnap.data()
+
+      });
+
     });
+
+
+    document.getElementById("roomCountTop").innerText =
+      currentRooms.length;
+
+    document.getElementById("roomCount").innerText =
+      currentRooms.length + " rooms";
+
+
+    renderRooms(currentRooms);
+
+
+  }catch(error){
+
+    console.error(
+      "Rooms load error:",
+      error
+    );
+
+
+    container.innerHTML = `
+      <div style="
+        grid-column:1/-1;
+        background:#fff3f3;
+        color:#b00020;
+        padding:20px;
+        border-radius:15px;
+        text-align:center;
+      ">
+
+        ❌ Rooms load नहीं हुए.
+
+        <br><br>
+
+        <small>
+          ${escapeHtml(error.message || "Unknown error")}
+        </small>
+
+      </div>
+    `;
+
+  }
+
+};
+
+
+/* RENDER ROOMS */
+
+function renderRooms(rooms){
+
+  const container =
+    document.getElementById("roomsContainer");
+
+
+  if(!rooms || rooms.length === 0){
+
+    container.innerHTML = `
+      <div style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:35px;
+        background:#fff;
+        border-radius:18px;
+      ">
+        🏠 अभी कोई room नहीं मिला.
+      </div>
+    `;
 
     return;
   }
 
 
-  const name =
-  document.getElementById("name").value.trim();
+  container.innerHTML =
+    rooms.map(room => {
 
-  const mobile =
-  document.getElementById("mobile").value.trim();
+      const type =
+        room.type || "Room";
 
-  const state =
-  document.getElementById("state").value.trim();
-
-  const city =
-  document.getElementById("city").value.trim();
-
-  const village =
-  document.getElementById("village").value.trim();
-
-  const address =
-  document.getElementById("address").value.trim();
-
-  const type =
-  document.getElementById("type").value;
-
-  const furnishing =
-  document.getElementById("furnishing").value;
-
-  const rent =
-  Number(document.getElementById("rent").value);
-
-  const description =
-  document.getElementById("description").value.trim();
-
-  const file =
-  document.getElementById("image").files[0];
+      const rent =
+        Number(room.rent || 0);
 
 
-  if(!name || !mobile || !city || !rent){
+      const owner =
+        room.name || "Owner";
+
+
+      const mobile =
+        room.mobile || "";
+
+
+      const city =
+        room.city || "";
+
+
+      const state =
+        room.state ||
+        inferState(city, room.address);
+
+
+      const address =
+        room.address || "";
+
+
+      const furnishing =
+        room.furnishing || "";
+
+
+      const description =
+        room.description || "";
+
+
+      const image =
+        room.image ||
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80";
+
+
+      const safeImage =
+        escapeHtml(image);
+
+
+      let callButton = "";
+
+
+      if(mobile){
+
+        const tel =
+          String(mobile)
+          .replace(/[^\d+]/g,"");
+
+        callButton = `
+          <a
+            href="tel:${escapeHtml(tel)}"
+          >
+            📞 Contact Owner
+          </a>
+        `;
+
+      }
+
+
+      return `
+
+        <div class="room-card">
+
+          <img
+            class="room-img"
+            src="${safeImage}"
+            onerror="
+              this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80'
+            "
+          >
+
+
+          <div class="room-body">
+
+            <div class="room-type">
+              ${escapeHtml(type)}
+            </div>
+
+
+            <div class="room-rent">
+              ₹${rent.toLocaleString("en-IN")}
+              <small style="
+                font-size:13px;
+                color:#667085;
+                font-weight:normal;
+              ">
+                / month
+              </small>
+            </div>
+
+
+            <div class="room-info">
+
+              📍
+              ${escapeHtml(city)}
+              ${state ? ", " + escapeHtml(state) : ""}
+
+              <br>
+
+              🏘️
+              ${escapeHtml(address)}
+
+              <br>
+
+              🛋️
+              ${escapeHtml(furnishing)}
+
+              ${
+                description
+                ?
+                `<br>📝 ${escapeHtml(description)}`
+                :
+                ""
+              }
+
+            </div>
+
+
+            <div class="room-owner">
+
+              👤
+              <strong>
+                ${escapeHtml(owner)}
+              </strong>
+
+            </div>
+
+
+            <div class="room-actions">
+
+              ${callButton}
+
+
+              ${
+                currentUser &&
+                room.ownerId === currentUser.uid
+
+                ?
+
+                `
+                  <button
+                    onclick="editRoom('${escapeJs(room.id)}')"
+                  >
+                    ✏️ Edit
+                  </button>
+
+                  <button
+                    onclick="deleteRoom('${escapeJs(room.id)}')"
+                  >
+                    🗑️ Delete
+                  </button>
+                `
+
+                :
+
+                ""
+
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* POST ROOM */
+
+window.postRoom = async function(){
+
+  const status =
+    document.getElementById("postStatus");
+
+
+  /*
+    Firebase rules currently create के लिए login मांगते हैं.
+  */
+
+  if(!currentUser){
+
+    status.innerHTML = `
+      <span style="color:#b00020;">
+        ❌ Room post करने के लिए पहले Login / Signup करें.
+      </span>
+    `;
+
+    return;
+  }
+
+
+  const data = {
+
+    name:
+      document.getElementById("name").value.trim(),
+
+    mobile:
+      document.getElementById("mobile").value.trim(),
+
+    state:
+      document.getElementById("state").value.trim(),
+
+    city:
+      document.getElementById("city").value.trim(),
+
+    address:
+      document.getElementById("address").value.trim(),
+
+    type:
+      document.getElementById("type").value,
+
+    furnishing:
+      document.getElementById("furnishing").value,
+
+    rent:
+      Number(
+        document.getElementById("rent").value
+      ),
+
+    description:
+      document.getElementById("description").value.trim(),
+
+    image:
+      currentPhotoData || "",
+
+    ownerId:
+      currentUser.uid,
+
+    updatedAt:
+      serverTimestamp()
+
+  };
+
+
+  if(!data.name){
 
     status.innerHTML =
-    "❌ Owner Name, Mobile, City और Rent जरूरी है।";
+      "❌ Owner Name भरें.";
 
-    status.className="status error";
+    return;
+  }
+
+
+  if(!data.mobile){
+
+    status.innerHTML =
+      "❌ Mobile Number भरें.";
+
+    return;
+  }
+
+
+  if(!data.city){
+
+    status.innerHTML =
+      "❌ City भरें.";
+
+    return;
+  }
+
+
+  if(!data.rent){
+
+    status.innerHTML =
+      "❌ Monthly Rent भरें.";
 
     return;
   }
 
 
   try{
-
-    button.disabled=true;
-
-    button.innerText="Saving...";
-
-
-    let image="";
-
-    if(file){
-
-      image = await compressImage(file);
-
-    }
-
-
-    const data = {
-
-      name:name,
-
-      mobile:mobile,
-
-      state:state,
-
-      city:city,
-
-      village:village,
-
-      address:address,
-
-      type:type,
-
-      furnishing:furnishing,
-
-      rent:rent,
-
-      description:description,
-
-      image:image,
-
-      ownerId:currentUser.uid,
-
-      updatedAt:serverTimestamp()
-
-    };
-
 
     if(editingId){
 
@@ -1855,12 +2240,12 @@ window.postRoom = async function(){
       );
 
       status.innerHTML =
-      "✅ Room successfully updated.";
+        "✅ Room updated successfully.";
 
     }else{
 
       data.createdAt =
-      serverTimestamp();
+        serverTimestamp();
 
       await addDoc(
         roomCollection,
@@ -1868,691 +2253,141 @@ window.postRoom = async function(){
       );
 
       status.innerHTML =
-      "✅ Room successfully posted.";
+        "✅ Room successfully posted.";
 
     }
 
 
-    status.className="status success";
-
     clearPostForm();
 
     await loadRooms();
-
 
   }catch(error){
 
     console.error(error);
 
     status.innerHTML =
-    "❌ Room save नहीं हुआ: "+error.message;
-
-    status.className="status error";
-
-  }finally{
-
-    button.disabled=false;
-
-    button.innerText =
-    editingId ? "Update Room" : "Room Post करें";
+      "❌ Room save नहीं हुआ: " +
+      escapeHtml(error.message);
 
   }
 
 };
 
 
-/* ================= LOAD ROOMS ================= */
+/* EDIT */
 
-async function loadRooms(){
-
-  const container =
-  document.getElementById("roomsContainer");
-
-  container.innerHTML =
-  '<div class="empty">⏳ Rooms load हो रहे हैं...</div>';
-
-  try{
-
-    const q =
-    query(
-      roomCollection,
-      orderBy("createdAt","desc")
-    );
-
-    const snapshot =
-    await getDocs(q);
-
-    currentRooms=[];
-
-    snapshot.forEach((item)=>{
-
-      currentRooms.push({
-        id:item.id,
-        ...item.data()
-      });
-
-    });
-
-
-    document.getElementById("roomCountTop")
-    .innerText=currentRooms.length;
-
-
-    renderRooms(currentRooms);
-
-
-  }catch(error){
-
-    console.error(error);
-
-    try{
-
-      const snapshot =
-      await getDocs(roomCollection);
-
-      currentRooms=[];
-
-      snapshot.forEach((item)=>{
-
-        currentRooms.push({
-          id:item.id,
-          ...item.data()
-        });
-
-      });
-
-      document.getElementById("roomCountTop")
-      .innerText=currentRooms.length;
-
-      renderRooms(currentRooms);
-
-    }catch(error2){
-
-      container.innerHTML =
-      '<div class="empty">❌ Rooms load नहीं हुए: '
-      +escapeHtml(error2.message)+
-      '</div>';
-
-    }
-
-  }
-
-}
-
-
-/* ================= STATE ================= */
-
-function normalizeStateQuery(q){
-
-  const s =
-  String(q || "")
-  .trim()
-  .toLowerCase()
-  .replace(/\./g,"");
-
-  const aliases={
-
-    "mp":"madhya pradesh",
-    "m p":"madhya pradesh",
-    "madhya pradesh":"madhya pradesh",
-
-    "up":"uttar pradesh",
-    "u p":"uttar pradesh",
-    "uttar pradesh":"uttar pradesh",
-
-    "cg":"chhattisgarh",
-    "c g":"chhattisgarh",
-    "chhattisgarh":"chhattisgarh",
-
-    "mh":"maharashtra",
-    "m h":"maharashtra",
-    "maharashtra":"maharashtra",
-
-    "rj":"rajasthan",
-    "r j":"rajasthan",
-    "rajasthan":"rajasthan",
-
-    "gj":"gujarat",
-    "g j":"gujarat",
-    "gujarat":"gujarat",
-
-    "dl":"delhi",
-    "d l":"delhi",
-    "delhi":"delhi",
-
-    "br":"bihar",
-    "b r":"bihar",
-    "bihar":"bihar",
-
-    "jh":"jharkhand",
-    "j h":"jharkhand",
-    "jharkhand":"jharkhand",
-
-    "od":"odisha",
-    "o d":"odisha",
-    "odisha":"odisha"
-
-  };
-
-  return aliases[s] || s;
-
-}
-
-
-function inferredState(room){
-
-  if(
-    room.state &&
-    String(room.state).trim()
-  ){
-
-    return room.state;
-
-  }
-
-
-  const raw =
-  `${room.city || ""} ${room.village || ""} ${room.address || ""}`
-  .toLowerCase();
-
-
-  const mpPlaces=[
-    "betul",
-    "multai",
-    "indore",
-    "bhopal",
-    "itarsi",
-    "hoshangabad",
-    "narmadapuram",
-    "jabalpur",
-    "seoni",
-    "chhindwara",
-    "nagpur"
-  ];
-
-
-  for(const place of mpPlaces){
-
-    if(raw.includes(place)){
-
-      return "Madhya Pradesh";
-
-    }
-
-  }
-
-
-  if(
-    raw.includes("m.p") ||
-    raw.includes("mp")
-  ){
-
-    return "Madhya Pradesh";
-
-  }
-
-
-  const upPlaces=[
-    "lucknow",
-    "kanpur",
-    "varanasi",
-    "prayagraj",
-    "allahabad",
-    "agra",
-    "meerut",
-    "noida",
-    "ghaziabad",
-    "gorakhpur"
-  ];
-
-
-  for(const place of upPlaces){
-
-    if(raw.includes(place)){
-
-      return "Uttar Pradesh";
-
-    }
-
-  }
-
-
-  const cgPlaces=[
-    "raipur",
-    "bilaspur",
-    "durg",
-    "bhilai",
-    "korba",
-    "rajnandgaon"
-  ];
-
-
-  for(const place of cgPlaces){
-
-    if(raw.includes(place)){
-
-      return "Chhattisgarh";
-
-    }
-
-  }
-
-
-  return room.state || "";
-
-}
-
-
-function locationText(room){
-
-  return (
-    `${room.city || ""} `
-    +`${room.village || ""} `
-    +`${room.address || ""}`
-  ).toLowerCase();
-
-}
-
-
-function matchesState(room,query){
-
-  if(!query) return true;
-
-  const wanted =
-  normalizeStateQuery(query);
-
-  const actual =
-  normalizeStateQuery(
-    inferredState(room)
-  );
-
-  return (
-    actual.includes(wanted) ||
-    wanted.includes(actual)
-  );
-
-}
-
-
-/* ================= RENDER ROOMS ================= */
-
-function renderRooms(rooms){
-
-  const container =
-  document.getElementById("roomsContainer");
-
-
-  if(!rooms.length){
-
-    container.innerHTML=
-    '<div class="empty">🏠 कोई room नहीं मिला।</div>';
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-  rooms.map(room=>{
-
-    const image =
-    room.image ||
-    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80";
-
-
-    const state =
-    inferredState(room);
-
-
-    const phone =
-    String(room.mobile || "")
-    .replace(/\s/g,"");
-
-
-    const ownerId =
-    room.ownerId || "";
-
-
-    const canEdit =
-    currentUser &&
-    ownerId === currentUser.uid;
-
-
-    return `
-
-<div class="room-card">
-
-<img
-class="room-photo"
-src="${image}"
-onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80';"
-alt="Room">
-
-<div class="room-body">
-
-<div class="room-top">
-
-<span class="room-type">
-${escapeHtml(room.type || "Room")}
-</span>
-
-<span style="font-size:12px;color:#647086;">
-${escapeHtml(state || "India")}
-</span>
-
-</div>
-
-
-<div class="room-price">
-₹${Number(room.rent || 0).toLocaleString("en-IN")}
-<span style="font-size:12px;color:#788297;">
-/ month
-</span>
-</div>
-
-
-<div class="room-info">
-
-👤 <b>${escapeHtml(room.name || "Owner")}</b><br>
-
-📍 ${escapeHtml(room.city || "")}
-
-${room.village ? " • "+escapeHtml(room.village) : ""}
-
-<br>
-
-🏠 ${escapeHtml(room.address || "Address not provided")}<br>
-
-🛋️ ${escapeHtml(room.furnishing || "Not specified")}
-
-</div>
-
-
-<div class="room-desc">
-
-${escapeHtml(room.description || "No description available.")}
-
-</div>
-
-
-<div class="room-actions">
-
-<a
-class="call-btn"
-href="tel:${escapeHtml(phone)}">
-📞 Contact
-</a>
-
-<button
-class="share-btn"
-onclick="shareRoom('${escapeJs(room.type || "Room")}','${escapeJs(room.city || "")}',${Number(room.rent || 0)})">
-🔗 Share
-</button>
-
-</div>
-
-
-${canEdit ? `
-
-<div style="display:flex;gap:7px;margin-top:8px;">
-
-<button
-class="secondary"
-style="flex:1;padding:9px;"
-onclick="editRoom('${room.id}')">
-✏️ Edit
-</button>
-
-<button
-style="flex:1;padding:9px;border:0;border-radius:9px;background:#fff0f0;color:#c72828;"
-onclick="deleteRoom('${room.id}')">
-🗑️ Delete
-</button>
-
-</div>
-
-` : ""}
-
-
-</div>
-
-</div>
-
-`;
-
-  }).join("");
-
-}
-
-
-/* ================= SEARCH ================= */
-
-window.searchRooms=function(){
-
-  const state =
-  document.getElementById("searchState")
-  .value.trim();
-
-  const city =
-  document.getElementById("searchCity")
-  .value.trim()
-  .toLowerCase();
-
-  const village =
-  document.getElementById("searchVillage")
-  .value.trim()
-  .toLowerCase();
-
-  const type =
-  document.getElementById("searchType")
-  .value;
-
-  const maxRent =
-  Number(
-    document.getElementById("searchRent").value
-  ) || Infinity;
-
-
-  const filtered =
-  currentRooms.filter(room=>{
-
-    const loc =
-    locationText(room);
-
-
-    const cityMatch =
-    !city ||
-    loc.includes(city);
-
-
-    const villageMatch =
-    !village ||
-    loc.includes(village);
-
-
-    const typeMatch =
-    !type ||
-    String(room.type || "")
-    .toLowerCase() ===
-    type.toLowerCase();
-
-
-    const rentMatch =
-    Number(room.rent || 0) <= maxRent;
-
-
-    return (
-      matchesState(room,state) &&
-      cityMatch &&
-      villageMatch &&
-      typeMatch &&
-      rentMatch
-    );
-
-  });
-
-
-  renderRooms(filtered);
-
-};
-
-
-/* ================= CLEAR SEARCH ================= */
-
-window.clearSearch=function(){
-
-  document.getElementById("searchState").value="";
-  document.getElementById("searchCity").value="";
-  document.getElementById("searchVillage").value="";
-  document.getElementById("searchType").value="";
-  document.getElementById("searchRent").value="";
-
-  renderRooms(currentRooms);
-
-};
-
-
-/* ================= QUICK SEARCH ================= */
-
-window.quickSearch=function(){
-
-  document.getElementById("searchState").value =
-  document.getElementById("quickState").value;
-
-  document.getElementById("searchCity").value =
-  document.getElementById("quickCity").value;
-
-  document.getElementById("searchVillage").value =
-  document.getElementById("quickArea").value;
-
-
-  document.getElementById("rooms")
-  .scrollIntoView({
-    behavior:"smooth"
-  });
-
-
-  setTimeout(()=>{
-    searchRooms();
-  },300);
-
-};
-
-
-/* ================= EDIT ================= */
-
-window.editRoom=async function(id){
+window.editRoom = function(id){
 
   const room =
-  currentRooms.find(x=>x.id===id);
-
-  if(!room) return;
-
-
-  if(!currentUser){
-
-    alert("पहले Login करें।");
-
-    return;
-
-  }
-
-
-  if(room.ownerId !== currentUser.uid){
-
-    alert("यह आपकी property नहीं है।");
-
-    return;
-
-  }
-
-
-  editingId=id;
-
-
-  document.getElementById("name").value =
-  room.name || "";
-
-  document.getElementById("mobile").value =
-  room.mobile || "";
-
-  document.getElementById("state").value =
-  room.state || "";
-
-  document.getElementById("city").value =
-  room.city || "";
-
-  document.getElementById("village").value =
-  room.village || "";
-
-  document.getElementById("address").value =
-  room.address || "";
-
-  document.getElementById("type").value =
-  room.type || "Room";
-
-  document.getElementById("furnishing").value =
-  room.furnishing || "Unfurnished";
-
-  document.getElementById("rent").value =
-  room.rent || "";
-
-  document.getElementById("description").value =
-  room.description || "";
-
-
-  document.getElementById("postButton")
-  .innerText="Update Room";
-
-  document.getElementById("cancelButton")
-  .style.display="block";
-
-
-  document.getElementById("post")
-  .scrollIntoView({
-    behavior:"smooth"
-  });
-
-};
-
-
-/* ================= DELETE ================= */
-
-window.deleteRoom=async function(id){
-
-  if(!currentUser){
-
-    alert("पहले Login करें।");
-
-    return;
-
-  }
-
-
-  const room =
-  currentRooms.find(x=>x.id===id);
+    currentRooms.find(
+      item => item.id === id
+    );
 
 
   if(!room){
 
     return;
-
   }
 
 
-  if(room.ownerId !== currentUser.uid){
+  if(!currentUser ||
+     room.ownerId !== currentUser.uid){
 
-    alert("यह आपकी property नहीं है।");
+    alert(
+      "इस room को edit करने की permission नहीं है."
+    );
 
     return;
-
   }
 
 
-  if(!confirm("क्या आप यह room delete करना चाहते हैं?")){
+  editingId = id;
+
+
+  document.getElementById("name").value =
+    room.name || "";
+
+  document.getElementById("mobile").value =
+    room.mobile || "";
+
+  document.getElementById("state").value =
+    room.state || "";
+
+  document.getElementById("city").value =
+    room.city || "";
+
+  document.getElementById("address").value =
+    room.address || "";
+
+  document.getElementById("type").value =
+    room.type || "Room";
+
+  document.getElementById("furnishing").value =
+    room.furnishing || "Unfurnished";
+
+  document.getElementById("rent").value =
+    room.rent || "";
+
+  document.getElementById("description").value =
+    room.description || "";
+
+
+  currentPhotoData =
+    room.image || "";
+
+
+  document.getElementById("postButton").innerText =
+    "Update Room";
+
+
+  document.getElementById("cancelButton").style.display =
+    "inline-block";
+
+
+  showHome();
+
+  scrollToId("post");
+
+};
+
+
+/* DELETE */
+
+window.deleteRoom = async function(id){
+
+  const room =
+    currentRooms.find(
+      item => item.id === id
+    );
+
+
+  if(!room){
 
     return;
+  }
 
+
+  if(!currentUser ||
+     room.ownerId !== currentUser.uid){
+
+    alert(
+      "इस room को delete करने की permission नहीं है."
+    );
+
+    return;
+  }
+
+
+  const ok =
+    confirm(
+      "क्या आप यह room delete करना चाहते हैं?"
+    );
+
+
+  if(!ok){
+
+    return;
   }
 
 
@@ -2562,14 +2397,12 @@ window.deleteRoom=async function(id){
       doc(db,"room",id)
     );
 
-    alert("✅ Room deleted.");
-
     await loadRooms();
 
   }catch(error){
 
     alert(
-      "❌ Delete नहीं हुआ: "+
+      "Delete नहीं हुआ: " +
       error.message
     );
 
@@ -2578,130 +2411,479 @@ window.deleteRoom=async function(id){
 };
 
 
-/* ================= CANCEL ================= */
+/* CANCEL EDIT */
 
-window.cancelEdit=function(){
+window.cancelEdit = function(){
 
-  editingId=null;
+  editingId = null;
 
   clearPostForm();
 
-  document.getElementById("postButton")
-  .innerText="Room Post करें";
+  document.getElementById("postButton").innerText =
+    "Post Room";
 
-  document.getElementById("cancelButton")
-  .style.display="none";
+  document.getElementById("cancelButton").style.display =
+    "none";
 
 };
 
 
-/* ================= CLEAR FORM ================= */
+/* CLEAR FORM */
 
 function clearPostForm(){
 
-  document.getElementById("name").value="";
-  document.getElementById("mobile").value="";
-  document.getElementById("state").value="";
-  document.getElementById("city").value="";
-  document.getElementById("village").value="";
-  document.getElementById("address").value="";
-  document.getElementById("rent").value="";
-  document.getElementById("description").value="";
-  document.getElementById("image").value="";
+  document.getElementById("name").value = "";
+
+  document.getElementById("mobile").value = "";
+
+  document.getElementById("state").value = "";
+
+  document.getElementById("city").value = "";
+
+  document.getElementById("address").value = "";
+
+  document.getElementById("rent").value = "";
+
+  document.getElementById("description").value = "";
+
+  document.getElementById("image").value = "";
+
+  document.getElementById("photoPreview").style.display =
+    "none";
+
+  currentPhotoData = "";
+
+  editingId = null;
 
 }
 
 
-/* ================= SHARE ================= */
+/* PHOTO */
 
-window.shareRoom=function(type,city,rent){
+window.previewPhoto = function(event){
 
-  const text =
-  `Dream House Rental\n${type} in ${city}\nRent ₹${rent}/month`;
+  const file =
+    event.target.files[0];
 
-  if(navigator.share){
 
-    navigator.share({
-      title:"Dream House Rental",
-      text:text,
-      url:location.href
-    });
+  if(!file){
 
-  }else{
-
-    navigator.clipboard
-    .writeText(
-      text+"\n"+location.href
-    )
-    .then(()=>{
-      alert("✅ Property link copied.");
-    });
-
+    return;
   }
 
+
+  if(file.size > 900000){
+
+    alert(
+      "Photo बड़ी है. कृपया छोटी photo चुनें."
+    );
+
+    event.target.value = "";
+
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload = function(e){
+
+    currentPhotoData =
+      e.target.result;
+
+
+    const preview =
+      document.getElementById("photoPreview");
+
+
+    preview.src =
+      currentPhotoData;
+
+    preview.style.display =
+      "block";
+
+  };
+
+
+  reader.readAsDataURL(file);
+
 };
 
 
-/* ================= FEEDBACK ================= */
+/* FILTER */
 
-window.openFeedback=function(){
+window.filterRooms = function(){
 
-  const box =
-  document.getElementById("feedbackBox");
-
-  box.style.display =
-  box.style.display === "block"
-  ? "none"
-  : "block";
-
-};
+  const state =
+    document.getElementById("searchState")
+    .value
+    .trim()
+    .toLowerCase();
 
 
-window.submitFeedback=async function(){
+  const city =
+    document.getElementById("searchCity")
+    .value
+    .trim()
+    .toLowerCase();
 
-  const status =
-  document.getElementById("feedbackStatus");
+
+  const area =
+    document.getElementById("searchArea")
+    .value
+    .trim()
+    .toLowerCase();
 
 
   const type =
-  document.getElementById("feedbackType")
-  .value;
+    document.getElementById("searchType")
+    .value
+    .trim()
+    .toLowerCase();
 
-  const name =
-  document.getElementById("feedbackName")
-  .value.trim();
 
-  const mobile =
-  document.getElementById("feedbackMobile")
-  .value.trim();
+  const maxRent =
+    Number(
+      document.getElementById("maxRent").value
+    ) || Infinity;
 
-  const subject =
-  document.getElementById("feedbackSubject")
-  .value.trim();
 
-  const message =
-  document.getElementById("feedbackMessage")
-  .value.trim();
+  const filtered =
+    currentRooms.filter(room => {
 
-  const rating =
-  document.getElementById("feedbackRating")
-  .value;
+      const roomState =
+        (
+          room.state ||
+          inferState(
+            room.city,
+            room.address
+          )
+        )
+        .toLowerCase();
+
+
+      const roomCity =
+        (room.city || "")
+        .toLowerCase();
+
+
+      const roomAddress =
+        (room.address || "")
+        .toLowerCase();
+
+
+      const roomType =
+        (room.type || "")
+        .toLowerCase();
+
+
+      const roomRent =
+        Number(room.rent || 0);
+
+
+      const stateOk =
+        !state ||
+        roomState.includes(state) ||
+        stateAliases(state).some(
+          alias => roomState.includes(alias)
+        );
+
+
+      const cityOk =
+        !city ||
+        roomCity.includes(city);
+
+
+      const areaOk =
+        !area ||
+        roomAddress.includes(area);
+
+
+      const typeOk =
+        !type ||
+        roomType === type;
+
+
+      const rentOk =
+        roomRent <= maxRent;
+
+
+      return (
+        stateOk &&
+        cityOk &&
+        areaOk &&
+        typeOk &&
+        rentOk
+      );
+
+    });
+
+
+  renderRooms(filtered);
+
+
+  document.getElementById("roomCount").innerText =
+    filtered.length + " rooms found";
+
+};
+
+
+/* CLEAR FILTER */
+
+window.clearFilters = function(){
+
+  document.getElementById("searchState").value = "";
+
+  document.getElementById("searchCity").value = "";
+
+  document.getElementById("searchArea").value = "";
+
+  document.getElementById("searchType").value = "";
+
+  document.getElementById("maxRent").value = "";
+
+
+  renderRooms(currentRooms);
+
+
+  document.getElementById("roomCount").innerText =
+    currentRooms.length + " rooms";
+
+};
+
+
+/* HERO SEARCH */
+
+window.heroSearch = function(){
+
+  const value =
+    document.getElementById("heroLocation")
+    .value
+    .trim();
+
+
+  document.getElementById("searchCity").value =
+    value;
+
+
+  showHome();
+
+  setTimeout(() => {
+
+    scrollToId("rooms");
+
+    filterRooms();
+
+  },100);
+
+};
+
+
+/* SELECT TYPE */
+
+window.selectType = function(type){
+
+  document.getElementById("searchType").value =
+    type;
+
+  showHome();
+
+  setTimeout(() => {
+
+    scrollToId("rooms");
+
+    filterRooms();
+
+  },100);
+
+};
+
+
+/* STATE */
+
+function stateAliases(value){
+
+  const v =
+    value.toLowerCase().trim();
 
 
   if(
-    !name ||
-    !mobile ||
-    !subject ||
-    !message
+    v === "mp" ||
+    v === "m.p" ||
+    v === "madhya pradesh"
   ){
 
-    status.innerHTML =
-    "❌ सभी जरूरी जानकारी भरें।";
+    return [
+      "mp",
+      "m.p",
+      "madhya pradesh"
+    ];
 
-    status.className="status error";
+  }
+
+
+  if(
+    v === "up" ||
+    v === "u.p" ||
+    v === "uttar pradesh"
+  ){
+
+    return [
+      "up",
+      "u.p",
+      "uttar pradesh"
+    ];
+
+  }
+
+
+  return [v];
+
+}
+
+
+/* INFER STATE */
+
+function inferState(city,address){
+
+  const text =
+    (
+      (city || "") +
+      " " +
+      (address || "")
+    )
+    .toLowerCase();
+
+
+  const mpCities = [
+    "betul",
+    "multai",
+    "indore",
+    "bhopal",
+    "jabalpur",
+    "ujjain",
+    "gwalior",
+    "sagar",
+    "chhindwara",
+    "sehore",
+    "burhanpur",
+    "khandwa"
+  ];
+
+
+  if(
+    mpCities.some(
+      c => text.includes(c)
+    )
+  ){
+
+    return "Madhya Pradesh";
+
+  }
+
+
+  const cgCities = [
+    "raipur",
+    "durg",
+    "bhilai",
+    "bilaspur",
+    "korba",
+    "rajnandgaon"
+  ];
+
+
+  if(
+    cgCities.some(
+      c => text.includes(c)
+    )
+  ){
+
+    return "Chhattisgarh";
+
+  }
+
+
+  return "";
+
+}
+
+
+/* FEEDBACK */
+
+window.openFeedback = function(){
+
+  document.getElementById("feedbackSection").style.display =
+    "block";
+
+
+  document.getElementById("feedbackSection")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+};
+
+
+window.closeFeedback = function(){
+
+  document.getElementById("feedbackSection").style.display =
+    "none";
+
+};
+
+
+window.submitFeedback = async function(){
+
+  const status =
+    document.getElementById("feedbackStatus");
+
+
+  const type =
+    document.getElementById("feedbackType")
+    .value;
+
+
+  const name =
+    document.getElementById("feedbackName")
+    .value
+    .trim();
+
+
+  const mobile =
+    document.getElementById("feedbackMobile")
+    .value
+    .trim();
+
+
+  const subject =
+    document.getElementById("feedbackSubject")
+    .value
+    .trim();
+
+
+  const message =
+    document.getElementById("feedbackMessage")
+    .value
+    .trim();
+
+
+  if(!name){
+
+    status.innerHTML =
+      "❌ Name भरें.";
 
     return;
+  }
 
+
+  if(!message){
+
+    status.innerHTML =
+      "❌ Message लिखें.";
+
+    return;
   }
 
 
@@ -2721,24 +2903,34 @@ window.submitFeedback=async function(){
 
         message:message,
 
-        rating:Number(rating),
-
-        createdAt:serverTimestamp()
+        createdAt:
+          serverTimestamp()
 
       }
     );
 
 
-    status.innerHTML =
-    "✅ आपका सुझाव / शिकायत सफलतापूर्वक भेज दिया गया है। धन्यवाद! 🙏";
+    status.innerHTML = `
+      <div style="
+        background:#edf8ef;
+        color:#18752b;
+        padding:13px;
+        border-radius:10px;
+      ">
+        ✅ आपका सुझाव / शिकायत
+        सफलतापूर्वक भेज दिया गया है।
+        धन्यवाद! 🙏
+      </div>
+    `;
 
-    status.className="status success";
 
+    document.getElementById("feedbackName").value = "";
 
-    document.getElementById("feedbackName").value="";
-    document.getElementById("feedbackMobile").value="";
-    document.getElementById("feedbackSubject").value="";
-    document.getElementById("feedbackMessage").value="";
+    document.getElementById("feedbackMobile").value = "";
+
+    document.getElementById("feedbackSubject").value = "";
+
+    document.getElementById("feedbackMessage").value = "";
 
 
   }catch(error){
@@ -2746,68 +2938,125 @@ window.submitFeedback=async function(){
     console.error(error);
 
     status.innerHTML =
-    "❌ Feedback save नहीं हुआ: "+
-    error.message;
-
-    status.className="status error";
+      "❌ Feedback save नहीं हुआ: " +
+      escapeHtml(error.message);
 
   }
 
 };
 
 
-/* ================= LOAD ================= */
+/* MORE PAGE */
+
+window.showMore = function(){
+
+  document.getElementById("homePage").style.display =
+    "none";
+
+  document.getElementById("morePage").style.display =
+    "block";
+
+  document.getElementById("feedbackSection").style.display =
+    "none";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+
+  closeMenu();
+
+};
+
+
+/* HOME */
+
+window.showHome = function(){
+
+  document.getElementById("morePage").style.display =
+    "none";
+
+  document.getElementById("homePage").style.display =
+    "block";
+
+
+  closeMenu();
+
+};
+
+
+/* SCROLL */
+
+window.scrollToId = function(id){
+
+  showHome();
+
+  setTimeout(() => {
+
+    const element =
+      document.getElementById(id);
+
+    if(element){
+
+      element.scrollIntoView({
+        behavior:"smooth"
+      });
+
+    }
+
+  },50);
+
+};
+
+
+/* MENU */
+
+window.toggleMenu = function(){
+
+  document.getElementById("navLinks")
+    .classList.toggle("show");
+
+};
+
+
+function closeMenu(){
+
+  document.getElementById("navLinks")
+    .classList.remove("show");
+
+}
+
+
+/* ESCAPE HTML */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* ESCAPE JS */
+
+function escapeJs(value){
+
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/"/g,'\\"');
+
+}
+
+
+/* START */
 
 loadRooms();
-
-</script>
-
-
-<!-- ================= PAGE NAVIGATION ================= -->
-
-<script>
-
-function showMore(){
-
-  document.getElementById("homePage")
-  .style.display="none";
-
-  document.getElementById("morePage")
-  .style.display="block";
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-
-function showHome(){
-
-  document.getElementById("morePage")
-  .style.display="none";
-
-  document.getElementById("homePage")
-  .style.display="block";
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-
-function socialMessage(name){
-
-  alert(
-    name+
-    " link अभी add नहीं किया गया है।\n"+
-    "Marketing के समय यहाँ अपना real link डाल देंगे।"
-  );
-
-}
 
 </script>
 
