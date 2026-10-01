@@ -1247,6 +1247,37 @@ header{
   .post-nav-label{display:none;}
   .search-box .location-search-btn{width:100%;}
 }
+
+/* ================= FINAL PROFESSIONAL HOME / SEARCH DESIGN ================= */
+.hero{position:relative;overflow:visible;background:linear-gradient(135deg,#0b4ea2,#1684e8);min-height:500px;padding-bottom:95px;}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,47,98,.92),rgba(8,102,190,.55),rgba(0,0,0,.10));pointer-events:none;}
+.hero-content{position:relative;z-index:2;max-width:1250px;margin:auto;padding:58px 24px 0;}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:800;letter-spacing:-1px;}
+.hero p{font-size:18px;max-width:720px;}
+.pro-search-box{position:relative;z-index:5;margin:42px auto -40px;max-width:1180px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:22px;background:rgba(255,255,255,.98);border:1px solid rgba(255,255,255,.8);border-radius:22px;box-shadow:0 20px 50px rgba(12,50,90,.22);}
+.search-field{background:#fff;border:1px solid #dbe5f1;border-radius:13px;padding:8px 12px;min-width:0;}
+.search-field label,.radius-field label{display:block;font-size:12px;font-weight:800;color:#153b68;margin-bottom:5px;}
+.search-field input,.search-field select,.radius-field select{width:100%;border:0;outline:0;background:#fff;color:#344054;font-size:14px;padding:4px 0;}
+.search-bottom-row{grid-column:1/-1;display:grid;grid-template-columns:1.1fr .9fr 2fr .8fr;gap:12px;align-items:center;}
+.near-me-main,.results-near-btn{border:1px solid #bcd3ee;background:#f7fbff;color:#0759b5;border-radius:12px;padding:13px 14px;font-weight:800;cursor:pointer;}
+.radius-field{display:flex;align-items:center;gap:10px;border:1px solid #dbe5f1;border-radius:12px;padding:8px 12px;background:#fff;}
+.radius-field label{margin:0;white-space:nowrap;}
+.search-main-btn{min-height:48px;border-radius:12px;font-weight:800;}
+.search-main-btn span{font-size:18px;margin-left:8px;}
+.clear-main-btn{min-height:48px;border-radius:12px;}
+.near-me-status{grid-column:1/-1;color:#526581;font-size:12px;padding:2px 4px;text-align:left;}
+.results-toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px;padding:18px 20px;border:1px solid #e2eaf3;border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbff);box-shadow:0 8px 25px rgba(20,70,120,.06);}
+.distance-away{display:block;margin-top:3px;font-size:12px;color:#0759b5;font-weight:800;}
+.results-toolbar h2{margin:4px 0 3px;color:#123b68;}
+.results-toolbar p{margin:0;color:#667085;font-size:14px;}
+.results-kicker{font-size:12px;font-weight:800;color:#0b70d9;text-transform:uppercase;letter-spacing:.4px;}
+.results-near-btn{white-space:nowrap;}
+.categories{gap:12px;}
+.category{min-height:110px;border:1px solid #e1eaf4;box-shadow:0 5px 18px rgba(20,70,120,.05);transition:.2s;}
+.category:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(20,70,120,.10);}
+.stat{border-radius:14px;}
+@media(max-width:900px){.pro-search-box{grid-template-columns:repeat(2,1fr);margin-left:14px;margin-right:14px}.search-bottom-row{grid-template-columns:1fr 1fr}.search-main-btn{grid-column:1/-1}.clear-main-btn{grid-column:1/-1}.hero{padding-bottom:110px}}
+@media(max-width:600px){.hero-content{padding:38px 16px 0}.hero h1{font-size:37px}.hero p{font-size:15px}.pro-search-box{grid-template-columns:1fr;margin:25px 10px -55px;padding:14px;border-radius:18px}.search-bottom-row{grid-template-columns:1fr}.near-me-main,.radius-field,.search-main-btn,.clear-main-btn{width:100%}.near-me-status{line-height:1.6}.results-toolbar{align-items:flex-start;flex-direction:column}.results-near-btn{width:100%}.category{min-height:95px}}
 </style>
 </head>
 
@@ -1335,36 +1366,79 @@ header{
         aasani se search karein.
       </p>
 
-      <div class="search-box">
+      <div class="search-box pro-search-box">
 
-        <input
-          id="heroLocation"
-          type="text"
-          placeholder="🔎 City / Village / Area"
-        >
+        <div class="search-field">
+          <label>📍 State</label>
+          <input id="searchState" placeholder="Select State">
+        </div>
 
-        <button
-          class="primary-btn"
-          onclick="heroSearch()">
-          🔎 Search Property
-        </button>
+        <div class="search-field">
+          <label>🏙️ City / District</label>
+          <input id="searchCity" placeholder="Enter City">
+        </div>
 
-        <button
-          class="location-search-btn"
-          type="button"
-          onclick="searchNearMe()"
-          title="Nearby properties खोजें">
-          📍 Near Me
-        </button>
+        <div class="search-field">
+          <label>📌 Village / Area</label>
+          <input id="searchArea" placeholder="Enter Area">
+        </div>
+
+        <div class="search-field">
+          <label>🏠 Property Type</label>
+          <select id="searchType">
+            <option value="">All Types</option>
+            <option value="Room">Room</option>
+            <option value="1 BHK">1 BHK</option>
+            <option value="2 BHK">2 BHK</option>
+            <option value="3 BHK">3 BHK</option>
+            <option value="Flat">Flat</option>
+            <option value="House">House</option>
+            <option value="PG">PG</option>
+            <option value="Hostel">Hostel</option>
+            <option value="Shop">Shop</option>
+          </select>
+        </div>
+
+        <div class="search-field">
+          <label>₹ Max Rent</label>
+          <input id="maxRent" type="number" min="0" placeholder="No Limit">
+        </div>
+
+        <div class="search-bottom-row">
+          <button class="near-me-main" type="button" onclick="searchNearMe()">
+            📍 Search Near Me
+          </button>
+
+          <div class="radius-field">
+            <label>Search Radius</label>
+            <select id="radiusKm">
+              <option value="1">1 km</option>
+              <option value="2">2 km</option>
+              <option value="5" selected>5 km</option>
+              <option value="10">10 km</option>
+              <option value="25">25 km</option>
+              <option value="50">50 km</option>
+              <option value="100">100 km</option>
+            </select>
+          </div>
+
+          <button class="primary-btn search-main-btn" type="button" onclick="heroSearch()">
+            🔎 Search Properties <span>→</span>
+          </button>
+
+          <button class="secondary-btn clear-main-btn" type="button" onclick="clearFilters()">
+            ↻ Clear
+          </button>
+        </div>
+
+        <div id="nearMeStatus" class="near-me-status">
+          📍 Location से nearby rooms खोजें &nbsp;•&nbsp; 🗺️ हर property पर Google Maps &nbsp;•&nbsp; 🔐 GPS permission optional
+        </div>
 
       </div>
 
     </div>
 
-  </div>
-
-  <div class="home-intro-strip">
-    <div class="intro-pill">📍 Location से nearby rooms खोजें &nbsp;•&nbsp; 🗺️ हर property पर Google Maps</div>
   </div>
 
 
@@ -1382,7 +1456,7 @@ header{
     </div>
 
     <div class="stat">
-      <strong>8+</strong>
+      <strong>9+</strong>
       <span>Property Types</span>
     </div>
 
@@ -1400,77 +1474,14 @@ header{
 
 <section id="rooms" class="section">
 
-  <div class="section-title">
-
-    <h2>Find Your Room</h2>
-
-    <p>
-      Available properties search karein.
-    </p>
-
-  </div>
-
-
-  <div class="filter-box">
-
-    <div class="filter-grid">
-
-      <input id="searchState"
-             placeholder="State">
-
-      <input id="searchCity"
-             placeholder="City / District">
-
-      <input id="searchArea"
-             placeholder="Village / Area">
-
-      <select id="searchType">
-
-        <option value="">
-          All Property Types
-        </option>
-
-        <option value="Room">Room</option>
-        <option value="1 BHK">1 BHK</option>
-        <option value="2 BHK">2 BHK</option>
-        <option value="3 BHK">3 BHK</option>
-        <option value="Flat">Flat</option>
-        <option value="House">House</option>
-        <option value="PG">PG</option>
-        <option value="Shop">Shop</option>
-
-      </select>
-
-      <input id="maxRent"
-             type="number"
-             placeholder="Maximum Rent">
-
+  <div class="results-toolbar">
+    <div>
+      <span class="results-kicker">🏠 Dream House Rental</span>
+      <h2>Featured Properties</h2>
+      <p>Apni requirement ke according available properties dekhein.</p>
     </div>
-
-
-    <button class="primary-btn"
-            style="margin-top:12px;"
-            onclick="filterRooms()">
-      🔎 Search Rooms
-    </button>
-
-    <button class="secondary-btn"
-            onclick="clearFilters()">
-      Clear
-    </button>
-
-    <button class="location-search-btn"
-            type="button"
-            onclick="searchNearMe()">
-      📍 Search Near Me
-    </button>
-
-    <div id="nearMeStatus" style="margin-top:10px;color:#667085;font-size:13px;">
-      GPS search optional है — permission देने पर nearby properties दिखाई जाएँगी।
-    </div>
-
+    <button class="results-near-btn" type="button" onclick="searchNearMe()">📍 Near Me</button>
   </div>
-
 
   <div id="roomsContainer"
        class="rooms-grid"
@@ -1555,6 +1566,12 @@ header{
          onclick="selectType('PG')">
       <div class="icon">🛌</div>
       <h3>PG</h3>
+    </div>
+
+    <div class="category"
+         onclick="selectType('Hostel')">
+      <div class="icon">🏨</div>
+      <h3>Hostel</h3>
     </div>
 
     <div class="category"
@@ -1727,6 +1744,7 @@ header{
           <option value="Flat">Flat</option>
           <option value="House">House</option>
           <option value="PG">PG</option>
+          <option value="Hostel">Hostel</option>
           <option value="Shop">Shop</option>
 
         </select>
@@ -4944,6 +4962,9 @@ function renderRoomCard(
                 ? ", " +
                   escapeHtml(room.state)
                 : ""}
+              ${Number.isFinite(Number(room._distanceKm))
+                ? `<strong class="distance-away">📏 ${Number(room._distanceKm).toFixed(1)} km away</strong>`
+                : ""}
             </span>
           </div>
 
@@ -5316,6 +5337,9 @@ window.clearFilters = function(){
     currentRooms
   );
 
+  const status=$("nearMeStatus");
+  if(status) status.innerHTML="📍 Location से nearby rooms खोजें • 🗺️ हर property पर Google Maps • 🔐 GPS permission optional";
+
 };
 
 
@@ -5332,11 +5356,13 @@ window.searchNearMe = function(){
   const status=$("nearMeStatus");
   if(status) status.innerHTML="⏳ आपकी location मिल रही है...";
 
+  const radiusEl=$("radiusKm");
+  const radiusKm=Math.max(1,Number(radiusEl ? radiusEl.value : 5)||5);
+
   navigator.geolocation.getCurrentPosition(function(position){
 
     const lat=position.coords.latitude;
     const lng=position.coords.longitude;
-    const radiusKm=25;
 
     const nearby=currentRooms.filter(function(room){
       const rlat=Number(room.latitude);
@@ -5346,8 +5372,7 @@ window.searchNearMe = function(){
       const R=6371;
       const dLat=(rlat-lat)*Math.PI/180;
       const dLng=(rlng-lng)*Math.PI/180;
-      const a=Math.sin(dLat/2)**2+
-        Math.cos(lat*Math.PI/180)*Math.cos(rlat*Math.PI/180)*Math.sin(dLng/2)**2;
+      const a=Math.sin(dLat/2)**2 + Math.cos(lat*Math.PI/180)*Math.cos(rlat*Math.PI/180)*Math.sin(dLng/2)**2;
       const d=2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
       room._distanceKm=d;
       return d<=radiusKm;
@@ -5357,23 +5382,17 @@ window.searchNearMe = function(){
 
     if(status){
       status.innerHTML=nearby.length
-        ? `📍 ${nearby.length} nearby ${nearby.length===1?'property':'properties'} मिलीं (लगभग ${radiusKm} km के अंदर)।`
+        ? `📍 ${nearby.length} nearby ${nearby.length===1?'property':'properties'} मिलीं — ${radiusKm} km के अंदर।`
         : `📍 ${radiusKm} km के अंदर GPS location वाली property नहीं मिली।`;
     }
 
     showHome();
-    setTimeout(()=>{
-      $("rooms").scrollIntoView({behavior:"smooth"});
-    },100);
+    setTimeout(()=>$("rooms").scrollIntoView({behavior:"smooth"}),100);
 
   },function(error){
     console.error(error);
     if(status) status.innerHTML="❌ Location नहीं मिली। Phone में Location ON करके permission Allow करें।";
-  },{
-    enableHighAccuracy:true,
-    timeout:15000,
-    maximumAge:0
-  });
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 
 };
 
@@ -5401,40 +5420,19 @@ window.selectType = function(type){
 
 window.heroSearch = function(){
 
-  const value =
-    $("heroLocation")
-      .value
-      .trim();
-
-
   showHome();
 
-
-  $("searchState").value =
-    "";
-
-  $("searchCity").value =
-    value;
-
-  $("searchArea").value =
-    "";
-
-  $("searchType").value =
-    "";
-
-  $("maxRent").value =
-    "";
-
+  const state=$("searchState").value.trim();
+  const city=$("searchCity").value.trim();
+  const area=$("searchArea").value.trim();
+  const type=$("searchType").value;
+  const rent=$("maxRent").value;
 
   filterRooms();
 
-
   setTimeout(()=>{
-
-    $("rooms").scrollIntoView({
-      behavior:"smooth"
-    });
-
+    const el=$("rooms");
+    if(el) el.scrollIntoView({behavior:"smooth"});
   },100);
 
 };
