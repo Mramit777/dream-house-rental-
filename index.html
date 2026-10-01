@@ -5220,129 +5220,53 @@ async function loadRooms(){
 
 /* ================= FILTER ================= */
 
+function getSearchFilteredRooms(sourceRooms){
+  const state = $("searchState").value.trim().toLowerCase();
+  const city = $("searchCity").value.trim().toLowerCase();
+  const area = $("searchArea").value.trim().toLowerCase();
+  const type = $("searchType").value;
+  const maxRent = Number($("maxRent").value);
+
+  return sourceRooms.filter(room=>{
+    const roomState = String(room.state || "").toLowerCase();
+    const roomCity = String(room.city || "").toLowerCase();
+    const roomArea = String(room.address || room.area || "").toLowerCase();
+    const roomRent = Number(room.rent || 0);
+
+    if(state && !roomState.includes(state)) return false;
+    if(city && !roomCity.includes(city)) return false;
+    if(area && !roomArea.includes(area)) return false;
+    if(type && room.type !== type) return false;
+    if(maxRent && roomRent > maxRent) return false;
+    return true;
+  });
+}
+
 window.filterRooms = function(){
-
-  const state =
-    $("searchState")
-      .value
-      .trim()
-      .toLowerCase();
-
-  const city =
-    $("searchCity")
-      .value
-      .trim()
-      .toLowerCase();
-
-  const area =
-    $("searchArea")
-      .value
-      .trim()
-      .toLowerCase();
-
-  const type =
-    $("searchType").value;
-
-  const maxRent =
-    Number(
-      $("maxRent").value
-    );
-
-
-  const filtered =
-    currentRooms.filter(room=>{
-
-      const roomState =
-        String(
-          room.state || ""
-        ).toLowerCase();
-
-      const roomCity =
-        String(
-          room.city || ""
-        ).toLowerCase();
-
-      const roomArea =
-        String(
-          room.address || ""
-        ).toLowerCase();
-
-      const roomRent =
-        Number(
-          room.rent || 0
-        );
-
-
-      if(
-        state &&
-        !roomState.includes(state)
-      ){
-        return false;
-      }
-
-
-      if(
-        city &&
-        !roomCity.includes(city)
-      ){
-        return false;
-      }
-
-
-      if(
-        area &&
-        !roomArea.includes(area)
-      ){
-        return false;
-      }
-
-
-      if(
-        type &&
-        room.type !== type
-      ){
-        return false;
-      }
-
-
-      if(
-        maxRent &&
-        roomRent > maxRent
-      ){
-        return false;
-      }
-
-
-      return true;
-
-    });
-
-
-  renderRooms(
-    filtered
-  );
-
+  renderRooms(getSearchFilteredRooms(currentRooms));
 };
 
-
 window.clearFilters = function(){
-
   $("searchState").value = "";
   $("searchCity").value = "";
   $("searchArea").value = "";
   $("searchType").value = "";
   $("maxRent").value = "";
 
-  renderRooms(
-    currentRooms
-  );
+  /* Full reset: radius + nearby/GPS result state */
+  const radiusEl = $("radiusKm");
+  if(radiusEl) radiusEl.value = "5";
+  window.lastNearbySearch = false;
+
+  currentRooms.forEach(room=>{
+    try{ delete room._distanceKm; }catch(e){}
+  });
+
+  renderRooms(currentRooms);
 
   const status=$("nearMeStatus");
   if(status) status.innerHTML="📍 Location से nearby rooms खोजें • 🗺️ हर property पर Google Maps • 🔐 GPS permission optional";
-
 };
-
-
 
 /* ================= NEARBY LOCATION SEARCH ================= */
 window.searchNearMe = function(){
@@ -5363,8 +5287,12 @@ window.searchNearMe = function(){
 
     const lat=position.coords.latitude;
     const lng=position.coords.longitude;
+    window.lastNearbySearch = true;
 
-    const nearby=currentRooms.filter(function(room){
+    /* First apply ALL normal search filters, then apply GPS radius. */
+    const textFiltered = getSearchFilteredRooms(currentRooms);
+
+    const nearby=textFiltered.filter(function(room){
       const rlat=Number(room.latitude);
       const rlng=Number(room.longitude);
       if(!Number.isFinite(rlat) || !Number.isFinite(rlng)) return false;
@@ -5382,8 +5310,8 @@ window.searchNearMe = function(){
 
     if(status){
       status.innerHTML=nearby.length
-        ? `📍 ${nearby.length} nearby ${nearby.length===1?'property':'properties'} मिलीं — ${radiusKm} km के अंदर।`
-        : `📍 ${radiusKm} km के अंदर GPS location वाली property नहीं मिली।`;
+        ? `📍 ${nearby.length} nearby ${nearby.length===1?'property':'properties'} मिलीं — सभी selected filters + ${radiusKm} km के अंदर।`
+        : `📍 Selected filters के साथ ${radiusKm} km के अंदर GPS location वाली property नहीं मिली।`;
     }
 
     showHome();
@@ -5396,45 +5324,26 @@ window.searchNearMe = function(){
 
 };
 
-
 window.selectType = function(type){
-
   showHome();
-
-  $("searchType").value =
-    type;
-
+  $("searchType").value = type;
   filterRooms();
-
-
   setTimeout(()=>{
-
-    $("rooms").scrollIntoView({
-      behavior:"smooth"
-    });
-
+    $("rooms").scrollIntoView({behavior:"smooth"});
   },100);
-
 };
 
-
 window.heroSearch = function(){
-
   showHome();
-
-  const state=$("searchState").value.trim();
-  const city=$("searchCity").value.trim();
-  const area=$("searchArea").value.trim();
-  const type=$("searchType").value;
-  const rent=$("maxRent").value;
-
+  window.lastNearbySearch = false;
+  currentRooms.forEach(room=>{
+    try{ delete room._distanceKm; }catch(e){}
+  });
   filterRooms();
-
   setTimeout(()=>{
     const el=$("rooms");
     if(el) el.scrollIntoView({behavior:"smooth"});
   },100);
-
 };
 
 
