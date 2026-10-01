@@ -6,6 +6,9 @@
 
 <title>Dream House Rental | Find • Rent • Stay</title>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3V4l5Q5k7JYw5X5c5bQ2Q3Q7f7f8Q=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
 <style>
 *{
   box-sizing:border-box;
@@ -1249,6 +1252,30 @@ header{
   }
 
 }
+
+/* ================= POST LOCATION MAP ================= */
+#postLocationMap{
+  width:100%;
+  height:320px;
+  margin-top:12px;
+  border:1px solid #dbe3ef;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(15,23,42,.08);
+  display:none;
+  background:#eef3f8;
+}
+.location-map-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.location-map-hint{
+  margin-top:8px;
+  color:#667085;
+  font-size:13px;
+}
 </style>
 
 <style>
@@ -1736,51 +1763,32 @@ header{
 
       <div class="form-group location-box">
 
-        <label>📍 Google Location <span style="font-weight:400;color:#667085;">(Optional)</span></label>
+        <label>📍 Property Location <span style="font-weight:400;color:#667085;">(Optional)</span></label>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-
-          <button type="button"
-                  class="secondary-btn"
-                  onclick="getPostLocation()">
-            📍 Get Current Location
-          </button>
-
-          <button type="button"
-                  class="secondary-btn"
-                  onclick="openPostGoogleMap()">
-            🗺️ Open Google Maps
-          </button>
-
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="secondary-btn" onclick="openPostLocationPicker()">🗺️ Select Location on Map</button>
+          <button type="button" class="secondary-btn" onclick="getPostLocation()">📍 Use Current Location</button>
+          <button type="button" class="secondary-btn" onclick="clearPostLocation()">✕ Clear Location</button>
         </div>
 
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-          <input id="postMapSearch"
-                 placeholder="Map में जगह खोजें (जैसे Betul Bus Stand)"
-                 style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
-          <button type="button" class="primary-btn" onclick="searchPostMapLocation()">
-            🔎 Search & Add Location
-          </button>
+        <div id="postLocationPicker" style="display:none;margin-top:10px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input id="postMapSearch" placeholder="🔎 Map में जगह खोजें (जैसे Betul Bus Stand)" style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
+            <button type="button" class="primary-btn" onclick="searchPostMapLocation()">🔎 Search</button>
+          </div>
+          <div id="postLocationMap"></div>
+          <div class="location-map-actions">
+            <button type="button" class="secondary-btn" onclick="useMapCurrentLocation()">📍 My Current Location</button>
+            <button type="button" class="primary-btn" onclick="confirmPostMapLocation()">✅ Select This Location</button>
+            <button type="button" class="secondary-btn" onclick="openPostGoogleMap()">🧭 Open in Google Maps</button>
+          </div>
+          <div class="location-map-hint">Map पर tap करें या pin को drag करें। Location select होते ही State, City और Area auto-fill होंगे।</div>
+          <div id="postMapResults" style="margin-top:8px;"></div>
         </div>
-
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-          <input id="postGoogleMapLink"
-                 placeholder="Google Maps link paste करें"
-                 style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
-          <button type="button" class="secondary-btn" onclick="addLocationFromGoogleMapLink()">
-            📌 Add Map Link Location
-          </button>
-        </div>
-
-        <div id="postMapResults" style="margin-top:8px;"></div>
 
         <div id="locationStatus" style="margin-top:8px;color:#667085;font-size:13px;">
-          Location add करने के लिए “Get Current Location” दबाएँ।
+          Location optional है। Map से location चुनें या Current Location इस्तेमाल करें।
         </div>
-
-        <button type="button" class="secondary-btn" style="margin-top:8px;" onclick="clearPostLocation()">
-          ✕ Clear Location
-        </button>
 
       </div>
 
@@ -4505,22 +4513,87 @@ window.previewPhoto = async function(event){
 
 };
 
-/* ================= GOOGLE LOCATION ================= */
+/* ================= PROPERTY LOCATION MAP ================= */
+
+let postMap = null;
+let postMapMarker = null;
+let postMapSelected = false;
+
+function ensurePostMap(){
+  const mapEl = $("postLocationMap");
+  if(!mapEl || typeof L === "undefined") return false;
+  if(postMap) return true;
+
+  postMap = L.map(mapEl, {zoomControl:true}).setView([22.9734, 78.6569], 5);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom:19,
+    attribution:'&copy; OpenStreetMap contributors'
+  }).addTo(postMap);
+
+  postMap.on("click", function(e){
+    setPostMapPoint(e.latlng.lat, e.latlng.lng, true);
+  });
+  return true;
+}
+
+function setPostMapPoint(lat,lng,autoFill){
+  lat=Number(lat); lng=Number(lng);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
+  postLatitude=Number(lat.toFixed(7));
+  postLongitude=Number(lng.toFixed(7));
+  postMapSelected=true;
+
+  if(postMap){
+    if(postMapMarker) postMapMarker.setLatLng([postLatitude,postLongitude]);
+    else{
+      postMapMarker=L.marker([postLatitude,postLongitude],{draggable:true}).addTo(postMap);
+      postMapMarker.on("dragend",function(){
+        const p=postMapMarker.getLatLng();
+        setPostMapPoint(p.lat,p.lng,true);
+      });
+    }
+    postMap.setView([postLatitude,postLongitude], Math.max(postMap.getZoom(),15));
+  }
+
+  if(autoFill){
+    reverseFillPostLocation(postLatitude,postLongitude);
+    if($("locationStatus")) $("locationStatus").innerHTML=`📍 Selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो रहे हैं...`;
+  }
+}
+
+window.openPostLocationPicker = function(){
+  const panel=$("postLocationPicker");
+  if(panel) panel.style.display="block";
+  const mapEl=$("postLocationMap");
+  if(mapEl) mapEl.style.display="block";
+  if(!ensurePostMap()){
+    if($("locationStatus")) $("locationStatus").innerHTML="❌ Map load नहीं हुआ। Internet connection check करें।";
+    return;
+  }
+  setTimeout(()=>postMap.invalidateSize(),100);
+  if(postLatitude!==null && postLongitude!==null){
+    setPostMapPoint(postLatitude,postLongitude,false);
+  }
+};
 
 window.getPostLocation = function(){
+  window.openPostLocationPicker();
   if(!navigator.geolocation){
     $("locationStatus").textContent="❌ इस browser में GPS support नहीं है।";
     return;
   }
   $("locationStatus").textContent="⏳ आपकी current location मिल रही है...";
   navigator.geolocation.getCurrentPosition(async function(position){
-    postLatitude=Number(position.coords.latitude.toFixed(7));
-    postLongitude=Number(position.coords.longitude.toFixed(7));
+    setPostMapPoint(position.coords.latitude,position.coords.longitude,true);
     await reverseFillPostLocation(postLatitude,postLongitude);
-    $("locationStatus").innerHTML=`✅ Location saved: ${postLatitude}, ${postLongitude} • State/City/Area भी auto-fill हो गए।`;
+    $("locationStatus").innerHTML=`✅ Current Location selected • State/City/Area auto-fill हो गए।`;
   },function(){
     $("locationStatus").textContent="❌ Location नहीं मिली। Phone Location ON करके permission Allow करें।";
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+};
+
+window.useMapCurrentLocation = function(){
+  window.getPostLocation();
 };
 
 async function reverseFillPostLocation(lat,lng){
@@ -4542,6 +4615,7 @@ async function reverseFillPostLocation(lat,lng){
 window.searchPostMapLocation = async function(){
   const q=$("postMapSearch")?.value.trim();
   if(!q){ $("postMapResults").innerHTML="❌ पहले map में जगह का नाम लिखें।"; return; }
+  if(!ensurePostMap()) return;
   const box=$("postMapResults");
   box.innerHTML="⏳ Location search हो रही है...";
   try{
@@ -4550,11 +4624,11 @@ window.searchPostMapLocation = async function(){
     if(!res.ok) throw new Error("Search failed");
     const items=await res.json();
     if(!items.length){ box.innerHTML="❌ Location नहीं मिली। दूसरा नाम try करें।"; return; }
+    window._postMapResults=items;
     box.innerHTML=items.map((item,i)=>{
       const safeName=escapeHtml(item.display_name||q);
       return `<button type="button" class="secondary-btn" style="display:block;width:100%;text-align:left;margin-top:6px;" onclick="usePostMapResult(${i})">📍 ${safeName}</button>`;
     }).join("");
-    window._postMapResults=items;
   }catch(e){
     console.error(e);
     box.innerHTML="❌ Map search अभी उपलब्ध नहीं है। Internet connection check करें।";
@@ -4564,88 +4638,46 @@ window.searchPostMapLocation = async function(){
 window.usePostMapResult = async function(index){
   const item=window._postMapResults?.[index];
   if(!item) return;
-  postLatitude=Number(Number(item.lat).toFixed(7));
-  postLongitude=Number(Number(item.lon).toFixed(7));
-  const a=item.address||{};
-  const stateName=a.state || a.state_district || "";
-  const city=a.city || a.town || a.municipality || a.village || a.county || "";
-  const area=a.suburb || a.neighbourhood || a.quarter || a.residential || a.village || "";
-  if($("state") && INDIA_STATES.includes(stateName)) $("state").value=stateName;
-  if($("city") && city) $("city").value=city;
-  if($("address") && (area || item.display_name)) $("address").value=area || item.display_name;
-  $("locationStatus").innerHTML=`✅ Map location added: ${postLatitude}, ${postLongitude}`;
-  $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br><button type="button" class="secondary-btn" style="margin-top:7px;" onclick="openPostGoogleMap()">🗺️ Open selected location in Google Maps</button></div>`;
+  window.openPostLocationPicker();
+  setPostMapPoint(Number(item.lat),Number(item.lon),true);
+  await reverseFillPostLocation(postLatitude,postLongitude);
+  $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br>✅ Location selected</div>`;
+  $("locationStatus").innerHTML=`✅ Map location selected • State/City/Area auto-fill हो गए।`;
+};
+
+window.confirmPostMapLocation = async function(){
+  if(postLatitude===null || postLongitude===null){
+    alert("पहले map पर location चुनें या pin रखें।");
+    return;
+  }
+  await reverseFillPostLocation(postLatitude,postLongitude);
+  $("locationStatus").innerHTML=`✅ Location selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो गए।`;
 };
 
 window.clearPostLocation = function(){
-  postLatitude = null;
-  postLongitude = null;
-  if($("postMapSearch")) $("postMapSearch").value = "";
-  if($("postGoogleMapLink")) $("postGoogleMapLink").value = "";
-  if($("postMapResults")) $("postMapResults").innerHTML = "";
-  if($("locationStatus")) $("locationStatus").innerHTML = "📍 Location clear हो गई। अब नई location select कर सकते हैं।";
-};
-
-window.addLocationFromGoogleMapLink = async function(){
-  const raw = $("postGoogleMapLink")?.value.trim();
-  if(!raw){
-    if($("locationStatus")) $("locationStatus").innerHTML="❌ पहले Google Maps link paste करें।";
-    return;
+  postLatitude=null;
+  postLongitude=null;
+  postMapSelected=false;
+  if($("postMapSearch")) $("postMapSearch").value="";
+  if($("postMapResults")) $("postMapResults").innerHTML="";
+  if(postMapMarker && postMap){
+    postMap.removeLayer(postMapMarker);
+    postMapMarker=null;
   }
-  let lat=null, lng=null;
-  const at = raw.match(/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);
-  const q = raw.match(/[?&](?:q|query|ll)=(-?\d+(?:\.\d+)?)[,%2C]+(-?\d+(?:\.\d+)?)/i);
-  const pair = raw.match(/(-?\d{1,3}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
-  const m = at || q || pair;
-  if(m){ lat=Number(m[1]); lng=Number(m[2]); }
-  if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180){
-    if($("locationStatus")) $("locationStatus").innerHTML="❌ Link में latitude/longitude नहीं मिला। Google Maps से पूरा link copy करें।";
-    return;
-  }
-  postLatitude=Number(lat.toFixed(7)); postLongitude=Number(lng.toFixed(7));
-  await reverseFillPostLocation(postLatitude,postLongitude);
-  if($("locationStatus")) $("locationStatus").innerHTML=`✅ Google Maps link से location add: ${postLatitude}, ${postLongitude}`;
+  if($("locationStatus")) $("locationStatus").innerHTML="📍 Location clear हो गई। अब नई location select कर सकते हैं।";
 };
 
 window.openPostGoogleMap = function(){
-  let url = "";
-  if(postLatitude !== null && postLongitude !== null){
-    url = "https://www.google.com/maps?q=" + encodeURIComponent(postLatitude + "," + postLongitude);
+  let url="";
+  if(postLatitude!==null && postLongitude!==null){
+    url="https://www.google.com/maps?q="+encodeURIComponent(postLatitude+","+postLongitude);
   }else{
-    const query = [$("address").value.trim(),$("city").value.trim(),$("state").value.trim()].filter(Boolean).join(", ");
-    if(!query){ alert("पहले Address / City डालें या Current Location लें।"); return; }
-    url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
+    const query=[$("address")?.value.trim(),$("city")?.value.trim(),$("state")?.value.trim()].filter(Boolean).join(", ");
+    if(!query){ alert("पहले map पर location चुनें या Address / City डालें।"); return; }
+    url="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(query);
   }
   window.open(url,"_blank");
 };
-
-window.openGoogleLocation = function(lat,lng,address,city,state){
-
-  let url = "";
-
-  if(lat !== null && lat !== undefined && lng !== null && lng !== undefined && lat !== "" && lng !== ""){
-    url =
-      "https://www.google.com/maps?q=" +
-      encodeURIComponent(lat + "," + lng);
-  }else{
-    const query = [address,city,state]
-      .filter(Boolean)
-      .join(", ");
-
-    if(!query){
-      alert("Google Location उपलब्ध नहीं है।");
-      return;
-    }
-
-    url =
-      "https://www.google.com/maps/search/?api=1&query=" +
-      encodeURIComponent(query);
-  }
-
-  window.open(url,"_blank");
-
-};
-
 
 /* ================= POST ROOM ================= */
 
