@@ -1294,7 +1294,7 @@ header{
 /* ================= PHOTO GALLERY / BADGES ================= */
 .room-photo-button{display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer;position:relative;}
 .property-status-badges{position:absolute;left:10px;top:44px;display:flex;gap:6px;flex-wrap:wrap;z-index:3;}
-.verified-badge,.new-badge,.photo-count-badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+.new-badge,.photo-count-badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.12);}
 .new-badge{background:#eff8ff;color:#175cd3;border:1px solid #b2ddff;}
 .photo-count-badge{background:rgba(15,23,42,.82);color:#fff;}
 #roomGalleryModal{display:none;position:fixed;inset:0;z-index:99999;}
@@ -1762,11 +1762,25 @@ header{
             🔎 Search & Add Location
           </button>
         </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <input id="postGoogleMapLink"
+                 placeholder="Google Maps link paste करें"
+                 style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
+          <button type="button" class="secondary-btn" onclick="addLocationFromGoogleMapLink()">
+            📌 Add Map Link Location
+          </button>
+        </div>
+
         <div id="postMapResults" style="margin-top:8px;"></div>
 
         <div id="locationStatus" style="margin-top:8px;color:#667085;font-size:13px;">
           Location add करने के लिए “Get Current Location” दबाएँ।
         </div>
+
+        <button type="button" class="secondary-btn" style="margin-top:8px;" onclick="clearPostLocation()">
+          ✕ Clear Location
+        </button>
 
       </div>
 
@@ -2189,10 +2203,18 @@ header{
                  onchange="changeProfilePhoto(event)"
                  style="display:none;">
 
-          <button class="primary-btn"
-                  onclick="document.getElementById('profilePhotoInput').click()">
-            📷 Change Photo
-          </button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="primary-btn"
+                    onclick="document.getElementById('profilePhotoInput').click()">
+              📷 Change Photo
+            </button>
+
+            <button class="secondary-btn"
+                    type="button"
+                    onclick="removeProfilePhoto()">
+              🗑️ Remove Photo
+            </button>
+          </div>
 
           <div id="profilePhotoStatus"
                style="margin-top:7px;font-size:13px;">
@@ -2308,6 +2330,10 @@ header{
           <select id="inqRadius">
             <option value="5">5 km</option><option value="10">10 km</option><option value="25">25 km</option><option value="50">50 km</option>
           </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label>📝 Additional Demand / Requirement</label>
+          <textarea id="inqRequirements" placeholder="जैसे Parking, Attached Bathroom, Furnished, Family/Bachelor, 24 घंटे पानी, Bike Parking आदि..."></textarea>
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -3662,6 +3688,32 @@ window.changeProfilePhoto = async function(event){
 };
 
 
+/* ================= REMOVE PROFILE PHOTO ================= */
+
+window.removeProfilePhoto = async function(){
+  if(!currentUser) return;
+  const yes = confirm("क्या आप profile picture remove करना चाहते हैं?");
+  if(!yes) return;
+  const status = $("profilePhotoStatus");
+  if(status) status.innerHTML = "⏳ Profile picture remove हो रही है...";
+  try{
+    await updateDoc(doc(db,"users",currentUser.uid),{
+      profilePhoto:"",
+      updatedAt:serverTimestamp()
+    });
+    if(!profileData) profileData = {};
+    profileData.profilePhoto = "";
+    const input=$("profilePhotoInput");
+    if(input) input.value="";
+    updateProfileUI();
+    if(status) status.innerHTML = "✅ Profile picture remove हो गई।";
+  }catch(error){
+    console.error(error);
+    if(status) status.innerHTML = "❌ Profile picture remove नहीं हुई।";
+  }
+};
+
+
 /* ================= EDIT PROFILE ================= */
 
 window.openEditProfile = function(){
@@ -3920,7 +3972,7 @@ async function loadNotifications(){
 
 
     container.innerHTML =
-      notifications.slice(0,20).map(
+      notifications.map(
         n => `
           <div class="notification-item ${
             n.read ? "" : "unread"
@@ -3980,6 +4032,7 @@ window.savePropertyInquiry = async function(){
     type:$("inqType").value,
     maxRent:Number($("inqBudget").value||0),
     radiusKm:Number($("inqRadius").value||5),
+    additionalRequirements:$("inqRequirements")?.value.trim() || "",
     latitude:inquiryLatitude,
     longitude:inquiryLongitude,
     createdAt:new Date().toISOString(),
@@ -3994,7 +4047,7 @@ window.savePropertyInquiry = async function(){
     await updateDoc(doc(db,"users",currentUser.uid),{inquiries:[...old,inquiry],updatedAt:serverTimestamp()});
     $("inquiryStatus").textContent="✅ Inquiry save हो गई। Matching नई property पर notification आएगी।";
     $("inqState").value=$("inqCity").value=$("inqArea").value=$("inqBudget").value="";
-    $("inqType").value=""; inquiryLatitude=null; inquiryLongitude=null;
+    $("inqType").value=""; if($("inqRequirements")) $("inqRequirements").value=""; inquiryLatitude=null; inquiryLongitude=null;
     await loadMyInquiries();
   }catch(error){ console.error(error); $("inquiryStatus").textContent="❌ Inquiry save नहीं हुई: "+error.message; }
 };
@@ -4004,7 +4057,7 @@ window.loadMyInquiries = async function(){
   try{
     const snap=await getDoc(doc(db,"users",currentUser.uid));
     const list=Array.isArray(snap.data()?.inquiries)?snap.data().inquiries:[];
-    $("myInquiriesList").innerHTML=list.length?list.slice().reverse().map(q=>`<div class="notification-item"><strong>🔎 ${escapeHtml(q.type||"Any Property")}</strong><div style="color:#667085;font-size:13px;">${escapeHtml([q.area,q.city,q.state].filter(Boolean).join(", ")||"Any Location")} ${q.maxRent?"• ₹"+escapeHtml(q.maxRent)+" तक":""}</div><button class="small-btn danger" style="margin-top:7px;" onclick="deletePropertyInquiry('${escapeJs(q.id)}')">Delete</button></div>`).join(""):"<p style='color:#667085;'>अभी कोई inquiry save नहीं है।</p>";
+    $("myInquiriesList").innerHTML=list.length?list.slice().reverse().map(q=>`<div class="notification-item"><strong>🔎 ${escapeHtml(q.type||"Any Property")}</strong><div style="color:#667085;font-size:13px;">${escapeHtml([q.area,q.city,q.state].filter(Boolean).join(", ")||"Any Location")} ${q.maxRent?"• ₹"+escapeHtml(q.maxRent)+" तक":""}</div>${q.additionalRequirements?`<div style="margin-top:6px;color:#344054;font-size:13px;"><strong>📝 Demand:</strong> ${escapeHtml(q.additionalRequirements)}</div>`:""}<button class="small-btn danger" style="margin-top:7px;" onclick="deletePropertyInquiry('${escapeJs(q.id)}')">Delete</button></div>`).join(""):"<p style='color:#667085;'>अभी कोई inquiry save नहीं है।</p>";
   }catch(e){ console.error(e); }
 };
 
@@ -4038,7 +4091,7 @@ async function notifyMatchingInquiries(room, roomId){
           const a=Math.sin(dLat/2)**2+Math.cos(Number(q.latitude)*Math.PI/180)*Math.cos(Number(room.latitude)*Math.PI/180)*Math.sin(dLng/2)**2;
           const d=2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); if(d>Number(q.radiusKm||5)) continue;
         }
-        tasks.push(addDoc(notificationsCollection,{userId:item.id,message:`🔔 New Property Match! ${room.type||"Property"} in ${room.city||"your area"}, ₹${room.rent||""}/month.`,roomId,read:false,createdAt:serverTimestamp()})); break;
+        tasks.push(addDoc(notificationsCollection,{userId:item.id,message:`🔔 New Property Match! ${room.type||"Property"} in ${room.city||"your area"}, ₹${room.rent||""}/month.${q.additionalRequirements ? " 📝 आपकी Demand: " + q.additionalRequirements : ""}`,roomId,read:false,createdAt:serverTimestamp()})); break;
       }
     });
     await Promise.all(tasks);
@@ -4207,6 +4260,54 @@ window.toggleSaveRoom = async function(id){
 
   }
 
+};
+
+
+/* ================= PROPERTY RATE REQUEST ================= */
+
+window.requestPropertyRate = async function(roomId){
+  if(!currentUser){
+    alert("🔐 Rate request भेजने के लिए पहले Login करें।");
+    showLogin();
+    return;
+  }
+  const room=currentRooms.find(r=>r.id===roomId);
+  if(!room) return;
+  if(room.ownerId===currentUser.uid){
+    alert("यह आपकी अपनी property है।");
+    return;
+  }
+  const current=Number(room.rent||0);
+  const input=prompt(`Current Rent: ₹${current}/month\nआप कितना Rent चाहते हैं?`, current ? String(current) : "");
+  if(input===null) return;
+  const requested=Number(String(input).replace(/[^0-9.]/g,""));
+  if(!Number.isFinite(requested)||requested<=0){ alert("❌ सही rent amount डालें।"); return; }
+  const direction=requested<current?"कम":"ज्यादा";
+  try{
+    await addDoc(notificationsCollection,{
+      userId:room.ownerId,
+      message:`💰 Rent Change Request: Customer ने ${room.type||"property"} (${room.city||""}) का rent ₹${current}/month से ₹${requested}/month ${direction} करने की request भेजी है।`,
+      roomId,
+      fromUserId:currentUser.uid,
+      requestType:"rate_change",
+      currentRent:current,
+      requestedRent:requested,
+      read:false,
+      createdAt:serverTimestamp()
+    });
+    await addDoc(notificationsCollection,{
+      userId:currentUser.uid,
+      message:`✅ आपकी Rent Change Request ₹${requested}/month के लिए owner को भेज दी गई है।`,
+      roomId,
+      requestType:"rate_change_sent",
+      read:false,
+      createdAt:serverTimestamp()
+    });
+    alert("✅ Rent request owner को भेज दी गई है।");
+  }catch(error){
+    console.error(error);
+    alert("❌ Rent request नहीं भेजी गई: "+error.message);
+  }
 };
 
 
@@ -4476,35 +4577,47 @@ window.usePostMapResult = async function(index){
   $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br><button type="button" class="secondary-btn" style="margin-top:7px;" onclick="openPostGoogleMap()">🗺️ Open selected location in Google Maps</button></div>`;
 };
 
-window.openPostGoogleMap = function(){
-
-  let url = "";
-
-  if(postLatitude !== null && postLongitude !== null){
-    url =
-      "https://www.google.com/maps?q=" +
-      encodeURIComponent(postLatitude + "," + postLongitude);
-  }else{
-    const query = [
-      $("address").value.trim(),
-      $("city").value.trim(),
-      $("state").value.trim()
-    ].filter(Boolean).join(", ");
-
-    if(!query){
-      alert("पहले Address / City डालें या Current Location लें।");
-      return;
-    }
-
-    url =
-      "https://www.google.com/maps/search/?api=1&query=" +
-      encodeURIComponent(query);
-  }
-
-  window.open(url,"_blank");
-
+window.clearPostLocation = function(){
+  postLatitude = null;
+  postLongitude = null;
+  if($("postMapSearch")) $("postMapSearch").value = "";
+  if($("postGoogleMapLink")) $("postGoogleMapLink").value = "";
+  if($("postMapResults")) $("postMapResults").innerHTML = "";
+  if($("locationStatus")) $("locationStatus").innerHTML = "📍 Location clear हो गई। अब नई location select कर सकते हैं।";
 };
 
+window.addLocationFromGoogleMapLink = async function(){
+  const raw = $("postGoogleMapLink")?.value.trim();
+  if(!raw){
+    if($("locationStatus")) $("locationStatus").innerHTML="❌ पहले Google Maps link paste करें।";
+    return;
+  }
+  let lat=null, lng=null;
+  const at = raw.match(/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);
+  const q = raw.match(/[?&](?:q|query|ll)=(-?\d+(?:\.\d+)?)[,%2C]+(-?\d+(?:\.\d+)?)/i);
+  const pair = raw.match(/(-?\d{1,3}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
+  const m = at || q || pair;
+  if(m){ lat=Number(m[1]); lng=Number(m[2]); }
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180){
+    if($("locationStatus")) $("locationStatus").innerHTML="❌ Link में latitude/longitude नहीं मिला। Google Maps से पूरा link copy करें।";
+    return;
+  }
+  postLatitude=Number(lat.toFixed(7)); postLongitude=Number(lng.toFixed(7));
+  await reverseFillPostLocation(postLatitude,postLongitude);
+  if($("locationStatus")) $("locationStatus").innerHTML=`✅ Google Maps link से location add: ${postLatitude}, ${postLongitude}`;
+};
+
+window.openPostGoogleMap = function(){
+  let url = "";
+  if(postLatitude !== null && postLongitude !== null){
+    url = "https://www.google.com/maps?q=" + encodeURIComponent(postLatitude + "," + postLongitude);
+  }else{
+    const query = [$("address").value.trim(),$("city").value.trim(),$("state").value.trim()].filter(Boolean).join(", ");
+    if(!query){ alert("पहले Address / City डालें या Current Location लें।"); return; }
+    url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
+  }
+  window.open(url,"_blank");
+};
 
 window.openGoogleLocation = function(lat,lng,address,city,state){
 
@@ -5001,6 +5114,9 @@ function clearPostForm(){
     $("locationStatus").innerHTML =
       "Location add करने के लिए “Get Current Location” दबाएँ।";
   }
+  if($("postMapSearch")) $("postMapSearch").value="";
+  if($("postGoogleMapLink")) $("postGoogleMapLink").value="";
+  if($("postMapResults")) $("postMapResults").innerHTML="";
 
   $("image").value = "";
 
@@ -5029,7 +5145,7 @@ function clearPostForm(){
 
 /* ================= CALL ================= */
 
-window.contactOwner = function(mobile){
+window.contactOwner = async function(mobile, roomId){
 
   if(!mobile){
 
@@ -5055,10 +5171,8 @@ window.contactOwner = function(mobile){
 
 
   if(yes){
-
-    window.location.href =
-      "tel:" + clean;
-
+    if(roomId) await notifyOwnerContact(roomId,"Call");
+    window.location.href = "tel:" + clean;
   }
 
 };
@@ -5066,10 +5180,11 @@ window.contactOwner = function(mobile){
 
 /* ================= WHATSAPP ================= */
 
-window.whatsappOwner = function(
+window.whatsappOwner = async function(
   mobile,
   type,
-  city
+  city,
+  roomId
 ){
 
   const number =
@@ -5104,12 +5219,29 @@ window.whatsappOwner = function(
     encodeURIComponent(message);
 
 
-  window.open(
-    url,
-    "_blank"
-  );
+  if(roomId) await notifyOwnerContact(roomId,"WhatsApp");
+  window.open(url,"_blank");
 
 };
+
+
+async function notifyOwnerContact(roomId,channel){
+  try{
+    if(!currentUser) return;
+    const room=currentRooms.find(r=>r.id===roomId);
+    if(!room || !room.ownerId || room.ownerId===currentUser.uid) return;
+    await addDoc(notificationsCollection,{
+      userId:room.ownerId,
+      message:`📩 Customer ने आपकी property ${channel} से contact किया: ${room.type||"Property"}${room.city?" • "+room.city:""}.`,
+      roomId,
+      fromUserId:currentUser.uid,
+      requestType:"contact",
+      channel,
+      read:false,
+      createdAt:serverTimestamp()
+    });
+  }catch(e){ console.warn("Contact notification failed:",e); }
+}
 
 
 /* ================= ROOM CARD ================= */
@@ -5299,7 +5431,7 @@ function renderRoomCard(
 
           <button
             class="small-btn primary"
-            onclick="contactOwner('${escapeJs(room.mobile || "")}')">
+            onclick="contactOwner('${escapeJs(room.mobile || "") }','${escapeJs(room.id)}')">
             📞 Call Owner
           </button>
 
@@ -5308,10 +5440,19 @@ function renderRoomCard(
             onclick="whatsappOwner(
               '${escapeJs(room.mobile || "")}',
               '${escapeJs(room.type || "property")}',
-              '${escapeJs(room.city || "")}'
+              '${escapeJs(room.city || "")}',
+              '${escapeJs(room.id)}'
             )">
             💬 WhatsApp
           </button>
+
+          ${currentUser && room.ownerId !== currentUser.uid ? `
+          <button
+            class="small-btn"
+            onclick="requestPropertyRate('${escapeJs(room.id)}')">
+            💰 Rate Request
+          </button>
+          ` : ""}
 
           <button
             class="small-btn location-btn"
@@ -5982,6 +6123,7 @@ onAuthStateChanged(
 
 /* ================= START ================= */
 
+populateStateOptions();
 loadRooms();
 
 </script>
