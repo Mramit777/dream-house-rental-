@@ -1255,6 +1255,7 @@ header{
 
 /* ================= POST LOCATION MAP ================= */
 #postLocationMap{
+  position:relative;
   width:100%;
   height:320px;
   margin-top:12px;
@@ -1782,7 +1783,7 @@ header{
             <button type="button" class="primary-btn" onclick="confirmPostMapLocation()">✅ Select This Location</button>
             <button type="button" class="secondary-btn" onclick="openPostGoogleMap()">🧭 Open in Google Maps</button>
           </div>
-          <div class="location-map-hint">Map पर tap करें या pin को drag करें। Location select होते ही State, City और Area auto-fill होंगे।</div>
+          <div class="location-map-hint">📍 लाल pin map के बीच में रहेगा। Map को उंगली से move करके सही जगह pin के नीचे लाएँ, फिर <b>✅ Select This Location</b> दबाएँ।</div>
           <div id="postMapResults" style="margin-top:8px;"></div>
         </div>
 
@@ -4516,7 +4517,6 @@ window.previewPhoto = async function(event){
 /* ================= PROPERTY LOCATION MAP ================= */
 
 let postMap = null;
-let postMapMarker = null;
 let postMapSelected = false;
 
 function ensurePostMap(){
@@ -4524,41 +4524,32 @@ function ensurePostMap(){
   if(!mapEl || typeof L === "undefined") return false;
   if(postMap) return true;
 
-  postMap = L.map(mapEl, {zoomControl:true}).setView([22.9734, 78.6569], 5);
+  postMap = L.map(mapEl, {zoomControl:true}).setView([22.9734,78.6569], 5);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom:19,
     attribution:'&copy; OpenStreetMap contributors'
   }).addTo(postMap);
 
-  postMap.on("click", function(e){
-    setPostMapPoint(e.latlng.lat, e.latlng.lng, true);
+  /* Center-pin picker: moving the map changes the location under the pin. */
+  postMap.on("moveend", function(){
+    const c = postMap.getCenter();
+    postLatitude = Number(c.lat.toFixed(7));
+    postLongitude = Number(c.lng.toFixed(7));
+    postMapSelected = true;
+    if($("locationStatus") && !window._postMapConfirming){
+      $("locationStatus").innerHTML = `📍 Pin location ready: ${postLatitude}, ${postLongitude} • अब “Select This Location” दबाएँ।`;
+    }
   });
   return true;
 }
 
-function setPostMapPoint(lat,lng,autoFill){
+function centerPostMap(lat,lng,zoom=16){
   lat=Number(lat); lng=Number(lng);
-  if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)||!postMap) return;
   postLatitude=Number(lat.toFixed(7));
   postLongitude=Number(lng.toFixed(7));
   postMapSelected=true;
-
-  if(postMap){
-    if(postMapMarker) postMapMarker.setLatLng([postLatitude,postLongitude]);
-    else{
-      postMapMarker=L.marker([postLatitude,postLongitude],{draggable:true}).addTo(postMap);
-      postMapMarker.on("dragend",function(){
-        const p=postMapMarker.getLatLng();
-        setPostMapPoint(p.lat,p.lng,true);
-      });
-    }
-    postMap.setView([postLatitude,postLongitude], Math.max(postMap.getZoom(),15));
-  }
-
-  if(autoFill){
-    reverseFillPostLocation(postLatitude,postLongitude);
-    if($("locationStatus")) $("locationStatus").innerHTML=`📍 Selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो रहे हैं...`;
-  }
+  postMap.setView([postLatitude,postLongitude], zoom, {animate:true});
 }
 
 window.openPostLocationPicker = function(){
@@ -4570,10 +4561,12 @@ window.openPostLocationPicker = function(){
     if($("locationStatus")) $("locationStatus").innerHTML="❌ Map load नहीं हुआ। Internet connection check करें।";
     return;
   }
-  setTimeout(()=>postMap.invalidateSize(),100);
-  if(postLatitude!==null && postLongitude!==null){
-    setPostMapPoint(postLatitude,postLongitude,false);
-  }
+  setTimeout(()=>{
+    postMap.invalidateSize();
+    if(postLatitude!==null && postLongitude!==null){
+      centerPostMap(postLatitude,postLongitude,Math.max(postMap.getZoom(),16));
+    }
+  },100);
 };
 
 window.getPostLocation = function(){
@@ -4584,9 +4577,8 @@ window.getPostLocation = function(){
   }
   $("locationStatus").textContent="⏳ आपकी current location मिल रही है...";
   navigator.geolocation.getCurrentPosition(async function(position){
-    setPostMapPoint(position.coords.latitude,position.coords.longitude,true);
-    await reverseFillPostLocation(postLatitude,postLongitude);
-    $("locationStatus").innerHTML=`✅ Current Location selected • State/City/Area auto-fill हो गए।`;
+    centerPostMap(position.coords.latitude,position.coords.longitude,17);
+    await window.confirmPostMapLocation(true);
   },function(){
     $("locationStatus").textContent="❌ Location नहीं मिली। Phone Location ON करके permission Allow करें।";
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
@@ -4639,18 +4631,23 @@ window.usePostMapResult = async function(index){
   const item=window._postMapResults?.[index];
   if(!item) return;
   window.openPostLocationPicker();
-  setPostMapPoint(Number(item.lat),Number(item.lon),true);
-  await reverseFillPostLocation(postLatitude,postLongitude);
-  $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br>✅ Location selected</div>`;
-  $("locationStatus").innerHTML=`✅ Map location selected • State/City/Area auto-fill हो गए।`;
+  centerPostMap(Number(item.lat),Number(item.lon),17);
+  $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br>अब map को थोड़ा move करके exact जगह pin के नीचे रखें और <b>✅ Select This Location</b> दबाएँ।</div>`;
+  $("locationStatus").innerHTML=`📍 Location map पर आ गई है। Exact जगह pin के नीचे रखें।`;
 };
 
-window.confirmPostMapLocation = async function(){
-  if(postLatitude===null || postLongitude===null){
-    alert("पहले map पर location चुनें या pin रखें।");
+window.confirmPostMapLocation = async function(fromCurrent=false){
+  if(!postMap){
+    if(!fromCurrent){ alert("पहले “Select Location on Map” खोलें।"); }
     return;
   }
+  const c=postMap.getCenter();
+  postLatitude=Number(c.lat.toFixed(7));
+  postLongitude=Number(c.lng.toFixed(7));
+  postMapSelected=true;
+  window._postMapConfirming=true;
   await reverseFillPostLocation(postLatitude,postLongitude);
+  window._postMapConfirming=false;
   $("locationStatus").innerHTML=`✅ Location selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो गए।`;
 };
 
@@ -4660,10 +4657,6 @@ window.clearPostLocation = function(){
   postMapSelected=false;
   if($("postMapSearch")) $("postMapSearch").value="";
   if($("postMapResults")) $("postMapResults").innerHTML="";
-  if(postMapMarker && postMap){
-    postMap.removeLayer(postMapMarker);
-    postMapMarker=null;
-  }
   if($("locationStatus")) $("locationStatus").innerHTML="📍 Location clear हो गई। अब नई location select कर सकते हैं।";
 };
 
