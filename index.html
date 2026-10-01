@@ -1198,7 +1198,7 @@ header{
   }
 
   .dashboard-stats{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(3,1fr);
   }
 
   .dashboard-stat{
@@ -1241,7 +1241,6 @@ header{
   }
 
   .dashboard-stats{
-    grid-template-columns:repeat(2,1fr);
     gap:6px;
   }
 
@@ -1296,7 +1295,6 @@ header{
 .room-photo-button{display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer;position:relative;}
 .property-status-badges{position:absolute;left:10px;top:44px;display:flex;gap:6px;flex-wrap:wrap;z-index:3;}
 .verified-badge,.new-badge,.photo-count-badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.12);}
-.verified-badge{background:#ecfdf3;color:#067647;border:1px solid #abefc6;}
 .new-badge{background:#eff8ff;color:#175cd3;border:1px solid #b2ddff;}
 .photo-count-badge{background:rgba(15,23,42,.82);color:#fff;}
 #roomGalleryModal{display:none;position:fixed;inset:0;z-index:99999;}
@@ -1372,11 +1370,6 @@ header{
 </div>
 </header>
 
-<!-- Quick post button: always available without taking Home space -->
-<button class="quick-post-fab" onclick="showPost()" aria-label="Post Property" title="Post Property">
-  ➕🏠
-</button>
-
 
 <!-- ================= HOME ================= -->
 
@@ -1405,7 +1398,9 @@ header{
 
         <div class="search-field">
           <label>📍 State</label>
-          <input id="searchState" placeholder="Select State">
+          <select id="searchState" aria-label="Select State">
+            <option value="">All States</option>
+          </select>
         </div>
 
         <div class="search-field">
@@ -1700,13 +1695,13 @@ header{
 
       <div class="form-group">
         <label>Owner Name</label>
-        <input id="name"
+        <input id="name" required
                placeholder="Owner name">
       </div>
 
       <div class="form-group">
         <label>Mobile Number</label>
-        <input id="mobile"
+        <input id="mobile" required
                placeholder="10 digit mobile number">
       </div>
 
@@ -1714,18 +1709,9 @@ header{
 
         <label>State</label>
 
-        <input id="state"
-               list="stateList"
-               placeholder="Madhya Pradesh">
-
-        <datalist id="stateList">
-          <option value="Madhya Pradesh">
-          <option value="Uttar Pradesh">
-          <option value="Maharashtra">
-          <option value="Chhattisgarh">
-          <option value="Rajasthan">
-          <option value="Gujarat">
-        </datalist>
+        <select id="state" required>
+          <option value="">Select State</option>
+        </select>
 
       </div>
 
@@ -1733,7 +1719,7 @@ header{
 
         <label>City / District</label>
 
-        <input id="city"
+        <input id="city" required
                placeholder="City / District">
 
       </div>
@@ -1742,7 +1728,7 @@ header{
 
         <label>Village / Area</label>
 
-        <input id="address"
+        <input id="address" required
                placeholder="Village / Area / Address">
 
       </div>
@@ -1767,6 +1753,16 @@ header{
           </button>
 
         </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <input id="postMapSearch"
+                 placeholder="Map में जगह खोजें (जैसे Betul Bus Stand)"
+                 style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
+          <button type="button" class="primary-btn" onclick="searchPostMapLocation()">
+            🔎 Search & Add Location
+          </button>
+        </div>
+        <div id="postMapResults" style="margin-top:8px;"></div>
 
         <div id="locationStatus" style="margin-top:8px;color:#667085;font-size:13px;">
           Location add करने के लिए “Get Current Location” दबाएँ।
@@ -1820,7 +1816,7 @@ header{
 
         <label>Monthly Rent ₹</label>
 
-        <input id="rent"
+        <input id="rent" required
                type="number"
                placeholder="5000">
 
@@ -1876,9 +1872,8 @@ header{
 
     <button id="cancelButton"
             class="secondary-btn"
-            onclick="cancelEdit()"
-            style="display:none;">
-      Cancel
+            onclick="cancelEdit()">
+      ↻ Clear
     </button>
 
     <div id="postStatus"
@@ -2171,11 +2166,6 @@ header{
       <span>Saved</span>
     </div>
 
-    <div class="dashboard-stat">
-      <strong id="myContactCount">0</strong>
-      <span>Contact Leads</span>
-    </div>
-
   </div>
 
 
@@ -2253,31 +2243,6 @@ header{
 
     <div class="dashboard-card">
 
-      <h3>🛡️ Owner Verification</h3>
-      <p style="color:#667085;font-size:13px;margin:-8px 0 14px;">
-        Verified owner profile से customers को भरोसेमंद property information पहचानने में मदद मिलेगी।
-      </p>
-
-      <div id="verificationStatusBox"
-           style="padding:14px;border-radius:14px;background:#f8fafc;border:1px solid #e6eaf0;">
-        Verification status load हो रहा है...
-      </div>
-
-      <button id="verificationRequestBtn"
-              class="primary-btn"
-              style="margin-top:12px;"
-              onclick="requestOwnerVerification()">
-        🔐 Request Verification
-      </button>
-
-      <div id="verificationRequestStatus"
-           style="margin-top:9px;font-size:13px;color:#667085;"></div>
-
-    </div>
-
-
-    <div class="dashboard-card">
-
       <h3>🔔 Notifications</h3>
 
       <div id="notificationsList">
@@ -2316,7 +2281,7 @@ header{
       <div class="form-grid" style="grid-template-columns:1fr 1fr;">
         <div class="form-group">
           <label>State</label>
-          <input id="inqState" placeholder="Madhya Pradesh">
+          <select id="inqState"><option value="">All States</option></select>
         </div>
         <div class="form-group">
           <label>City / District</label>
@@ -2358,9 +2323,6 @@ header{
     <div class="dashboard-card">
 
       <h3>❤️ Saved Properties</h3>
-      <p style="color:#667085;font-size:13px;margin:-8px 0 14px;">
-        पसंद की properties यहाँ save करके बाद में आसानी से वापस देख सकते हैं।
-      </p>
 
       <div id="savedPropertiesList">
 
@@ -2494,9 +2456,9 @@ header{
     <h3>Coming Soon</h3>
 
     <p>
-      GPS Nearby Search, saved properties,
-      owner verification, contact tracking और notifications
-      जैसे features लगातार improve किए जा रहे हैं.
+      GPS Nearby Search, better filters,
+      notifications aur aur bhi features
+      future updates mein add kiye ja sakte hain.
     </p>
 
   </div>
@@ -2763,7 +2725,6 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  increment,
   serverTimestamp
 }
 from
@@ -2843,6 +2804,31 @@ let postLatitude = null;
 let postLongitude = null;
 let inquiryLatitude = null;
 let inquiryLongitude = null;
+
+const INDIA_STATES = [
+  "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh",
+  "Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka",
+  "Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram",
+  "Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
+  "Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands",
+  "Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir",
+  "Ladakh","Lakshadweep","Puducherry"
+];
+
+function populateStateOptions(){
+  const configs = [
+    [$("state"), false],
+    [$("searchState"), true],
+    [$("inqState"), true]
+  ];
+  configs.forEach(([el, all])=>{
+    if(!el) return;
+    const current = el.value;
+    el.innerHTML = (all ? '<option value="">All States</option>' : '<option value="">Select State</option>') +
+      INDIA_STATES.map(st=>`<option value="${escapeHtml(st)}">${escapeHtml(st)}</option>`).join("");
+    if(current && INDIA_STATES.includes(current)) el.value=current;
+  });
+}
 
 
 /* ================= HELPERS ================= */
@@ -3276,8 +3262,6 @@ window.signupUser = async function(){
         address:address,
         savedRooms:[],
         profilePhoto:"",
-        verified:false,
-        verificationRequested:false,
         createdAt:serverTimestamp(),
         updatedAt:serverTimestamp()
       },
@@ -3492,10 +3476,7 @@ async function loadUserProfile(){
 
         savedRooms:[],
 
-        profilePhoto:"",
-
-        verified:false,
-        verificationRequested:false
+        profilePhoto:""
 
       };
 
@@ -3562,24 +3543,6 @@ function updateProfileUI(){
     profileData.address || "-";
 
 
-  if($("verificationStatusBox")){
-    const verified = profileData.verified === true;
-    const requested = profileData.verificationRequested === true;
-
-    $("verificationStatusBox").innerHTML = verified
-      ? "<strong style=\"color:#067647;\">✓ Verified Owner</strong><div style=\"font-size:12px;color:#667085;margin-top:4px;\">आपका owner profile verified है।</div>"
-      : requested
-        ? "<strong style=\"color:#b54708;\">⏳ Verification Requested</strong><div style=\"font-size:12px;color:#667085;margin-top:4px;\">आपकी verification request review के लिए save हो गई है।</div>"
-        : "<strong>Not Verified Yet</strong><div style=\"font-size:12px;color:#667085;margin-top:4px;\">Verification के लिए नीचे button दबाएँ।</div>";
-
-    const btn = $("verificationRequestBtn");
-    if(btn){
-      btn.disabled = verified || requested;
-      btn.textContent = verified ? "✓ Verified Owner" : (requested ? "⏳ Request Pending" : "🔐 Request Verification");
-    }
-  }
-
-
   setProfileAvatar(
     "dashboardAvatar",
     profileData.profilePhoto
@@ -3626,47 +3589,6 @@ function setProfileAvatar(
   }
 
 }
-
-
-window.requestOwnerVerification = async function(){
-
-  if(!currentUser){
-    showLogin();
-    return;
-  }
-
-  if(profileData?.verified === true){
-    return;
-  }
-
-  if(profileData?.verificationRequested === true){
-    if($("verificationRequestStatus")) $("verificationRequestStatus").textContent = "⏳ Verification request पहले से pending है।";
-    return;
-  }
-
-  const btn = $("verificationRequestBtn");
-  if(btn){ btn.disabled = true; btn.textContent = "⏳ Sending..."; }
-  if($("verificationRequestStatus")) $("verificationRequestStatus").textContent = "⏳ Verification request save हो रही है...";
-
-  try{
-    await updateDoc(doc(db,"users",currentUser.uid),{
-      verificationRequested:true,
-      verificationRequestedAt:serverTimestamp(),
-      updatedAt:serverTimestamp()
-    });
-
-    if(!profileData) profileData = {};
-    profileData.verificationRequested = true;
-    updateProfileUI();
-
-    if($("verificationRequestStatus")) $("verificationRequestStatus").textContent = "✅ Verification request भेज दी गई।";
-  }catch(error){
-    console.error(error);
-    if(btn){ btn.disabled = false; btn.textContent = "🔐 Request Verification"; }
-    if($("verificationRequestStatus")) $("verificationRequestStatus").textContent = "❌ Request save नहीं हुई: " + escapeHtml(error.message);
-  }
-
-};
 
 
 /* ================= PROFILE PHOTO ================= */
@@ -3903,10 +3825,6 @@ async function loadMyPosts(){
 
   $("myPostCount").textContent =
     myRooms.length;
-
-  if($("myContactCount")){
-    $("myContactCount").textContent = myRooms.reduce((total,room)=> total + Number(room.contactCount || 0), 0);
-  }
 
 
   if(myRooms.length === 0){
@@ -4489,43 +4407,74 @@ window.previewPhoto = async function(event){
 /* ================= GOOGLE LOCATION ================= */
 
 window.getPostLocation = function(){
-
   if(!navigator.geolocation){
-    $("locationStatus").innerHTML =
-      "❌ आपके browser में location support नहीं है।";
+    $("locationStatus").textContent="❌ इस browser में GPS support नहीं है।";
     return;
   }
-
-  $("locationStatus").innerHTML =
-    "⏳ आपकी current location मिल रही है...";
-
-  navigator.geolocation.getCurrentPosition(
-    function(position){
-
-      postLatitude = Number(position.coords.latitude.toFixed(7));
-      postLongitude = Number(position.coords.longitude.toFixed(7));
-
-      $("locationStatus").innerHTML =
-        "✅ Google Location saved: " +
-        postLatitude + ", " + postLongitude;
-
-    },
-    function(error){
-
-      console.error(error);
-      $("locationStatus").innerHTML =
-        "❌ Location नहीं मिली। Phone में Location ON करें और permission Allow करें।";
-
-    },
-    {
-      enableHighAccuracy:true,
-      timeout:15000,
-      maximumAge:0
-    }
-  );
-
+  $("locationStatus").textContent="⏳ आपकी current location मिल रही है...";
+  navigator.geolocation.getCurrentPosition(async function(position){
+    postLatitude=Number(position.coords.latitude.toFixed(7));
+    postLongitude=Number(position.coords.longitude.toFixed(7));
+    await reverseFillPostLocation(postLatitude,postLongitude);
+    $("locationStatus").innerHTML=`✅ Location saved: ${postLatitude}, ${postLongitude} • State/City/Area भी auto-fill हो गए।`;
+  },function(){
+    $("locationStatus").textContent="❌ Location नहीं मिली। Phone Location ON करके permission Allow करें।";
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 };
 
+async function reverseFillPostLocation(lat,lng){
+  try{
+    const url=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&zoom=18&addressdetails=1`;
+    const res=await fetch(url,{headers:{"Accept":"application/json"}});
+    if(!res.ok) return;
+    const data=await res.json();
+    const a=data.address||{};
+    const stateName=a.state || a.state_district || "";
+    const city=a.city || a.town || a.municipality || a.village || a.county || "";
+    const area=a.suburb || a.neighbourhood || a.quarter || a.residential || a.village || "";
+    if($("state") && INDIA_STATES.includes(stateName)) $("state").value=stateName;
+    if($("city") && city) $("city").value=city;
+    if($("address") && (area || data.display_name)) $("address").value=area || data.display_name;
+  }catch(e){ console.warn("Reverse geocoding failed",e); }
+}
+
+window.searchPostMapLocation = async function(){
+  const q=$("postMapSearch")?.value.trim();
+  if(!q){ $("postMapResults").innerHTML="❌ पहले map में जगह का नाम लिखें।"; return; }
+  const box=$("postMapResults");
+  box.innerHTML="⏳ Location search हो रही है...";
+  try{
+    const url=`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=${encodeURIComponent(q)}`;
+    const res=await fetch(url,{headers:{"Accept":"application/json"}});
+    if(!res.ok) throw new Error("Search failed");
+    const items=await res.json();
+    if(!items.length){ box.innerHTML="❌ Location नहीं मिली। दूसरा नाम try करें।"; return; }
+    box.innerHTML=items.map((item,i)=>{
+      const safeName=escapeHtml(item.display_name||q);
+      return `<button type="button" class="secondary-btn" style="display:block;width:100%;text-align:left;margin-top:6px;" onclick="usePostMapResult(${i})">📍 ${safeName}</button>`;
+    }).join("");
+    window._postMapResults=items;
+  }catch(e){
+    console.error(e);
+    box.innerHTML="❌ Map search अभी उपलब्ध नहीं है। Internet connection check करें।";
+  }
+};
+
+window.usePostMapResult = async function(index){
+  const item=window._postMapResults?.[index];
+  if(!item) return;
+  postLatitude=Number(Number(item.lat).toFixed(7));
+  postLongitude=Number(Number(item.lon).toFixed(7));
+  const a=item.address||{};
+  const stateName=a.state || a.state_district || "";
+  const city=a.city || a.town || a.municipality || a.village || a.county || "";
+  const area=a.suburb || a.neighbourhood || a.quarter || a.residential || a.village || "";
+  if($("state") && INDIA_STATES.includes(stateName)) $("state").value=stateName;
+  if($("city") && city) $("city").value=city;
+  if($("address") && (area || item.display_name)) $("address").value=area || item.display_name;
+  $("locationStatus").innerHTML=`✅ Map location added: ${postLatitude}, ${postLongitude}`;
+  $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br><button type="button" class="secondary-btn" style="margin-top:7px;" onclick="openPostGoogleMap()">🗺️ Open selected location in Google Maps</button></div>`;
+};
 
 window.openPostGoogleMap = function(){
 
@@ -4629,31 +4578,18 @@ window.postRoom = async function(){
     $("description").value.trim();
 
 
-  if(
-    !name ||
-    !mobile ||
-    !city ||
-    !address ||
-    !rent
-  ){
+  if(!name){ $("postStatus").innerHTML="❌ Owner Name भरें।"; $("name").focus(); return; }
+  if(!mobile){ $("postStatus").innerHTML="❌ Mobile Number भरें।"; $("mobile").focus(); return; }
+  if(!state){ $("postStatus").innerHTML="❌ State select करें।"; $("state").focus(); return; }
+  if(!city){ $("postStatus").innerHTML="❌ City / District भरें।"; $("city").focus(); return; }
+  if(!address){ $("postStatus").innerHTML="❌ Village / Area / Address भरें।"; $("address").focus(); return; }
+  if(!rent || Number(rent)<=0){ $("postStatus").innerHTML="❌ Rent सही भरें।"; $("rent").focus(); return; }
 
-    $("postStatus").innerHTML =
-      "❌ Name, Mobile, City, Address और Rent भरें।";
-
+  const normalizedMobile=mobile.replace(/[^0-9]/g,"");
+  if(normalizedMobile.length!==10){
+    $("postStatus").innerHTML="❌ Mobile number 10 digit का होना चाहिए।";
+    $("mobile").focus();
     return;
-
-  }
-
-
-  if(
-    !/^[0-9\s+\-]{10,15}$/.test(mobile)
-  ){
-
-    $("postStatus").innerHTML =
-      "❌ Mobile number सही डालें।";
-
-    return;
-
   }
 
 
@@ -4683,11 +4619,9 @@ window.postRoom = async function(){
       ownerId:
         currentUser.uid,
 
-      verified: profileData?.verified === true,
-
       name:name,
 
-      mobile:mobile,
+      mobile:normalizedMobile,
 
       state:state,
 
@@ -5051,6 +4985,8 @@ function clearPostForm(){
   $("name").value = "";
   $("mobile").value = "";
   $("state").value = "";
+  if($("postMapSearch")) $("postMapSearch").value = "";
+  if($("postMapResults")) $("postMapResults").innerHTML = "";
   $("city").value = "";
   $("address").value = "";
   $("type").value = "Room";
@@ -5083,7 +5019,7 @@ function clearPostForm(){
     "🏠 Post Room";
 
   $("cancelButton").style.display =
-    "none";
+    "inline-flex";
 
   editingId =
     null;
@@ -5091,43 +5027,9 @@ function clearPostForm(){
 }
 
 
-/* ================= CONTACT TRACKING ================= */
-
-window.trackPropertyContact = async function(roomId, ownerId, channel, type, city){
-
-  if(!roomId) return;
-
-  try{
-    const roomRef = doc(db,"room",roomId);
-    const updates = {
-      contactCount: increment(1),
-      lastContactAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    };
-
-    if(channel === "call") updates.callCount = increment(1);
-    if(channel === "whatsapp") updates.whatsappCount = increment(1);
-
-    await updateDoc(roomRef, updates);
-
-    if(ownerId && (!currentUser || currentUser.uid !== ownerId)){
-      await addDoc(notificationsCollection,{
-        userId:ownerId,
-        message:`📞 आपकी ${type || "property"} में किसी customer ने ${channel === "whatsapp" ? "WhatsApp" : "Call"} से interest दिखाया।${city ? " Location: " + city + "." : ""}`,
-        roomId:roomId,
-        read:false,
-        createdAt:serverTimestamp()
-      });
-    }
-  }catch(error){
-    console.warn("Contact tracking skipped:",error);
-  }
-};
-
-
 /* ================= CALL ================= */
 
-window.contactOwner = function(mobile, roomId, ownerId, type, city){
+window.contactOwner = function(mobile){
 
   if(!mobile){
 
@@ -5154,8 +5056,6 @@ window.contactOwner = function(mobile, roomId, ownerId, type, city){
 
   if(yes){
 
-    trackPropertyContact(roomId, ownerId, "call", type, city);
-
     window.location.href =
       "tel:" + clean;
 
@@ -5169,9 +5069,7 @@ window.contactOwner = function(mobile, roomId, ownerId, type, city){
 window.whatsappOwner = function(
   mobile,
   type,
-  city,
-  roomId,
-  ownerId
+  city
 ){
 
   const number =
@@ -5205,8 +5103,6 @@ window.whatsappOwner = function(
     "?text=" +
     encodeURIComponent(message);
 
-
-  trackPropertyContact(roomId, ownerId, "whatsapp", type, city);
 
   window.open(
     url,
@@ -5302,7 +5198,6 @@ function renderRoomCard(
         </div>
 
         <div class="property-status-badges">
-          ${room.verified === true ? '<span class="verified-badge">✓ Verified</span>' : ''}
           ${isNew ? '<span class="new-badge">🆕 New</span>' : ''}
           ${gallery.length > 1 ? `<span class="photo-count-badge">📸 ${gallery.length}</span>` : ''}
         </div>
@@ -5404,7 +5299,7 @@ function renderRoomCard(
 
           <button
             class="small-btn primary"
-            onclick="contactOwner('${escapeJs(room.mobile || "")}','${escapeJs(room.id || "")}','${escapeJs(room.ownerId || "")}','${escapeJs(room.type || "property")}','${escapeJs(room.city || "")}')">
+            onclick="contactOwner('${escapeJs(room.mobile || "")}')">
             📞 Call Owner
           </button>
 
@@ -5413,9 +5308,7 @@ function renderRoomCard(
             onclick="whatsappOwner(
               '${escapeJs(room.mobile || "")}',
               '${escapeJs(room.type || "property")}',
-              '${escapeJs(room.city || "")}',
-              '${escapeJs(room.id || "")}',
-              '${escapeJs(room.ownerId || "")}'
+              '${escapeJs(room.city || "")}'
             )">
             💬 WhatsApp
           </button>
