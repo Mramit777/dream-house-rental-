@@ -119,6 +119,17 @@ header{
   color:#2563eb;
 }
 
+.nav-links .post-nav-btn{
+  background:#2563eb;
+  color:#fff;
+  box-shadow:0 5px 14px rgba(37,99,235,.18);
+}
+
+.nav-links .post-nav-btn:hover{
+  background:#1d4ed8;
+  color:#fff;
+}
+
 .menu-btn{
   display:none;
   border:0;
@@ -127,6 +138,101 @@ header{
   border-radius:11px;
   padding:9px 12px;
   font-size:21px;
+}
+
+
+/* ================= PROFESSIONAL QUICK ACTIONS ================= */
+.quick-post-fab{
+  position:fixed;
+  right:18px;
+  top:88px;
+  z-index:950;
+  width:58px;
+  height:58px;
+  border:0;
+  border-radius:18px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  color:#fff;
+  font-size:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 12px 28px rgba(37,99,235,.28);
+  transition:.22s;
+}
+.quick-post-fab:hover{transform:translateY(-2px) scale(1.03);}
+.quick-post-fab::after{
+  content:"Post Property";
+  position:absolute;
+  right:68px;
+  top:50%;
+  transform:translateY(-50%);
+  white-space:nowrap;
+  background:#111827;
+  color:#fff;
+  padding:7px 10px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:800;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+}
+.quick-post-fab:hover::after{opacity:1;}
+
+.location-search-btn{
+  border:1px solid #dbe7ff;
+  border-radius:12px;
+  padding:12px 16px;
+  background:#f7faff;
+  color:#2563eb;
+  font-weight:800;
+  white-space:nowrap;
+}
+.location-search-btn:hover{background:#eef4ff;}
+
+.home-intro-strip{
+  max-width:1100px;
+  margin:8px auto 0;
+  padding:0 18px;
+  display:flex;
+  justify-content:center;
+}
+.home-intro-strip .intro-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 13px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid #e3eaff;
+  color:#475467;
+  font-size:13px;
+  font-weight:700;
+  box-shadow:0 5px 16px rgba(15,23,42,.05);
+}
+
+.rooms-section-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:15px;
+}
+.rooms-section-head .section-title{margin-bottom:0;text-align:left;}
+
+@media(max-width:760px){
+  .quick-post-fab{
+    right:14px;
+    top:82px;
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    font-size:22px;
+  }
+  .quick-post-fab::after{display:none;}
+  .home-intro-strip{padding:0 12px;}
+  .rooms-section-head{display:block;}
+  .rooms-section-head .section-title{text-align:center;margin-bottom:18px;}
 }
 
 /* ================= HERO ================= */
@@ -595,6 +701,11 @@ header{
 .small-btn.primary{
   background:#2563eb;
   color:#fff;
+}
+
+.small-btn.location-btn{
+  background:#eef4ff;
+  color:#1d4ed8;
 }
 
 .small-btn.whatsapp{
@@ -1128,6 +1239,15 @@ header{
 
 }
 </style>
+
+<style>
+.post-nav-btn{display:inline-flex;align-items:center;gap:5px;}
+@media(max-width:760px){
+  .post-nav-btn{padding:9px 10px !important;border-radius:12px !important;}
+  .post-nav-label{display:none;}
+  .search-box .location-search-btn{width:100%;}
+}
+</style>
 </head>
 
 <body>
@@ -1164,8 +1284,8 @@ header{
       👤 My Account
     </button>
 
-    <button onclick="showHome();scrollToId('post')">
-      ➕ Post Room
+    <button class="post-nav-btn" onclick="showPost()" aria-label="Post Property" title="Post Property">
+      ➕ <span class="post-nav-label">Post</span>
     </button>
 
     <button onclick="showHome();scrollToId('rooms')">
@@ -1185,6 +1305,11 @@ header{
 
 </div>
 </header>
+
+<!-- Quick post button: always available without taking Home space -->
+<button class="quick-post-fab" onclick="showPost()" aria-label="Post Property" title="Post Property">
+  ➕🏠
+</button>
 
 
 <!-- ================= HOME ================= -->
@@ -1221,13 +1346,25 @@ header{
         <button
           class="primary-btn"
           onclick="heroSearch()">
-          Search Property
+          🔎 Search Property
+        </button>
+
+        <button
+          class="location-search-btn"
+          type="button"
+          onclick="searchNearMe()"
+          title="Nearby properties खोजें">
+          📍 Near Me
         </button>
 
       </div>
 
     </div>
 
+  </div>
+
+  <div class="home-intro-strip">
+    <div class="intro-pill">📍 Location से nearby rooms खोजें &nbsp;•&nbsp; 🗺️ हर property पर Google Maps</div>
   </div>
 
 
@@ -1257,6 +1394,109 @@ header{
   </div>
 
 </section>
+
+
+<!-- ================= ROOMS ================= -->
+
+<section id="rooms" class="section">
+
+  <div class="section-title">
+
+    <h2>Find Your Room</h2>
+
+    <p>
+      Available properties search karein.
+    </p>
+
+  </div>
+
+
+  <div class="filter-box">
+
+    <div class="filter-grid">
+
+      <input id="searchState"
+             placeholder="State">
+
+      <input id="searchCity"
+             placeholder="City / District">
+
+      <input id="searchArea"
+             placeholder="Village / Area">
+
+      <select id="searchType">
+
+        <option value="">
+          All Property Types
+        </option>
+
+        <option value="Room">Room</option>
+        <option value="1 BHK">1 BHK</option>
+        <option value="2 BHK">2 BHK</option>
+        <option value="3 BHK">3 BHK</option>
+        <option value="Flat">Flat</option>
+        <option value="House">House</option>
+        <option value="PG">PG</option>
+        <option value="Shop">Shop</option>
+
+      </select>
+
+      <input id="maxRent"
+             type="number"
+             placeholder="Maximum Rent">
+
+    </div>
+
+
+    <button class="primary-btn"
+            style="margin-top:12px;"
+            onclick="filterRooms()">
+      🔎 Search Rooms
+    </button>
+
+    <button class="secondary-btn"
+            onclick="clearFilters()">
+      Clear
+    </button>
+
+    <button class="location-search-btn"
+            type="button"
+            onclick="searchNearMe()">
+      📍 Search Near Me
+    </button>
+
+    <div id="nearMeStatus" style="margin-top:10px;color:#667085;font-size:13px;">
+      GPS search optional है — permission देने पर nearby properties दिखाई जाएँगी।
+    </div>
+
+  </div>
+
+
+  <div id="roomsContainer"
+       class="rooms-grid"
+       style="margin-top:22px;">
+
+    <div style="
+      grid-column:1/-1;
+      text-align:center;
+      padding:35px;">
+      ⏳ Rooms load हो रहे हैं...
+    </div>
+
+  </div>
+
+
+  <div id="roomCount"
+       style="
+       text-align:center;
+       color:#667085;
+       margin-top:20px;">
+    0 rooms
+  </div>
+
+</section>
+
+
 
 
 <!-- ================= CATEGORIES ================= -->
@@ -1328,7 +1568,59 @@ header{
 </section>
 
 
-<!-- ================= POST ================= -->
+<!-- ================= WHY ================= -->
+
+<section class="section">
+
+  <div class="section-title">
+
+    <h2>Why Dream House Rental?</h2>
+
+    <p>
+      Simple, fast aur convenient property search.
+    </p>
+
+  </div>
+
+
+  <div class="why-grid">
+
+    <div class="why-card">
+      <div class="icon">🔎</div>
+      <h3>Easy Search</h3>
+      <p>
+        City, area, property type aur rent ke
+        according room search karein.
+      </p>
+    </div>
+
+    <div class="why-card">
+      <div class="icon">🏠</div>
+      <h3>Multiple Properties</h3>
+      <p>
+        Room, BHK, Flat, House, PG aur Shop
+        ek hi jagah par.
+      </p>
+    </div>
+
+    <div class="why-card">
+      <div class="icon">📱</div>
+      <h3>Direct Contact</h3>
+      <p>
+        Owner ko direct Call ya WhatsApp karein.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+
+<!-- ================= POST PAGE ================= -->
+
+<div id="postPage" class="page hidden">
 
 <section id="post" class="section">
 
@@ -1392,6 +1684,33 @@ header{
 
         <input id="address"
                placeholder="Village / Area / Address">
+
+      </div>
+
+
+      <div class="form-group location-box">
+
+        <label>📍 Google Location <span style="font-weight:400;color:#667085;">(Optional)</span></label>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+          <button type="button"
+                  class="secondary-btn"
+                  onclick="getPostLocation()">
+            📍 Get Current Location
+          </button>
+
+          <button type="button"
+                  class="secondary-btn"
+                  onclick="openPostGoogleMap()">
+            🗺️ Open Google Maps
+          </button>
+
+        </div>
+
+        <div id="locationStatus" style="margin-top:8px;color:#667085;font-size:13px;">
+          Location add करने के लिए “Get Current Location” दबाएँ।
+        </div>
 
       </div>
 
@@ -1498,145 +1817,6 @@ header{
 
     <div id="postStatus"
          style="margin-top:15px;">
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= ROOMS ================= -->
-
-<section id="rooms" class="section">
-
-  <div class="section-title">
-
-    <h2>Find Your Room</h2>
-
-    <p>
-      Available properties search karein.
-    </p>
-
-  </div>
-
-
-  <div class="filter-box">
-
-    <div class="filter-grid">
-
-      <input id="searchState"
-             placeholder="State">
-
-      <input id="searchCity"
-             placeholder="City / District">
-
-      <input id="searchArea"
-             placeholder="Village / Area">
-
-      <select id="searchType">
-
-        <option value="">
-          All Property Types
-        </option>
-
-        <option value="Room">Room</option>
-        <option value="1 BHK">1 BHK</option>
-        <option value="2 BHK">2 BHK</option>
-        <option value="3 BHK">3 BHK</option>
-        <option value="Flat">Flat</option>
-        <option value="House">House</option>
-        <option value="PG">PG</option>
-        <option value="Shop">Shop</option>
-
-      </select>
-
-      <input id="maxRent"
-             type="number"
-             placeholder="Maximum Rent">
-
-    </div>
-
-
-    <button class="primary-btn"
-            style="margin-top:12px;"
-            onclick="filterRooms()">
-      🔎 Search Rooms
-    </button>
-
-    <button class="secondary-btn"
-            onclick="clearFilters()">
-      Clear
-    </button>
-
-  </div>
-
-
-  <div id="roomsContainer"
-       class="rooms-grid"
-       style="margin-top:22px;">
-
-    <div style="
-      grid-column:1/-1;
-      text-align:center;
-      padding:35px;">
-      ⏳ Rooms load हो रहे हैं...
-    </div>
-
-  </div>
-
-
-  <div id="roomCount"
-       style="
-       text-align:center;
-       color:#667085;
-       margin-top:20px;">
-    0 rooms
-  </div>
-
-</section>
-
-
-<!-- ================= WHY ================= -->
-
-<section class="section">
-
-  <div class="section-title">
-
-    <h2>Why Dream House Rental?</h2>
-
-    <p>
-      Simple, fast aur convenient property search.
-    </p>
-
-  </div>
-
-
-  <div class="why-grid">
-
-    <div class="why-card">
-      <div class="icon">🔎</div>
-      <h3>Easy Search</h3>
-      <p>
-        City, area, property type aur rent ke
-        according room search karein.
-      </p>
-    </div>
-
-    <div class="why-card">
-      <div class="icon">🏠</div>
-      <h3>Multiple Properties</h3>
-      <p>
-        Room, BHK, Flat, House, PG aur Shop
-        ek hi jagah par.
-      </p>
-    </div>
-
-    <div class="why-card">
-      <div class="icon">📱</div>
-      <h3>Direct Contact</h3>
-      <p>
-        Owner ko direct Call ya WhatsApp karein.
-      </p>
     </div>
 
   </div>
@@ -2378,9 +2558,9 @@ header{
         Rooms
       </button>
 
-      <button onclick="showHome();scrollToId('post')"
+      <button onclick="showPost()"
               style="background:none;border:0;text-align:left;cursor:pointer;">
-        Post Room
+        Post Property
       </button>
 
       <button onclick="showMore()"
@@ -2509,6 +2689,9 @@ let currentPhotoData = "";
 let profileData = null;
 let savedRoomIds = [];
 
+let postLatitude = null;
+let postLongitude = null;
+
 
 /* ================= HELPERS ================= */
 
@@ -2609,6 +2792,7 @@ window.closeMenu = function(){
 window.showHome = function(){
 
   $("homePage").classList.remove("hidden");
+  $("postPage").classList.add("hidden");
   $("loginPage").classList.add("hidden");
   $("dashboardPage").classList.add("hidden");
   $("morePage").classList.add("hidden");
@@ -2616,6 +2800,29 @@ window.showHome = function(){
   if($("feedbackSection")){
     $("feedbackSection").classList.add("hidden");
   }
+
+  closeMenu();
+
+};
+
+
+window.showPost = function(){
+
+  if(!currentUser){
+    showLogin();
+    return;
+  }
+
+  $("homePage").classList.add("hidden");
+  $("postPage").classList.remove("hidden");
+  $("loginPage").classList.add("hidden");
+  $("dashboardPage").classList.add("hidden");
+  $("morePage").classList.add("hidden");
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 
   closeMenu();
 
@@ -2632,6 +2839,7 @@ window.showLogin = function(){
   }
 
   $("homePage").classList.add("hidden");
+  $("postPage").classList.add("hidden");
   $("loginPage").classList.remove("hidden");
   $("dashboardPage").classList.add("hidden");
   $("morePage").classList.add("hidden");
@@ -2656,6 +2864,7 @@ window.showDashboard = async function(){
   }
 
   $("homePage").classList.add("hidden");
+  $("postPage").classList.add("hidden");
   $("loginPage").classList.add("hidden");
   $("dashboardPage").classList.remove("hidden");
   $("morePage").classList.add("hidden");
@@ -2679,6 +2888,7 @@ window.showDashboard = async function(){
 window.showMore = function(){
 
   $("homePage").classList.add("hidden");
+  $("postPage").classList.add("hidden");
   $("loginPage").classList.add("hidden");
   $("dashboardPage").classList.add("hidden");
   $("morePage").classList.remove("hidden");
@@ -3966,6 +4176,105 @@ window.previewPhoto = async function(event){
 };
 
 
+/* ================= GOOGLE LOCATION ================= */
+
+window.getPostLocation = function(){
+
+  if(!navigator.geolocation){
+    $("locationStatus").innerHTML =
+      "❌ आपके browser में location support नहीं है।";
+    return;
+  }
+
+  $("locationStatus").innerHTML =
+    "⏳ आपकी current location मिल रही है...";
+
+  navigator.geolocation.getCurrentPosition(
+    function(position){
+
+      postLatitude = Number(position.coords.latitude.toFixed(7));
+      postLongitude = Number(position.coords.longitude.toFixed(7));
+
+      $("locationStatus").innerHTML =
+        "✅ Google Location saved: " +
+        postLatitude + ", " + postLongitude;
+
+    },
+    function(error){
+
+      console.error(error);
+      $("locationStatus").innerHTML =
+        "❌ Location नहीं मिली। Phone में Location ON करें और permission Allow करें।";
+
+    },
+    {
+      enableHighAccuracy:true,
+      timeout:15000,
+      maximumAge:0
+    }
+  );
+
+};
+
+
+window.openPostGoogleMap = function(){
+
+  let url = "";
+
+  if(postLatitude !== null && postLongitude !== null){
+    url =
+      "https://www.google.com/maps?q=" +
+      encodeURIComponent(postLatitude + "," + postLongitude);
+  }else{
+    const query = [
+      $("address").value.trim(),
+      $("city").value.trim(),
+      $("state").value.trim()
+    ].filter(Boolean).join(", ");
+
+    if(!query){
+      alert("पहले Address / City डालें या Current Location लें।");
+      return;
+    }
+
+    url =
+      "https://www.google.com/maps/search/?api=1&query=" +
+      encodeURIComponent(query);
+  }
+
+  window.open(url,"_blank");
+
+};
+
+
+window.openGoogleLocation = function(lat,lng,address,city,state){
+
+  let url = "";
+
+  if(lat !== null && lat !== undefined && lng !== null && lng !== undefined && lat !== "" && lng !== ""){
+    url =
+      "https://www.google.com/maps?q=" +
+      encodeURIComponent(lat + "," + lng);
+  }else{
+    const query = [address,city,state]
+      .filter(Boolean)
+      .join(", ");
+
+    if(!query){
+      alert("Google Location उपलब्ध नहीं है।");
+      return;
+    }
+
+    url =
+      "https://www.google.com/maps/search/?api=1&query=" +
+      encodeURIComponent(query);
+  }
+
+  window.open(url,"_blank");
+
+};
+
+
 /* ================= POST ROOM ================= */
 
 window.postRoom = async function(){
@@ -4084,6 +4393,12 @@ window.postRoom = async function(){
 
       image:
         currentPhotoData || "",
+
+      latitude:
+        postLatitude,
+
+      longitude:
+        postLongitude,
 
       updatedAt:
         serverTimestamp()
@@ -4244,6 +4559,22 @@ window.editRoom = async function(id){
     room.description || "";
 
 
+  postLatitude =
+    room.latitude ?? null;
+
+  postLongitude =
+    room.longitude ?? null;
+
+  if(postLatitude !== null && postLongitude !== null){
+    $("locationStatus").innerHTML =
+      "✅ Google Location saved: " +
+      postLatitude + ", " + postLongitude;
+  }else{
+    $("locationStatus").innerHTML =
+      "Location add करने के लिए “Get Current Location” दबाएँ।";
+  }
+
+
   currentPhotoData =
     room.image || "";
 
@@ -4271,7 +4602,7 @@ window.editRoom = async function(id){
     "inline-block";
 
 
-  showHome();
+  showPost();
 
 
   setTimeout(()=>{
@@ -4398,6 +4729,14 @@ function clearPostForm(){
   $("furnishing").value = "Unfurnished";
   $("rent").value = "";
   $("description").value = "";
+
+  postLatitude = null;
+  postLongitude = null;
+
+  if($("locationStatus")){
+    $("locationStatus").innerHTML =
+      "Location add करने के लिए “Get Current Location” दबाएँ।";
+  }
 
   $("image").value = "";
 
@@ -4665,6 +5004,18 @@ function renderRoomCard(
               '${escapeJs(room.city || "")}'
             )">
             💬 WhatsApp
+          </button>
+
+          <button
+            class="small-btn location-btn"
+            onclick="openGoogleLocation(
+              ${room.latitude !== undefined && room.latitude !== null ? `'${escapeJs(room.latitude)}'` : "null"},
+              ${room.longitude !== undefined && room.longitude !== null ? `'${escapeJs(room.longitude)}'` : "null"},
+              '${escapeJs(room.address || "")}',
+              '${escapeJs(room.city || "")}',
+              '${escapeJs(room.state || "")}'
+            )">
+            🗺️ Google Maps
           </button>
 
           <button
@@ -4964,6 +5315,65 @@ window.clearFilters = function(){
   renderRooms(
     currentRooms
   );
+
+};
+
+
+
+/* ================= NEARBY LOCATION SEARCH ================= */
+window.searchNearMe = function(){
+
+  if(!navigator.geolocation){
+    const el=$("nearMeStatus");
+    if(el) el.innerHTML="❌ इस browser में GPS location support नहीं है।";
+    return;
+  }
+
+  const status=$("nearMeStatus");
+  if(status) status.innerHTML="⏳ आपकी location मिल रही है...";
+
+  navigator.geolocation.getCurrentPosition(function(position){
+
+    const lat=position.coords.latitude;
+    const lng=position.coords.longitude;
+    const radiusKm=25;
+
+    const nearby=currentRooms.filter(function(room){
+      const rlat=Number(room.latitude);
+      const rlng=Number(room.longitude);
+      if(!Number.isFinite(rlat) || !Number.isFinite(rlng)) return false;
+
+      const R=6371;
+      const dLat=(rlat-lat)*Math.PI/180;
+      const dLng=(rlng-lng)*Math.PI/180;
+      const a=Math.sin(dLat/2)**2+
+        Math.cos(lat*Math.PI/180)*Math.cos(rlat*Math.PI/180)*Math.sin(dLng/2)**2;
+      const d=2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+      room._distanceKm=d;
+      return d<=radiusKm;
+    }).sort((a,b)=>(a._distanceKm||99999)-(b._distanceKm||99999));
+
+    renderRooms(nearby);
+
+    if(status){
+      status.innerHTML=nearby.length
+        ? `📍 ${nearby.length} nearby ${nearby.length===1?'property':'properties'} मिलीं (लगभग ${radiusKm} km के अंदर)।`
+        : `📍 ${radiusKm} km के अंदर GPS location वाली property नहीं मिली।`;
+    }
+
+    showHome();
+    setTimeout(()=>{
+      $("rooms").scrollIntoView({behavior:"smooth"});
+    },100);
+
+  },function(error){
+    console.error(error);
+    if(status) status.innerHTML="❌ Location नहीं मिली। Phone में Location ON करके permission Allow करें।";
+  },{
+    enableHighAccuracy:true,
+    timeout:15000,
+    maximumAge:0
+  });
 
 };
 
