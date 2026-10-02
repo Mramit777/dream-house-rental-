@@ -548,8 +548,6 @@ header{
   color:#fff;
 }
 
-/* ================= SEARCH SUGGESTIONS ================= */
-
 /* ================= FILTER ================= */
 
 .filter-box{
@@ -1281,48 +1279,9 @@ header{
 @media(max-width:900px){.pro-search-box{grid-template-columns:repeat(2,1fr);margin-left:14px;margin-right:14px}.search-bottom-row{grid-template-columns:1fr 1fr}.search-main-btn{grid-column:1/-1}.clear-main-btn{grid-column:1/-1}.hero{padding-bottom:110px}}
 @media(max-width:600px){.hero-content{padding:38px 16px 0}.hero h1{font-size:37px}.hero p{font-size:15px}.pro-search-box{grid-template-columns:1fr;margin:25px 10px -55px;padding:14px;border-radius:18px}.search-bottom-row{grid-template-columns:1fr}.near-me-main,.radius-field,.search-main-btn,.clear-main-btn{width:100%}.near-me-status{line-height:1.6}.results-toolbar{align-items:flex-start;flex-direction:column}.results-near-btn{width:100%}.category{min-height:95px}}
 </style>
-<style>
-/* ================= FINAL SEARCH + MOBILE POLISH ================= */
-.pro-search-box{width:min(1120px,calc(100% - 28px));max-width:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:16px;border-radius:20px;}
-.search-field{min-height:66px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
-.search-field input,.search-field select{min-width:0;white-space:nowrap;text-overflow:ellipsis;}
-.search-bottom-row{gap:10px;}
-.search-main-btn,.clear-main-btn,.near-me-main{min-height:46px;}
-@media(max-width:900px){.pro-search-box{grid-template-columns:repeat(2,minmax(0,1fr));}.search-bottom-row{grid-template-columns:1fr 1fr;}.search-main-btn{grid-column:1/-1;}.clear-main-btn{grid-column:1/-1;}}
-@media(max-width:600px){
-  body{overflow-x:hidden;}
-  .hero{margin:7px;border-radius:20px;padding-left:8px;padding-right:8px;padding-bottom:125px;}
-  .hero-content{padding-left:0;padding-right:0;}
-  .pro-search-box{width:calc(100% - 8px);grid-template-columns:1fr;margin:20px 4px -72px;padding:10px;gap:8px;border-radius:16px;}
-  .search-field{min-height:58px;padding:7px 10px;}
-  .search-field label{font-size:11px;margin-bottom:3px;}
-  .search-field input,.search-field select{font-size:14px;padding:2px 0;}
-  .search-bottom-row{grid-template-columns:1fr;gap:8px;}
-  .near-me-main,.radius-field,.search-main-btn,.clear-main-btn{width:100%;min-height:44px;}
-  .radius-field{min-height:44px;}
-  .rooms-section-head,.results-toolbar{margin-left:0;margin-right:0;}
-  .results-toolbar{padding:14px;border-radius:15px;gap:10px;}
-  .results-toolbar h2{font-size:22px;}
-  .results-toolbar p{font-size:12px;}
-  .results-near-btn{width:100%;min-height:42px;}
-  .rooms-grid{gap:12px;}
-  .room-card{border-radius:16px;}
-  .room-image-wrap{height:190px;}
-  .room-body{padding:14px;}
-  .room-title h3{font-size:18px;}
-  .rent{font-size:17px;}
-  .room-meta{font-size:13px;gap:6px;}
-  .room-description{font-size:12px;}
-  .room-actions{gap:7px;}
-  .small-btn{min-height:42px;padding:8px 6px;font-size:12px;}
-  .section{padding-left:10px;padding-right:10px;}
-}
-@media(max-width:360px){
-  .logo-text strong{font-size:13px;}
-  .hero h1{font-size:33px;}
-  .room-actions{grid-template-columns:1fr 1fr;}
-  .small-btn{font-size:11px;}
-}
+<style id="compact-card-css">
+.compact-room-card{overflow:hidden}.compact-room-card .room-image-wrap{height:190px;position:relative;overflow:hidden}.compact-room-card .room-image{width:100%;height:100%;object-fit:cover}.compact-room-card .room-body{padding:14px}.compact-room-card .room-title{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.compact-room-card .room-title h3{font-size:20px;margin:0}.compact-room-card .rent{font-weight:800;white-space:nowrap}.compact-meta{display:grid;gap:6px;margin:10px 0}.compact-row{display:flex;gap:7px;font-size:14px;line-height:1.35;overflow-wrap:anywhere}.compact-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.compact-actions .small-btn{width:100%;min-height:40px}.compact-details-btn{grid-column:1/-1;min-height:42px;border:0;border-radius:10px;background:#0b63ce;color:#fff;font-weight:800;cursor:pointer}.compact-owner-actions{display:flex;gap:8px;margin-top:8px}.compact-owner-actions .small-btn{flex:1}.compact-new-badge{position:absolute;left:10px;top:10px;background:#fff;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+@media(max-width:600px){.compact-room-card .room-image-wrap{height:165px}.compact-room-card .room-body{padding:12px}.compact-room-card .room-title h3{font-size:18px}.compact-room-card .rent{font-size:16px}.compact-row{font-size:13px}}
 </style>
 </head>
 
@@ -1411,22 +1370,18 @@ header{
 
         <div class="search-field">
           <label>📍 State</label>
-          <input id="searchState" list="searchStateList" placeholder="Select State">
+          <input id="searchState" placeholder="Select State">
         </div>
 
         <div class="search-field">
           <label>🏙️ City / District</label>
-          <input id="searchCity" list="searchCityList" placeholder="Enter City">
+          <input id="searchCity" placeholder="Enter City">
         </div>
 
         <div class="search-field">
           <label>📌 Village / Area</label>
-          <input id="searchArea" list="searchAreaList" placeholder="Enter Area">
+          <input id="searchArea" placeholder="Enter Area">
         </div>
-
-        <datalist id="searchStateList"></datalist>
-        <datalist id="searchCityList"></datalist>
-        <datalist id="searchAreaList"></datalist>
 
         <div class="search-field">
           <label>🏠 Property Type</label>
@@ -1445,23 +1400,8 @@ header{
         </div>
 
         <div class="search-field">
-          <label>₹ Min Rent</label>
-          <input id="minRent" type="number" min="0" placeholder="No Min">
-        </div>
-
-        <div class="search-field">
           <label>₹ Max Rent</label>
           <input id="maxRent" type="number" min="0" placeholder="No Limit">
-        </div>
-
-        <div class="search-field">
-          <label>↕️ Sort</label>
-          <select id="searchSort">
-            <option value="newest">Newest First</option>
-            <option value="rentLow">Rent: Low to High</option>
-            <option value="rentHigh">Rent: High to Low</option>
-            <option value="name">Property Type A–Z</option>
-          </select>
         </div>
 
         <div class="search-bottom-row">
@@ -2777,26 +2717,6 @@ let postLongitude = null;
 function $(id){
   return document.getElementById(id);
 }
-
-
-/* ================= SEARCH SUGGESTIONS ================= */
-function updateSearchSuggestions(){
-  const stateEl=$("searchStateList"), cityEl=$("searchCityList"), areaEl=$("searchAreaList");
-  if(!stateEl || !cityEl || !areaEl) return;
-  const state=($("searchState").value||"").trim().toLowerCase();
-  const city=($("searchCity").value||"").trim().toLowerCase();
-  const unique=(arr)=>[...new Set(arr.filter(Boolean).map(v=>String(v).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  const states=unique(currentRooms.map(r=>r.state));
-  const cities=unique(currentRooms.filter(r=>!state || String(r.state||"").toLowerCase().includes(state)).map(r=>r.city));
-  const areas=unique(currentRooms.filter(r=>{
-    const rs=String(r.state||"").toLowerCase(), rc=String(r.city||"").toLowerCase();
-    return (!state || rs.includes(state)) && (!city || rc.includes(city));
-  }).map(r=>r.address || r.area));
-  stateEl.innerHTML=states.map(v=>`<option value="${escapeHtml(v)}">`).join("");
-  cityEl.innerHTML=cities.map(v=>`<option value="${escapeHtml(v)}">`).join("");
-  areaEl.innerHTML=areas.map(v=>`<option value="${escapeHtml(v)}">`).join("");
-}
-
 
 
 function escapeHtml(value){
@@ -4962,198 +4882,34 @@ window.whatsappOwner = function(
 
 /* ================= ROOM CARD ================= */
 
-function renderRoomCard(
-  room,
-  dashboard=false
-){
-
-  const saved =
-    savedRoomIds.includes(room.id);
-
-
-  const image =
-    room.image ||
-    "https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80";
-
-
-  const ownerActions =
-    currentUser &&
-    room.ownerId === currentUser.uid
-    ? `
-
-      <button
-        class="small-btn edit"
-        onclick="editRoom('${escapeJs(room.id)}')">
-        ✏️ Edit
-      </button>
-
-      <button
-        class="small-btn delete"
-        onclick="deleteRoom('${escapeJs(room.id)}')">
-        🗑️ Delete
-      </button>
-
-    `
-    : "";
-
-
-  return `
-
-    <div class="room-card"
-         data-room-id="${escapeHtml(room.id)}">
-
-      <div class="room-image-wrap">
-
-        <img
-          class="room-image"
-          src="${escapeHtml(image)}"
-          alt="Property"
-          onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80'">
-
-        <div class="property-badge">
-          ${escapeHtml(room.type || "Property")}
-        </div>
-
-        <button
-          class="save-top"
-          onclick="toggleSaveRoom('${escapeJs(room.id)}')"
-          title="Save Property">
-          ${saved ? "❤️" : "♡"}
-        </button>
-
-      </div>
-
-
-      <div class="room-body">
-
-        <div class="room-title">
-
-          <h3>
-            ${escapeHtml(
-              room.type || "Property"
-            )}
-          </h3>
-
-          <div class="rent">
-            ₹${escapeHtml(room.rent || "")}
-            <small>/ month</small>
-          </div>
-
-        </div>
-
-
-        <div class="room-meta">
-
-          <div>
-            👤
-            <span>
-              Owner:
-              ${escapeHtml(room.name || "-")}
-            </span>
-          </div>
-
-          <div>
-            📍
-            <span>
-              ${escapeHtml(room.city || "")}
-              ${room.state
-                ? ", " +
-                  escapeHtml(room.state)
-                : ""}
-              ${Number.isFinite(Number(room._distanceKm))
-                ? `<strong class="distance-away">📏 ${Number(room._distanceKm).toFixed(1)} km away</strong>`
-                : ""}
-            </span>
-          </div>
-
-          <div>
-            🏠
-            <span>
-              ${escapeHtml(room.address || "")}
-            </span>
-          </div>
-
-          <div>
-            🛋️
-            <span>
-              ${escapeHtml(room.furnishing || "")}
-            </span>
-          </div>
-
-          ${
-            room.createdAt
-            ? `
-              <div>
-                📅
-                <span>
-                  ${formatDate(room.createdAt)}
-                </span>
-              </div>
-            `
-            : ""
-          }
-
-        </div>
-
-
-        ${
-          room.description
-          ? `
-            <div class="room-description">
-              ${escapeHtml(room.description)}
-            </div>
-          `
-          : ""
-        }
-
-
-        <div class="room-actions">
-
-          <button
-            class="small-btn primary"
-            onclick="contactOwner('${escapeJs(room.mobile || "")}')">
-            📞 Call Owner
-          </button>
-
-          <button
-            class="small-btn whatsapp"
-            onclick="whatsappOwner(
-              '${escapeJs(room.mobile || "")}',
-              '${escapeJs(room.type || "property")}',
-              '${escapeJs(room.city || "")}'
-            )">
-            💬 WhatsApp
-          </button>
-
-          <button
-            class="small-btn location-btn"
-            onclick="openGoogleLocation(
-              ${room.latitude !== undefined && room.latitude !== null ? `'${escapeJs(room.latitude)}'` : "null"},
-              ${room.longitude !== undefined && room.longitude !== null ? `'${escapeJs(room.longitude)}'` : "null"},
-              '${escapeJs(room.address || "")}',
-              '${escapeJs(room.city || "")}',
-              '${escapeJs(room.state || "")}'
-            )">
-            🗺️ Google Maps
-          </button>
-
-          <button
-            class="small-btn save"
-            onclick="toggleSaveRoom('${escapeJs(room.id)}')">
-            ${saved ? "❤️ Saved" : "♡ Save"}
-          </button>
-
-          ${ownerActions}
-
-        </div>
-
-      </div>
-
+function renderRoomCard(room,dashboard=false){
+  const saved=savedRoomIds.includes(room.id);
+  const image=room.image||"https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80";
+  const ownerActions=currentUser&&room.ownerId===currentUser.uid?`<div class="compact-owner-actions"><button class="small-btn edit" onclick="editRoom('${escapeJs(room.id)}')">✏️ Edit</button><button class="small-btn delete" onclick="deleteRoom('${escapeJs(room.id)}')">🗑️ Delete</button></div>`:"";
+  return `<div class="room-card compact-room-card" data-room-id="${escapeHtml(room.id)}">
+    <div class="room-image-wrap">
+      <img class="room-image" src="${escapeHtml(image)}" alt="Property" onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80'">
+      <div class="property-badge">${escapeHtml(room.type||"Property")}</div>
+      <div class="compact-new-badge">🆕 New</div>
+      <button class="save-top" onclick="toggleSaveRoom('${escapeJs(room.id)}')" title="Save Property">${saved?"❤️":"♡"}</button>
     </div>
-
-  `;
-
+    <div class="room-body">
+      <div class="room-title"><h3>${escapeHtml(room.type||"Property")}</h3><div class="rent">₹${escapeHtml(room.rent||"")} <small>/ month</small></div></div>
+      <div class="compact-meta">
+        <div class="compact-row">👤 <span><strong>Owner:</strong> ${escapeHtml(room.name||"-")}</span></div>
+        <div class="compact-row">📍 <span>${escapeHtml(room.city||"")}${room.state?", "+escapeHtml(room.state):""}</span></div>
+        <div class="compact-row">🛋️ <span>${escapeHtml(room.furnishing||"Not specified")}</span></div>
+      </div>
+      <div class="compact-actions">
+        <button class="small-btn primary" onclick="contactOwner('${escapeJs(room.mobile||"")}')">📞 Call Owner</button>
+        <button class="small-btn whatsapp" onclick="whatsappOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.type||"property")}','${escapeJs(room.city||"")}')">💬 WhatsApp</button>
+        <button class="compact-details-btn" onclick="openRoomDetails('${escapeJs(room.id)}')">View Details →</button>
+      </div>
+      ${ownerActions}
+    </div>
+  </div>`;
 }
+
 
 
 function renderRooms(rooms){
@@ -5249,8 +5005,6 @@ async function loadRooms(){
     });
 
 
-    updateSearchSuggestions();
-
     currentRooms.sort((a,b)=>{
 
       const aTime =
@@ -5325,11 +5079,9 @@ function getSearchFilteredRooms(sourceRooms){
   const city = $("searchCity").value.trim().toLowerCase();
   const area = $("searchArea").value.trim().toLowerCase();
   const type = $("searchType").value;
-  const minRent = Number($("minRent") ? $("minRent").value : 0);
   const maxRent = Number($("maxRent").value);
-  const sort = $("searchSort") ? $("searchSort").value : "newest";
 
-  const filtered = sourceRooms.filter(room=>{
+  return sourceRooms.filter(room=>{
     const roomState = String(room.state || "").toLowerCase();
     const roomCity = String(room.city || "").toLowerCase();
     const roomArea = String(room.address || room.area || "").toLowerCase();
@@ -5339,22 +5091,9 @@ function getSearchFilteredRooms(sourceRooms){
     if(city && !roomCity.includes(city)) return false;
     if(area && !roomArea.includes(area)) return false;
     if(type && room.type !== type) return false;
-    if(minRent && roomRent < minRent) return false;
     if(maxRent && roomRent > maxRent) return false;
     return true;
   });
-
-  filtered.sort((a,b)=>{
-    if(sort === "rentLow") return Number(a.rent||0)-Number(b.rent||0);
-    if(sort === "rentHigh") return Number(b.rent||0)-Number(a.rent||0);
-    if(sort === "name") return String(a.type||"").localeCompare(String(b.type||""));
-    if(Number.isFinite(Number(a._distanceKm)) && Number.isFinite(Number(b._distanceKm))) return Number(a._distanceKm)-Number(b._distanceKm);
-    const at=a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
-    const bt=b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
-    return bt-at;
-  });
-
-  return filtered;
 }
 
 window.filterRooms = function(){
@@ -5366,9 +5105,7 @@ window.clearFilters = function(){
   $("searchCity").value = "";
   $("searchArea").value = "";
   $("searchType").value = "";
-  if($("minRent")) $("minRent").value = "";
   $("maxRent").value = "";
-  if($("searchSort")) $("searchSort").value = "newest";
 
   /* Full reset: radius + nearby/GPS result state */
   const radiusEl = $("radiusKm");
@@ -5463,22 +5200,6 @@ window.heroSearch = function(){
   },100);
 };
 
-
-["searchState","searchCity","searchArea"].forEach(id=>{
-  const el=$(id);
-  if(el){
-    el.addEventListener("input",()=>{
-      updateSearchSuggestions();
-    });
-  }
-});
-
-["searchState","searchCity","searchArea","searchType","minRent","maxRent","searchSort"].forEach(id=>{
-  const el=$(id);
-  if(el){
-    el.addEventListener("change",()=>filterRooms());
-  }
-});
 
 /* ================= FEEDBACK ================= */
 
