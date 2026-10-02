@@ -5816,7 +5816,7 @@ function renderRoomCard(
 
           <button
             class="small-btn details-btn full"
-            onclick="openPropertyDetails('${escapeJs(room.id)}',event)">
+            onclick="event.stopPropagation(); openPropertyDetails('${escapeJs(room.id)}')">
             📋 View Full Details →
           </button>
 
