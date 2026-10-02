@@ -5812,12 +5812,36 @@ window.openLocationPicker = function(){
       return;
     }
     let lat=Number(postLatitude),lng=Number(postLongitude);
-    if(!Number.isFinite(lat)||!Number.isFinite(lng)){
+    // If saved coordinates are empty/invalid, start from a real India location.
+    // Do not allow accidental 0,0 or tiny invalid coordinates to open the map.
+    if(!Number.isFinite(lat)||!Number.isFinite(lng) || Math.abs(lat)<5 || Math.abs(lng)<20 || Math.abs(lat)>38 || Math.abs(lng)>100){
       lat=22.7196; lng=75.8577;
     }
     if(!window._locationPickerMap){
-      window._locationPickerMap=L.map("locationPickerMap").setView([lat,lng],14);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"}).addTo(window._locationPickerMap);
+      window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true,attributionControl:true}).setView([lat,lng],14);
+
+      // Free map tiles with place names/roads. Carto Voyager is used first because
+      // it is more label-rich on mobile; OpenStreetMap is kept as a fallback.
+      const voyager=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
+        maxZoom:20,
+        subdomains:"abcd",
+        attribution:"© OpenStreetMap contributors © CARTO"
+      });
+      const osm=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+        maxZoom:19,
+        attribution:"© OpenStreetMap contributors"
+      });
+      voyager.addTo(window._locationPickerMap);
+      voyager.on("tileerror",function(){
+        if(!window._locationPickerMap._dreamOsmFallback){
+          window._locationPickerMap._dreamOsmFallback=true;
+          osm.addTo(window._locationPickerMap);
+        }
+      });
+      window._locationPickerMap.on("moveend zoomend",function(){
+        const c=window._locationPickerMap.getCenter();
+        window._pickedLat=Number(c.lat); window._pickedLng=Number(c.lng);
+      });
       window._locationPickerMarker=L.marker([lat,lng],{draggable:true}).addTo(window._locationPickerMap);
       window._locationPickerMarker.on("dragend",function(){
         const p=window._locationPickerMarker.getLatLng();
