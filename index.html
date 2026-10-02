@@ -549,22 +549,6 @@ header{
 }
 
 /* ================= SEARCH SUGGESTIONS ================= */
-function updateSearchSuggestions(){
-  const stateEl=$("searchStateList"), cityEl=$("searchCityList"), areaEl=$("searchAreaList");
-  if(!stateEl || !cityEl || !areaEl) return;
-  const state=($("searchState").value||"").trim().toLowerCase();
-  const city=($("searchCity").value||"").trim().toLowerCase();
-  const unique=(arr)=>[...new Set(arr.filter(Boolean).map(v=>String(v).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  const states=unique(currentRooms.map(r=>r.state));
-  const cities=unique(currentRooms.filter(r=>!state || String(r.state||"").toLowerCase().includes(state)).map(r=>r.city));
-  const areas=unique(currentRooms.filter(r=>{
-    const rs=String(r.state||"").toLowerCase(), rc=String(r.city||"").toLowerCase();
-    return (!state || rs.includes(state)) && (!city || rc.includes(city));
-  }).map(r=>r.address || r.area));
-  stateEl.innerHTML=states.map(v=>`<option value="${escapeHtml(v)}">`).join("");
-  cityEl.innerHTML=cities.map(v=>`<option value="${escapeHtml(v)}">`).join("");
-  areaEl.innerHTML=areas.map(v=>`<option value="${escapeHtml(v)}">`).join("");
-}
 
 /* ================= FILTER ================= */
 
@@ -2793,6 +2777,26 @@ let postLongitude = null;
 function $(id){
   return document.getElementById(id);
 }
+
+
+/* ================= SEARCH SUGGESTIONS ================= */
+function updateSearchSuggestions(){
+  const stateEl=$("searchStateList"), cityEl=$("searchCityList"), areaEl=$("searchAreaList");
+  if(!stateEl || !cityEl || !areaEl) return;
+  const state=($("searchState").value||"").trim().toLowerCase();
+  const city=($("searchCity").value||"").trim().toLowerCase();
+  const unique=(arr)=>[...new Set(arr.filter(Boolean).map(v=>String(v).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  const states=unique(currentRooms.map(r=>r.state));
+  const cities=unique(currentRooms.filter(r=>!state || String(r.state||"").toLowerCase().includes(state)).map(r=>r.city));
+  const areas=unique(currentRooms.filter(r=>{
+    const rs=String(r.state||"").toLowerCase(), rc=String(r.city||"").toLowerCase();
+    return (!state || rs.includes(state)) && (!city || rc.includes(city));
+  }).map(r=>r.address || r.area));
+  stateEl.innerHTML=states.map(v=>`<option value="${escapeHtml(v)}">`).join("");
+  cityEl.innerHTML=cities.map(v=>`<option value="${escapeHtml(v)}">`).join("");
+  areaEl.innerHTML=areas.map(v=>`<option value="${escapeHtml(v)}">`).join("");
+}
+
 
 
 function escapeHtml(value){
