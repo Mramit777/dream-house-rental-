@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Dream House Rental | Find • Rent • Stay</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <style>
 *{
@@ -5859,12 +5857,37 @@ window.choosePickerSearchResult=function(index){
   if($("pickerLocationResults")) $("pickerLocationResults").innerHTML=`<div style="padding:8px;background:#eef4ff;border-radius:9px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}</div>`;
 };
 
-window.openLocationPicker = function(){
+window.loadLeafletAssets = function(){
+  if(window.L && window._leafletReady) return Promise.resolve();
+  if(window._leafletLoading) return window._leafletLoading;
+  window._leafletLoading = new Promise(function(resolve,reject){
+    if(!document.getElementById("leaflet-css")){
+      const link=document.createElement("link");
+      link.id="leaflet-css"; link.rel="stylesheet";
+      link.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      document.head.appendChild(link);
+    }
+    if(window.L){ window._leafletReady=true; resolve(); return; }
+    const script=document.createElement("script");
+    script.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    script.onload=function(){ window._leafletReady=true; resolve(); };
+    script.onerror=function(){ reject(new Error("Leaflet load failed")); };
+    document.head.appendChild(script);
+  });
+  return window._leafletLoading;
+};
+
+window.openLocationPicker = async function(){
   const wrap=$("locationPickerWrap");
   if(!wrap) return;
   wrap.classList.remove("hidden");
 
-  setTimeout(function(){
+  try{ await window.loadLeafletAssets(); }catch(e){
+    if($("locationStatus")) $("locationStatus").innerHTML="❌ Map picker load नहीं हुआ। Internet connection check करें।";
+    return;
+  }
+
+  setTimeout(async function(){
     if(typeof L === "undefined"){
       if($("locationStatus")) $("locationStatus").innerHTML="❌ Map picker load नहीं हुआ। Internet connection check करें।";
       return;
