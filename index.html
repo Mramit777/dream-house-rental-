@@ -4903,12 +4903,102 @@ function renderRoomCard(room,dashboard=false){
       <div class="compact-actions">
         <button class="small-btn primary" onclick="contactOwner('${escapeJs(room.mobile||"")}')">📞 Call Owner</button>
         <button class="small-btn whatsapp" onclick="whatsappOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.type||"property")}','${escapeJs(room.city||"")}')">💬 WhatsApp</button>
-        <button class="compact-details-btn" onclick="openRoomDetails('${escapeJs(room.id)}')">View Details →</button>
+        <button class="compact-details-btn" onclick="openPropertyDetails('${escapeJs(room.id)}')">View Details →</button>
       </div>
       ${ownerActions}
     </div>
   </div>`;
 }
+
+/* ================= FULL PROPERTY DETAIL PAGE ================= */
+window.openPropertyDetails = function(id,event){
+  if(event && event.target && event.target.closest && event.target.closest("button,a,input,select,textarea")) return;
+  const room=currentRooms.find(item=>item.id===id);
+  if(!room) return;
+
+  const gallery = Array.isArray(room.images) && room.images.length
+    ? room.images.slice(0,4)
+    : (room.image ? [room.image] : []);
+  const image = gallery[0] || "https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=80";
+  const modalId="propertyDetailPage";
+  let modal=$(modalId);
+  if(!modal){
+    modal=document.createElement("div");
+    modal.id=modalId;
+    modal.className="property-detail-page";
+    document.body.appendChild(modal);
+  }
+
+  const locationText=[room.address,room.city,room.state].filter(Boolean).join(", ");
+  const hasCoords=Number.isFinite(Number(room.latitude)) && Number.isFinite(Number(room.longitude));
+  const galleryHtml=gallery.length>1 ? `<div class="property-detail-gallery-row">${gallery.map((src,i)=>`<img class="property-detail-gallery-thumb" src="${escapeHtml(src)}" alt="Photo ${i+1}" onclick="openRoomGallery('${escapeJs(room.id)}')">`).join("")}</div>` : "";
+  const ownerActions=currentUser && room.ownerId===currentUser.uid ? `
+    <button class="small-btn edit" onclick="editRoom('${escapeJs(room.id)}')">✏️ Edit Property</button>
+    <button class="small-btn delete" onclick="deleteRoom('${escapeJs(room.id)}')">🗑️ Delete Property</button>` : `
+    <button class="small-btn" onclick="requestPropertyRate('${escapeJs(room.id)}')">💰 Rate Request</button>`;
+
+  modal.innerHTML=`
+    <div class="property-detail-top">
+      <button class="property-detail-back" type="button" onclick="closePropertyDetails()">← Back to Properties</button>
+      <strong>🏠 Property Details</strong>
+      <button class="small-btn" type="button" onclick="closePropertyDetails()">✕</button>
+    </div>
+    <div class="property-detail-inner">
+      <div class="property-detail-card">
+        <img class="property-detail-main-photo" src="${escapeHtml(image)}" alt="Property" onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=80'">
+        ${galleryHtml}
+        <div class="property-detail-content">
+          <div class="property-detail-title-row">
+            <div>
+              <div class="property-badge" style="position:static;display:inline-flex;margin-bottom:8px;">${escapeHtml(room.type||"Property")}</div>
+              <h1>${escapeHtml(room.type||"Property")}</h1>
+            </div>
+            <div class="property-detail-rent">₹${escapeHtml(room.rent||"")}<small style="display:block;text-align:right;color:#98a2b3;font-size:12px;">/ month</small></div>
+          </div>
+          <div class="property-detail-grid">
+            <div class="property-detail-info"><strong>👤 Owner</strong><span>${escapeHtml(room.name||"-")}</span></div>
+            <div class="property-detail-info"><strong>📍 City / State</strong><span>${escapeHtml([room.city,room.state].filter(Boolean).join(", ")||"-")}</span></div>
+            <div class="property-detail-info"><strong>🏠 Area / Address</strong><span>${escapeHtml(room.address||"-")}</span></div>
+            <div class="property-detail-info"><strong>🛋️ Furnishing</strong><span>${escapeHtml(room.furnishing||"-")}</span></div>
+            <div class="property-detail-info"><strong>📅 Posted</strong><span>${escapeHtml(formatDate(room.createdAt)||"-")}</span></div>
+            ${Number.isFinite(Number(room._distanceKm)) ? `<div class="property-detail-info"><strong>📏 Distance</strong><span>${Number(room._distanceKm).toFixed(1)} km away</span></div>` : ""}
+            <div class="property-detail-info"><strong>🔐 Security Deposit</strong><span>₹${escapeHtml(room.deposit||0)}</span></div>
+            <div class="property-detail-info"><strong>🧾 Maintenance</strong><span>₹${escapeHtml(room.maintenance||0)}</span></div>
+            <div class="property-detail-info"><strong>⚡ Electricity</strong><span>${escapeHtml(room.electricityMode||"Extra")}</span></div>
+            <div class="property-detail-info"><strong>👨‍👩‍👧 Suitable For</strong><span>${escapeHtml(room.suitableFor||"-")}</span></div>
+            <div class="property-detail-info"><strong>📋 Rule</strong><span>${escapeHtml(room.propertyRules||"-")}</span></div>
+          </div>
+          ${room.rentNegotiable === "Yes" ? `<div class="property-detail-description"><strong>💬 Rent Negotiable</strong><br>Owner ने rent negotiable रखा है।</div>` : ""}
+          ${Array.isArray(room.facilities)&&room.facilities.length ? `<div class="property-detail-description"><strong>✨ Facilities / सुविधाएँ</strong><div class="feature-chips">${room.facilities.map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}</div></div>` : ""}
+          ${room.description ? `<div class="property-detail-description"><strong>📝 Description</strong><br>${escapeHtml(room.description)}</div>` : ""}
+          <div class="property-detail-actions">
+            <button class="small-btn primary" onclick="contactOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.id)}')">📞 Call Owner</button>
+            <button class="small-btn whatsapp" onclick="whatsappOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.type||"property")}','${escapeJs(room.city||"")}','${escapeJs(room.id)}')">💬 WhatsApp</button>
+            <button class="small-btn save" onclick="toggleSaveRoom('${escapeJs(room.id)}')">${savedRoomIds.includes(room.id)?"❤️ Saved":"♡ Save Property"}</button>
+            ${ownerActions}
+          </div>
+          <div class="property-detail-location">
+            <strong>📍 Property Location</strong>
+            <div style="margin-top:5px;color:#475467;">${escapeHtml(locationText||"Location details available नहीं हैं।")}</div>
+            <button type="button" class="primary-btn" style="margin-top:10px;width:100%;" onclick="openGoogleLocation(${hasCoords?`'${escapeJs(room.latitude)}','${escapeJs(room.longitude)}'`:`null,null`},'${escapeJs(room.address||"")}','${escapeJs(room.city||"")}','${escapeJs(room.state||"")}')">🗺️ Open This Location in Google Maps</button>
+          </div>
+          <div class="property-detail-description" style="background:#fff;border:1px solid #e5e7eb;">
+            <strong>⚖️ Compare / Similar</strong>
+            <button type="button" class="secondary-btn" style="margin-top:9px;" onclick="toggleCompare('${escapeJs(room.id)}',!window.compareIds.includes('${escapeJs(room.id)}'))">⚖️ Add / Remove Compare</button>
+            <div id="similarProperties-${escapeJs(room.id)}"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  modal.classList.add("show");
+  document.body.style.overflow="hidden";
+  const similar=currentRooms.filter(r=>r.id!==room.id && (r.type===room.type || r.city===room.city)).slice(0,3);
+  const simBox=$("similarProperties-"+room.id);
+  if(simBox) simBox.innerHTML=similar.length?`<div class="similar-grid">${similar.map(r=>{const im=(Array.isArray(r.images)&&r.images.length?r.images[0]:r.image)||"https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=600&q=80";return `<div class="similar-item" onclick="openPropertyDetails('${escapeJs(r.id)}',event)"><img src="${escapeHtml(im)}"><strong>${escapeHtml(r.type||"Property")}</strong><div>₹${escapeHtml(r.rent||0)} • ${escapeHtml(r.city||"")}</div></div>`}).join("")}</div>`:`<div style="margin-top:8px;color:#667085">अभी similar property नहीं मिली।</div>`;
+  window._propertyDetailOpen=true;
+  try{history.pushState({propertyDetail:id},"",location.pathname+location.search+"#property-"+encodeURIComponent(id));}catch(e){}
+};
+
 
 
 
