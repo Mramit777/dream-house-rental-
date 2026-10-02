@@ -1238,6 +1238,33 @@ header{
   }
 
 }
+
+/* FULL PROPERTY DETAIL PAGE CSS */
+.property-detail-page{position:fixed;inset:0;z-index:99990;background:#f4f7fb;overflow-y:auto;display:none;}
+.property-detail-page.show{display:block;}
+.property-detail-top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid #e5eaf1;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.property-detail-back{border:0;background:#eef4ff;color:#1d4ed8;border-radius:11px;padding:10px 14px;font-weight:900;}
+.property-detail-inner{max-width:1050px;margin:20px auto 50px;padding:0 16px;}
+.property-detail-card{background:#fff;border:1px solid #e4eaf2;border-radius:22px;overflow:hidden;box-shadow:0 12px 35px rgba(15,23,42,.08);}
+.property-detail-main-photo{width:100%;height:min(58vh,560px);object-fit:cover;display:block;background:#edf2f7;}
+.property-detail-content{padding:24px;}
+.property-detail-title-row{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;}
+.property-detail-title-row h1{font-size:clamp(26px,5vw,42px);color:#111827;}
+.property-detail-rent{font-size:25px;font-weight:900;color:#2563eb;white-space:nowrap;}
+.property-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;}
+.property-detail-info{padding:14px;border-radius:13px;background:#f8fafc;border:1px solid #e8edf4;}
+.property-detail-info strong{display:block;font-size:12px;color:#667085;margin-bottom:4px;}
+.property-detail-info span{color:#172033;font-weight:700;}
+.property-detail-description{margin-top:18px;padding:16px;border-radius:14px;background:#f8fafc;color:#475467;white-space:pre-wrap;}
+.property-detail-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px;}
+.property-detail-location{margin-top:18px;padding:16px;border-radius:15px;background:#eef4ff;border:1px solid #dbe7ff;}
+.property-detail-location strong{color:#1d4ed8;}
+.property-detail-gallery-row{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 0;}
+.property-detail-gallery-thumb{width:80px;height:58px;object-fit:cover;border-radius:9px;cursor:pointer;border:2px solid transparent;flex:0 0 auto;}
+.property-detail-gallery-thumb:hover{border-color:#2563eb;}
+@media(max-width:650px){.property-detail-content{padding:17px}.property-detail-title-row{display:block}.property-detail-rent{margin-top:8px}.property-detail-grid{grid-template-columns:1fr}.property-detail-actions{grid-template-columns:1fr}.property-detail-main-photo{height:42vh;}}
+
+
 </style>
 
 <style>
@@ -4903,7 +4930,7 @@ function renderRoomCard(room,dashboard=false){
       <div class="compact-actions">
         <button class="small-btn primary" onclick="contactOwner('${escapeJs(room.mobile||"")}')">📞 Call Owner</button>
         <button class="small-btn whatsapp" onclick="whatsappOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.type||"property")}','${escapeJs(room.city||"")}')">💬 WhatsApp</button>
-        <button class="compact-details-btn" onclick="openPropertyDetails('${escapeJs(room.id)}')">View Details →</button>
+        <button type="button" class="compact-details-btn" onclick="event.preventDefault(); event.stopPropagation(); openPropertyDetails('${escapeJs(room.id)}')">View Details →</button>
       </div>
       ${ownerActions}
     </div>
@@ -4911,6 +4938,8 @@ function renderRoomCard(room,dashboard=false){
 }
 
 /* ================= FULL PROPERTY DETAIL PAGE ================= */
+window._propertyDetailOpen = false;
+
 window.openPropertyDetails = function(id,event){
   if(event && event.target && event.target.closest && event.target.closest("button,a,input,select,textarea")) return;
   const room=currentRooms.find(item=>item.id===id);
@@ -4998,6 +5027,21 @@ window.openPropertyDetails = function(id,event){
   window._propertyDetailOpen=true;
   try{history.pushState({propertyDetail:id},"",location.pathname+location.search+"#property-"+encodeURIComponent(id));}catch(e){}
 };
+
+window.closePropertyDetails = function(fromPop){
+  const modal=$("propertyDetailPage");
+  if(modal) modal.classList.remove("show");
+  document.body.style.overflow="";
+  const wasOpen=window._propertyDetailOpen;
+  window._propertyDetailOpen=false;
+  if(wasOpen && !fromPop){
+    try{history.back();}catch(e){}
+  }
+};
+
+window.addEventListener("popstate",function(){
+  if(window._propertyDetailOpen) closePropertyDetails(true);
+});
 
 
 
