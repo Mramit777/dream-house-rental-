@@ -660,7 +660,7 @@ header{
 
 .room-image-wrap{
   position:relative;
-  height:215px;
+  height:175px;
   background:#edf2f7;
   overflow:hidden;
 }
@@ -704,7 +704,7 @@ header{
 }
 
 .room-body{
-  padding:18px;
+  padding:13px;
 }
 
 .room-title{
@@ -715,13 +715,13 @@ header{
 }
 
 .room-title h3{
-  font-size:20px;
+  font-size:17px;
   color:#111827;
 }
 
 .rent{
   color:#2563eb;
-  font-size:19px;
+  font-size:17px;
   font-weight:900;
   white-space:nowrap;
 }
@@ -735,9 +735,9 @@ header{
 }
 
 .room-meta{
-  margin-top:12px;
+  margin-top:8px;
   display:grid;
-  gap:7px;
+  gap:5px;
   color:#667085;
   font-size:14px;
 }
@@ -760,14 +760,14 @@ header{
 .room-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:16px;
+  gap:7px;
+  margin-top:11px;
 }
 
 .small-btn{
   border:0;
-  border-radius:9px;
-  padding:9px 9px;
+  border-radius:8px;
+  padding:8px 7px;
   font-size:13px;
   font-weight:800;
   background:#eef2f7;
@@ -776,6 +776,11 @@ header{
 
 .small-btn.primary{
   background:#2563eb;
+  color:#fff;
+}
+
+.small-btn.details-btn{
+  background:#111827;
   color:#fff;
 }
 
@@ -806,6 +811,32 @@ header{
 
 .room-actions .full{
   grid-column:1/-1;
+}
+
+/* ================= EARNING ADVICE ================= */
+.earning-advice-wrap{
+  background:linear-gradient(135deg,#f0fdf4,#eff6ff);
+  border:1px solid #dbeafe;
+  border-radius:22px;
+  padding:22px;
+}
+.earning-advice-head{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  margin-bottom:15px;
+}
+.earning-advice-head h2{font-size:27px;color:#111827;}
+.earning-advice-head p{color:#667085;margin-top:5px;}
+.earning-advice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.earning-advice-card{background:#fff;border:1px solid #e5e7eb;border-radius:15px;padding:16px;}
+.earning-advice-card .earning-icon{font-size:25px;margin-bottom:7px;}
+.earning-advice-card h3{font-size:16px;color:#111827;}
+.earning-advice-card p{font-size:13px;color:#667085;margin-top:5px;}
+.earning-note{margin-top:12px;font-size:12px;color:#667085;}
+@media(max-width:700px){
+  .earning-advice-wrap{padding:16px;border-radius:18px;}
+  .earning-advice-head{display:block;}
+  .earning-advice-head h2{font-size:23px;}
+  .earning-advice-grid{grid-template-columns:1fr;}
 }
 
 /* ================= WHY ================= */
@@ -1245,11 +1276,11 @@ header{
 
   .rooms-grid{
     grid-template-columns:1fr;
-    gap:16px;
+    gap:11px;
   }
 
   .room-image-wrap{
-    height:220px;
+    height:150px;
   }
 
   .room-actions{
@@ -1291,6 +1322,26 @@ header{
     padding-top:40px;
   }
 
+}
+
+/* Compact mobile property cards + mobile UI polish */
+@media(max-width:700px){
+  .room-card{border-radius:15px;}
+  .room-body{padding:11px 12px 12px;}
+  .room-title h3{font-size:17px;}
+  .rent{font-size:17px;}
+  .room-meta{font-size:12px;gap:4px;}
+  .room-actions{margin-top:8px;gap:5px;}
+  .small-btn{padding:8px 5px;font-size:12px;}
+  .room-actions .full{grid-column:1/-1;}
+  .property-badge{top:8px;left:8px;padding:5px 8px;font-size:11px;}
+  .save-top{top:7px;right:7px;width:34px;height:34px;font-size:17px;}
+  .compare-check{font-size:11px!important;padding:5px 7px!important;}
+  .results-toolbar h2{font-size:24px;}
+  .results-toolbar p{font-size:13px;}
+  .results-toolbar-actions{gap:6px;}
+  .results-sort,.results-near-btn{padding:9px 10px;font-size:12px;}
+  .section{margin:35px auto;}
 }
 
 /* ================= SMALL MOBILE ================= */
@@ -1805,6 +1856,37 @@ header{
 
   </div>
 
+</section>
+
+
+<!-- ================= EARNING ADVICE ================= -->
+<section class="section">
+  <div class="earning-advice-wrap">
+    <div class="earning-advice-head">
+      <div>
+        <h2>💰 Earning Advice</h2>
+        <p>Property se extra income badhane ke practical ideas.</p>
+      </div>
+    </div>
+    <div class="earning-advice-grid">
+      <div class="earning-advice-card">
+        <div class="earning-icon">🏠</div>
+        <h3>Khali Room ko Rent Par Dein</h3>
+        <p>Achhi photos aur complete details ke saath listing karke vacant space ko rental income source banayein.</p>
+      </div>
+      <div class="earning-advice-card">
+        <div class="earning-icon">📸</div>
+        <h3>Listing Better Banayein</h3>
+        <p>Clean photos, sahi rent, location aur facilities clearly likhne se genuine enquiries milne mein madad ho sakti hai.</p>
+      </div>
+      <div class="earning-advice-card">
+        <div class="earning-icon">📈</div>
+        <h3>Rental Income Ideas</h3>
+        <p>PG, furnished room, family rental ya shop jaise options ko apni property aur local demand ke hisaab se compare karein.</p>
+      </div>
+    </div>
+    <div class="earning-note">💡 Advice informational hai; actual earning location, demand, rent, property condition aur occupancy par depend karegi.</div>
+  </div>
 </section>
 
 
@@ -5705,72 +5787,13 @@ function renderRoomCard(
 
         <div class="room-meta">
 
-          <div>
-            👤
-            <span>
-              Owner:
-              ${escapeHtml(room.name || "-")}
-            </span>
-          </div>
+          <div>👤 <span>Owner: ${escapeHtml(room.name || "-")}</span></div>
 
-          <div>
-            📍
-            <span>
-              ${escapeHtml(room.city || "")}
-              ${room.state
-                ? ", " +
-                  escapeHtml(room.state)
-                : ""}
-              ${Number.isFinite(Number(room._distanceKm))
-                ? `<strong class="distance-away">📏 ${Number(room._distanceKm).toFixed(1)} km away</strong>`
-                : ""}
-            </span>
-          </div>
+          <div>📍 <span>${escapeHtml(room.city || "")}${room.state ? ", " + escapeHtml(room.state) : ""}${Number.isFinite(Number(room._distanceKm)) ? ` <strong class="distance-away">📏 ${Number(room._distanceKm).toFixed(1)} km</strong>` : ""}</span></div>
 
-          <div>
-            🏠
-            <span>
-              ${escapeHtml(room.address || "")}
-            </span>
-          </div>
-
-          <div>
-            🛋️
-            <span>
-              ${escapeHtml(room.furnishing || "")}
-            </span>
-          </div>
-
-          ${room.rentNegotiable === "Yes" ? `<div>💬 <span>Rent Negotiable</span></div>` : ""}
-          ${room.suitableFor ? `<div>👨‍👩‍👧 <span>Suitable: ${escapeHtml(room.suitableFor)}</span></div>` : ""}
-          ${Array.isArray(room.facilities) && room.facilities.length ? `<div style="display:block"><strong style="color:#1d4ed8;">✨ Facilities</strong><div class="feature-chips">${room.facilities.slice(0,5).map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}${room.facilities.length>5?`<span class="feature-chip">+${room.facilities.length-5} more</span>`:""}</div></div>` : ""}
-
-          ${
-            room.createdAt
-            ? `
-              <div>
-                📅
-                <span>
-                  ${formatDate(room.createdAt)}
-                </span>
-              </div>
-            `
-            : ""
-          }
+          <div>🛋️ <span>${escapeHtml(room.furnishing || "-")}</span></div>
 
         </div>
-
-
-        ${
-          room.description
-          ? `
-            <div class="room-description">
-              ${escapeHtml(room.description)}
-            </div>
-          `
-          : ""
-        }
-
 
         <div class="room-actions">
 
@@ -5791,35 +5814,11 @@ function renderRoomCard(
             💬 WhatsApp
           </button>
 
-          ${currentUser && room.ownerId !== currentUser.uid ? `
           <button
-            class="small-btn"
-            onclick="requestPropertyRate('${escapeJs(room.id)}')">
-            💰 Rate Request
+            class="small-btn details-btn full"
+            onclick="openPropertyDetails('${escapeJs(room.id)}',event)">
+            📋 View Full Details →
           </button>
-          ` : ""}
-
-          <button
-            class="small-btn location-btn"
-            onclick="openGoogleLocation(
-              ${room.latitude !== undefined && room.latitude !== null ? `'${escapeJs(room.latitude)}'` : "null"},
-              ${room.longitude !== undefined && room.longitude !== null ? `'${escapeJs(room.longitude)}'` : "null"},
-              '${escapeJs(room.address || "")}',
-              '${escapeJs(room.city || "")}',
-              '${escapeJs(room.state || "")}'
-            )">
-            🗺️ Google Maps
-          </button>
-
-          <button
-            class="small-btn save"
-            onclick="toggleSaveRoom('${escapeJs(room.id)}')">
-            ${saved ? "❤️ Saved" : "♡ Save"}
-          </button>
-
-          <button class="small-btn" onclick="toggleCompare('${escapeJs(room.id)}',!window.compareIds.includes('${escapeJs(room.id)}'))">⚖️ Compare</button>
-
-          ${ownerActions}
 
         </div>
 
