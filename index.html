@@ -745,28 +745,6 @@ header{
   grid-column:1/-1;
 }
 
-
-/* ================= COMPACT PROPERTY CARDS ================= */
-.compact-property-card .compact-image-wrap{height:180px;}
-.compact-room-body{padding:14px 15px 15px;}
-.compact-room-title h3{font-size:18px;}
-.compact-room-title .rent{font-size:18px;}
-.compact-property-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;color:#667085;font-size:13px;}
-.compact-property-meta span{background:#f8fafc;border:1px solid #edf0f4;border-radius:8px;padding:5px 7px;}
-.compact-property-meta .distance-away{background:#eef4ff;color:#1d4ed8;border-color:#dbe7ff;font-weight:800;}
-.compact-room-actions{margin-top:11px;gap:7px;}
-.compact-room-actions .compact-details-btn{grid-column:1/-1;background:#eef4ff;color:#1d4ed8;}
-.compact-property-card .room-photo-button{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;}
-@media(max-width:700px){
-  .compact-property-card .compact-image-wrap{height:185px;}
-  .compact-room-body{padding:13px;}
-  .compact-room-title h3{font-size:17px;}
-  .compact-room-title .rent{font-size:17px;}
-  .compact-property-meta{font-size:12px;gap:5px;}
-  .compact-room-actions{grid-template-columns:1fr 1fr;}
-  .compact-room-actions .compact-details-btn{grid-column:1/-1;}
-}
-
 /* ================= WHY ================= */
 
 .why-grid,
@@ -5528,7 +5506,9 @@ function renderRoomCard(
   dashboard=false
 ){
 
-  const saved = savedRoomIds.includes(room.id);
+  const saved =
+    savedRoomIds.includes(room.id);
+
 
   const gallery =
     Array.isArray(room.images) && room.images.length
@@ -5547,61 +5527,213 @@ function renderRoomCard(
     }catch(e){ return false; }
   })();
 
+
   const ownerActions =
-    currentUser && room.ownerId === currentUser.uid
+    currentUser &&
+    room.ownerId === currentUser.uid
     ? `
-      <button class="small-btn edit" onclick="editRoom('${escapeJs(room.id)}')">✏️ Edit</button>
-      <button class="small-btn delete" onclick="deleteRoom('${escapeJs(room.id)}')">🗑️ Delete</button>
+
+      <button
+        class="small-btn edit"
+        onclick="editRoom('${escapeJs(room.id)}')">
+        ✏️ Edit
+      </button>
+
+      <button
+        class="small-btn delete"
+        onclick="deleteRoom('${escapeJs(room.id)}')">
+        🗑️ Delete
+      </button>
+
     `
     : "";
 
+
   return `
-    <div class="room-card compact-property-card"
+
+    <div class="room-card"
          data-room-id="${escapeHtml(room.id)}"
          onclick="openPropertyDetails('${escapeJs(room.id)}',event)"
          role="button"
          tabindex="0">
 
-      <div class="room-image-wrap compact-image-wrap">
+      <div class="room-image-wrap">
+
         <button class="room-photo-button" type="button" onclick="openRoomGallery('${escapeJs(room.id)}')" title="View property photos">
-          <img class="room-image" src="${escapeHtml(image)}"
-               alt="Property"
-               onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80'">
+          <img
+            class="room-image"
+            src="${escapeHtml(image)}"
+            alt="Property"
+            onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80'">
         </button>
 
-        <div class="property-badge">${escapeHtml(room.type || "Property")}</div>
+        <div class="property-badge">
+          ${escapeHtml(room.type || "Property")}
+        </div>
 
         <div class="property-status-badges">
           ${isNew ? '<span class="new-badge">🆕 New</span>' : ''}
           ${gallery.length > 1 ? `<span class="photo-count-badge">📸 ${gallery.length}</span>` : ''}
         </div>
 
-        <button class="save-top" onclick="toggleSaveRoom('${escapeJs(room.id)}')" title="Save Property">
+        <button
+          class="save-top"
+          onclick="toggleSaveRoom('${escapeJs(room.id)}')"
+          title="Save Property">
           ${saved ? "❤️" : "♡"}
         </button>
+
+        <label class="compare-check" onclick="event.stopPropagation()">
+          <input type="checkbox" ${window.compareIds?.includes(room.id)?"checked":""} onchange="toggleCompare('${escapeJs(room.id)}',this.checked)"> Compare
+        </label>
+
       </div>
 
-      <div class="room-body compact-room-body">
-        <div class="room-title compact-room-title">
-          <h3>${escapeHtml(room.type || "Property")}</h3>
-          <div class="rent">₹${escapeHtml(room.rent || "")}<small>/ month</small></div>
+
+      <div class="room-body">
+
+        <div class="room-title">
+
+          <h3>
+            ${escapeHtml(
+              room.type || "Property"
+            )}
+          </h3>
+
+          <div class="rent">
+            ₹${escapeHtml(room.rent || "")}
+            <small>/ month</small>
+          </div>
+
         </div>
 
-        <div class="compact-property-meta">
-          <span>📍 ${escapeHtml(room.city || "")}${room.state ? ", " + escapeHtml(room.state) : ""}</span>
-          ${Number.isFinite(Number(room._distanceKm)) ? `<span class="distance-away">📏 ${Number(room._distanceKm).toFixed(1)} km away</span>` : ""}
-          ${room.furnishing ? `<span>🛋️ ${escapeHtml(room.furnishing)}</span>` : ""}
+
+        <div class="room-meta">
+
+          <div>
+            👤
+            <span>
+              Owner:
+              ${escapeHtml(room.name || "-")}
+            </span>
+          </div>
+
+          <div>
+            📍
+            <span>
+              ${escapeHtml(room.city || "")}
+              ${room.state
+                ? ", " +
+                  escapeHtml(room.state)
+                : ""}
+              ${Number.isFinite(Number(room._distanceKm))
+                ? `<strong class="distance-away">📏 ${Number(room._distanceKm).toFixed(1)} km away</strong>`
+                : ""}
+            </span>
+          </div>
+
+          <div>
+            🏠
+            <span>
+              ${escapeHtml(room.address || "")}
+            </span>
+          </div>
+
+          <div>
+            🛋️
+            <span>
+              ${escapeHtml(room.furnishing || "")}
+            </span>
+          </div>
+
+          ${room.rentNegotiable === "Yes" ? `<div>💬 <span>Rent Negotiable</span></div>` : ""}
+          ${room.suitableFor ? `<div>👨‍👩‍👧 <span>Suitable: ${escapeHtml(room.suitableFor)}</span></div>` : ""}
+          ${Array.isArray(room.facilities) && room.facilities.length ? `<div style="display:block"><strong style="color:#1d4ed8;">✨ Facilities</strong><div class="feature-chips">${room.facilities.slice(0,5).map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}${room.facilities.length>5?`<span class="feature-chip">+${room.facilities.length-5} more</span>`:""}</div></div>` : ""}
+
+          ${
+            room.createdAt
+            ? `
+              <div>
+                📅
+                <span>
+                  ${formatDate(room.createdAt)}
+                </span>
+              </div>
+            `
+            : ""
+          }
+
         </div>
 
-        <div class="room-actions compact-room-actions">
-          <button class="small-btn primary" onclick="contactOwner('${escapeJs(room.mobile || "")}','${escapeJs(room.id)}')">📞 Call Owner</button>
-          <button class="small-btn whatsapp" onclick="whatsappOwner('${escapeJs(room.mobile || "")}','${escapeJs(room.type || "property")}','${escapeJs(room.city || "")}','${escapeJs(room.id)}')">💬 WhatsApp</button>
-          <button class="small-btn compact-details-btn" onclick="openPropertyDetails('${escapeJs(room.id)}')">👁️ View Details</button>
+
+        ${
+          room.description
+          ? `
+            <div class="room-description">
+              ${escapeHtml(room.description)}
+            </div>
+          `
+          : ""
+        }
+
+
+        <div class="room-actions">
+
+          <button
+            class="small-btn primary"
+            onclick="contactOwner('${escapeJs(room.mobile || "") }','${escapeJs(room.id)}')">
+            📞 Call Owner
+          </button>
+
+          <button
+            class="small-btn whatsapp"
+            onclick="whatsappOwner(
+              '${escapeJs(room.mobile || "")}',
+              '${escapeJs(room.type || "property")}',
+              '${escapeJs(room.city || "")}',
+              '${escapeJs(room.id)}'
+            )">
+            💬 WhatsApp
+          </button>
+
+          ${currentUser && room.ownerId !== currentUser.uid ? `
+          <button
+            class="small-btn"
+            onclick="requestPropertyRate('${escapeJs(room.id)}')">
+            💰 Rate Request
+          </button>
+          ` : ""}
+
+          <button
+            class="small-btn location-btn"
+            onclick="openGoogleLocation(
+              ${room.latitude !== undefined && room.latitude !== null ? `'${escapeJs(room.latitude)}'` : "null"},
+              ${room.longitude !== undefined && room.longitude !== null ? `'${escapeJs(room.longitude)}'` : "null"},
+              '${escapeJs(room.address || "")}',
+              '${escapeJs(room.city || "")}',
+              '${escapeJs(room.state || "")}'
+            )">
+            🗺️ Google Maps
+          </button>
+
+          <button
+            class="small-btn save"
+            onclick="toggleSaveRoom('${escapeJs(room.id)}')">
+            ${saved ? "❤️ Saved" : "♡ Save"}
+          </button>
+
+          <button class="small-btn" onclick="toggleCompare('${escapeJs(room.id)}',!window.compareIds.includes('${escapeJs(room.id)}'))">⚖️ Compare</button>
+
           ${ownerActions}
+
         </div>
+
       </div>
+
     </div>
+
   `;
+
 }
 
 
