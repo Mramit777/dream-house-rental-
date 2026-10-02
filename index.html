@@ -5818,32 +5818,16 @@ window.openLocationPicker = function(){
       lat=22.7196; lng=75.8577;
     }
     if(!window._locationPickerMap){
-      window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true,attributionControl:true}).setView([lat,lng],14);
+      window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true,attributionControl:true}).setView([lat,lng],12);
 
-      // City/place-name focused free map: Esri World Street Map first,
-      // with OpenStreetMap as a no-API-key fallback. Keep all other
-      // location-picker behaviour unchanged.
-      const esri=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",{
-        maxZoom:19,
-        crossOrigin:true,
-        attribution:"© Esri, HERE, Garmin, (c) OpenStreetMap contributors"
-      });
-      const osm=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+      // Use OpenStreetMap directly: free, no API key, and includes city/road/place labels.
+      // Do not load Esri/CARTO here because those endpoints may show API-key-required screens.
+      const osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
         maxZoom:19,
         crossOrigin:true,
         attribution:"© OpenStreetMap contributors"
       });
-      window._locationPickerMap._dreamMapFallback=false;
-      esri.addTo(window._locationPickerMap);
-      let tileErrors=0;
-      esri.on("tileerror",function(){
-        tileErrors++;
-        if(tileErrors>=2 && !window._locationPickerMap._dreamMapFallback){
-          window._locationPickerMap._dreamMapFallback=true;
-          try{ window._locationPickerMap.removeLayer(esri); }catch(e){}
-          osm.addTo(window._locationPickerMap);
-        }
-      });
+      osm.addTo(window._locationPickerMap);
       window._locationPickerMap.on("moveend zoomend",function(){
         const c=window._locationPickerMap.getCenter();
         window._pickedLat=Number(c.lat); window._pickedLng=Number(c.lng);
