@@ -1811,6 +1811,11 @@ header{
           <div class="location-picker-panel">
             <strong>🗺️ Map पर pin को move करें</strong>
             <div style="font-size:12px;color:#667085;margin-top:3px;">Pin को सही जगह पर रखें, फिर “Select This Location” दबाएँ।</div>
+            <div class="location-picker-search" style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;">
+              <input id="pickerLocationSearch" placeholder="🔍 शहर / जगह खोजें जैसे Indore, Bhopal, Ujjain" style="flex:1;min-width:0;border:1px solid #d0d5dd;border-radius:10px;padding:11px;">
+              <button type="button" class="primary-btn" onclick="searchPickerLocation()">🔎 Search</button>
+            </div>
+            <div id="pickerLocationResults" style="margin-top:6px;"></div>
             <div id="locationPickerMap" class="location-picker-map">
               <div class="location-picker-center-pin">📍</div>
             </div>
@@ -5823,6 +5828,37 @@ function updatePickedLocationFromMap(){
   }
 }
 
+window.searchPickerLocation = async function(){
+  const input=$("pickerLocationSearch");
+  const box=$("pickerLocationResults");
+  const q=input?.value.trim();
+  if(!q){ if(box) box.innerHTML="❌ पहले शहर या जगह का नाम लिखें।"; return; }
+  if(box) box.innerHTML="⏳ जगह खोजी जा रही है...";
+  try{
+    const url=`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&countrycodes=in&q=${encodeURIComponent(q)}`;
+    const res=await fetch(url,{headers:{"Accept":"application/json"}});
+    if(!res.ok) throw new Error("Search failed");
+    const items=await res.json();
+    if(!items.length){ if(box) box.innerHTML="❌ यह जगह नहीं मिली। दूसरा नाम try करें।"; return; }
+    window._pickerSearchResults=items;
+    if(box) box.innerHTML=items.map((item,i)=>`<button type="button" class="secondary-btn" style="display:block;width:100%;text-align:left;margin-top:5px;white-space:normal;" onclick="choosePickerSearchResult(${i})">📍 ${escapeHtml(item.display_name||q)}</button>`).join("");
+  }catch(e){
+    console.error(e);
+    if(box) box.innerHTML="❌ Search नहीं हो पाई। Internet connection check करें।";
+  }
+};
+
+window.choosePickerSearchResult=function(index){
+  const item=window._pickerSearchResults?.[index];
+  if(!item || !window._locationPickerMap) return;
+  const lat=Number(item.lat),lng=Number(item.lon);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
+  window._locationPickerMap.setView([lat,lng],16,{animate:true});
+  window._pickedLat=lat; window._pickedLng=lng;
+  if($("locationPickedCoords")) $("locationPickedCoords").textContent=`📍 ${lat.toFixed(6)}, ${lng.toFixed(6)} — pin के नीचे वाली जगह select होगी`;
+  if($("pickerLocationResults")) $("pickerLocationResults").innerHTML=`<div style="padding:8px;background:#eef4ff;border-radius:9px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}</div>`;
+};
+
 window.openLocationPicker = function(){
   const wrap=$("locationPickerWrap");
   if(!wrap) return;
@@ -5836,15 +5872,40 @@ window.openLocationPicker = function(){
 
     let lat=Number(postLatitude),lng=Number(postLongitude);
     if(!Number.isFinite(lat)||!Number.isFinite(lng)){
-      lat=22.7196; lng=75.8577;
+      // Start from the address already entered; otherwise show central India.
+      const q=[$("address")?.value,$("city")?.value,$("state")?.value].filter(Boolean).join(", ");
+      if(q){
+        try{
+          const res=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q=${encodeURIComponent(q)}`,{headers:{"Accept":"application/json"}});
+          const items=await res.json();
+          if(items[0]){ lat=Number(items[0].lat); lng=Number(items[0].lon); }
+        }catch(e){}
+      }
+      if(!Number.isFinite(lat)||!Number.isFinite(lng)){ lat=22.9734; lng=78.6569; }
     }
 
     if(!window._locationPickerMap){
       window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true}).setView([lat,lng],14);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-        maxZoom:19,
-        attribution:"© OpenStreetMap contributors"
+      // Detailed map tiles with visible city/area names. Try Voyager first;
+      // if the tile server is unavailable, fall back to standard OpenStreetMap.
+      const voyager=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
+        maxZoom:20,
+        attribution:"© OpenStreetMap contributors © CARTO",
+        subdomains:"abcd"
       }).addTo(window._locationPickerMap);
+      const osmFallback=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+        maxZoom:19,
+        attribution:"© OpenStreetMap contributors",
+        opacity:0
+      }).addTo(window._locationPickerMap);
+      let voyagerLoaded=false;
+      voyager.on("tileload",function(){ voyagerLoaded=true; });
+      setTimeout(function(){
+        if(!voyagerLoaded){
+          try{ window._locationPickerMap.removeLayer(voyager); }catch(e){}
+          try{ osmFallback.setOpacity(1); }catch(e){}
+        }
+      },5000);
       window._locationPickerMap.on("moveend",updatePickedLocationFromMap);
     }else{
       window._locationPickerMap.setView([lat,lng],14);
