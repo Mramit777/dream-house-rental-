@@ -1316,7 +1316,12 @@ header{
 
 /* ================= HYBRID LOCATION PICKER ================= */
 .location-picker-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px;}
-.location-picker-map{height:320px;border-radius:14px;overflow:hidden;border:1px solid #dbe5f1;margin-top:10px;background:#eef4ff;}
+.location-picker-map{height:320px;border-radius:14px;overflow:hidden;border:1px solid #dbe5f1;margin-top:10px;background:#eef4ff;position:relative;}
+.location-picker-center-pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);z-index:1000;font-size:34px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.28));pointer-events:none;}
+.location-picker-coords{text-align:center;margin-top:7px;color:#475467;font-size:12px;font-weight:700;}
+.location-center-pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);z-index:500;pointer-events:none;font-size:38px;filter:drop-shadow(0 3px 3px rgba(0,0,0,.28));}
+.location-center-dot{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.3);z-index:500;pointer-events:none;}
+.location-picked-coords{margin-top:7px;font-size:12px;color:#475467;text-align:center;}
 .location-picker-panel{margin-top:10px;padding:12px;border-radius:12px;background:#f8fbff;border:1px solid #dbe7f5;}
 @media(max-width:600px){.location-picker-actions{grid-template-columns:1fr}.location-picker-map{height:280px}}
 
@@ -1806,7 +1811,10 @@ header{
           <div class="location-picker-panel">
             <strong>🗺️ Map पर pin को move करें</strong>
             <div style="font-size:12px;color:#667085;margin-top:3px;">Pin को सही जगह पर रखें, फिर “Select This Location” दबाएँ।</div>
-            <div id="locationPickerMap" class="location-picker-map"></div>
+            <div id="locationPickerMap" class="location-picker-map">
+              <div class="location-picker-center-pin">📍</div>
+            </div>
+            <div id="locationPickedCoords" class="location-picker-coords">📍 Map के बीच वाली जगह select होगी</div>
             <button type="button" class="primary-btn" style="width:100%;margin-top:9px;" onclick="selectPickedLocation()">📍 Select This Location</button>
           </div>
         </div>
@@ -5800,50 +5808,82 @@ window.closeComparePage=function(){const m=$("comparePage");if(m)m.classList.rem
 
 /* ================= HYBRID MAP PICKER ================= */
 window._locationPickerMap=null;
-window._locationPickerMarker=null;
+window._pickedLat=null;
+window._pickedLng=null;
+
+function updatePickedLocationFromMap(){
+  const map=window._locationPickerMap;
+  if(!map) return;
+  const c=map.getCenter();
+  window._pickedLat=Number(c.lat);
+  window._pickedLng=Number(c.lng);
+  const el=$("locationPickedCoords");
+  if(el){
+    el.textContent=`📍 Selected center: ${window._pickedLat.toFixed(6)}, ${window._pickedLng.toFixed(6)}`;
+  }
+}
 
 window.openLocationPicker = function(){
   const wrap=$("locationPickerWrap");
   if(!wrap) return;
   wrap.classList.remove("hidden");
+
   setTimeout(function(){
     if(typeof L === "undefined"){
       if($("locationStatus")) $("locationStatus").innerHTML="❌ Map picker load नहीं हुआ। Internet connection check करें।";
       return;
     }
+
     let lat=Number(postLatitude),lng=Number(postLongitude);
     if(!Number.isFinite(lat)||!Number.isFinite(lng)){
       lat=22.7196; lng=75.8577;
     }
+
     if(!window._locationPickerMap){
-      window._locationPickerMap=L.map("locationPickerMap").setView([lat,lng],14);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"}).addTo(window._locationPickerMap);
-      window._locationPickerMarker=L.marker([lat,lng],{draggable:true}).addTo(window._locationPickerMap);
-      window._locationPickerMarker.on("dragend",function(){
-        const p=window._locationPickerMarker.getLatLng();
-        window._pickedLat=p.lat; window._pickedLng=p.lng;
-      });
-      window._locationPickerMap.on("click",function(e){
-        window._locationPickerMarker.setLatLng(e.latlng);
-        window._pickedLat=e.latlng.lat; window._pickedLng=e.latlng.lng;
-      });
+      window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true}).setView([lat,lng],14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+        maxZoom:19,
+        attribution:"© OpenStreetMap contributors"
+      }).addTo(window._locationPickerMap);
+      window._locationPickerMap.on("moveend",updatePickedLocationFromMap);
     }else{
       window._locationPickerMap.setView([lat,lng],14);
-      window._locationPickerMarker.setLatLng([lat,lng]);
     }
-    window._pickedLat=lat; window._pickedLng=lng;
+
+    updatePickedLocationFromMap();
     window._locationPickerMap.invalidateSize();
-  },100);
+  },150);
 };
 
 window.selectPickedLocation = async function(){
+  const map=window._locationPickerMap;
+  if(!map) return;
+
+  updatePickedLocationFromMap();
   const lat=Number(window._pickedLat),lng=Number(window._pickedLng);
   if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
+
   postLatitude=Number(lat.toFixed(7));
   postLongitude=Number(lng.toFixed(7));
+
+  if($("locationStatus")){
+    $("locationStatus").innerHTML="⏳ Selected location की details मिल रही हैं...";
+  }
+
   await reverseFillPostLocation(postLatitude,postLongitude);
-  if($("locationStatus")) $("locationStatus").innerHTML=`✅ Exact location selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो गए।`;
-  if($("locationPickerWrap")) $("locationPickerWrap").classList.add("hidden");
+
+  if($("locationStatus")){
+    $("locationStatus").innerHTML=`✅ Location selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो गए।`;
+  }
+
+  if($("locationPickerWrap")){
+    $("locationPickerWrap").classList.add("hidden");
+  }
+
+  const form=$("postPage");
+  if(form){
+    setTimeout(()=>form.scrollIntoView({behavior:"smooth",block:"start"}),80);
+  }
 };
 
 window.focusManualLocation=function(){
