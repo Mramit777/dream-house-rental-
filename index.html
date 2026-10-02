@@ -248,6 +248,69 @@ header{
 .results-near-btn:hover{background:#dbeafe;}
 @media(max-width:600px){.results-toolbar{display:block;text-align:center}.results-toolbar-actions{justify-content:center;margin-top:12px}.results-sort{max-width:100%;}}
 
+/* ================= HOME PROFESSIONAL ENHANCEMENTS ================= */
+.home-trust-row{
+  max-width:1100px;
+  margin:16px auto 0;
+  padding:0 18px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.home-trust-card{
+  background:#fff;
+  border:1px solid #e6ebf3;
+  border-radius:15px;
+  padding:13px 15px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  box-shadow:0 5px 18px rgba(15,23,42,.045);
+}
+.home-trust-icon{
+  width:42px;height:42px;flex:0 0 42px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:#eef4ff;font-size:21px;
+}
+.home-trust-card strong{display:block;font-size:13px;color:#172033}
+.home-trust-card span{display:block;font-size:11px;color:#667085;margin-top:2px}
+.hero-actions{
+  display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:14px;
+}
+.hero-actions .hero-action-btn{min-width:155px}
+.home-section-kicker{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 10px;border-radius:999px;background:#eef4ff;color:#2563eb;
+  font-size:11px;font-weight:900;margin-bottom:8px;
+}
+.category-head-row{
+  display:flex;align-items:end;justify-content:space-between;gap:15px;
+}
+.category-head-row .section-title{margin-bottom:0;text-align:left}
+.category-count-note{color:#667085;font-size:12px;font-weight:700;white-space:nowrap}
+.home-bottom-cta{
+  max-width:1100px;margin:10px auto 0;padding:0 18px;
+}
+.home-bottom-cta-card{
+  border:1px solid #dfe7f5;border-radius:22px;padding:25px 28px;
+  background:linear-gradient(135deg,#eef4ff,#faf8ff 60%,#fff);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.home-bottom-cta-card h3{font-size:22px;color:#111827}
+.home-bottom-cta-card p{margin-top:5px;color:#667085;font-size:13px}
+.home-bottom-cta-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:760px){
+  .home-trust-row{grid-template-columns:1fr;padding:0 12px}
+  .hero-actions{margin-top:12px}
+  .hero-actions .hero-action-btn{min-width:140px;flex:1}
+  .category-head-row{display:block}
+  .category-head-row .section-title{text-align:center;margin-bottom:7px}
+  .category-count-note{display:block;text-align:center}
+  .home-bottom-cta{padding:0 12px}
+  .home-bottom-cta-card{display:block;text-align:center;padding:21px 17px}
+  .home-bottom-cta-actions{justify-content:center;margin-top:13px}
+}
+
 /* ================= HERO ================= */
 
 .hero{
@@ -1570,8 +1633,28 @@ header{
 
       </div>
 
+      <div class="hero-actions">
+        <button type="button" class="primary-btn hero-action-btn" onclick="document.getElementById('rooms').scrollIntoView({behavior:'smooth'})">🏠 Browse Properties</button>
+        <button type="button" class="secondary-btn hero-action-btn" onclick="showPost()">➕ Post Your Property</button>
+      </div>
+
     </div>
 
+  </div>
+
+  <div class="home-trust-row">
+    <div class="home-trust-card">
+      <div class="home-trust-icon">🔎</div>
+      <div><strong>Smart Property Search</strong><span>City, area, type aur rent ke saath</span></div>
+    </div>
+    <div class="home-trust-card">
+      <div class="home-trust-icon">📍</div>
+      <div><strong>Location Support</strong><span>Near Me aur exact map location</span></div>
+    </div>
+    <div class="home-trust-card">
+      <div class="home-trust-icon">📞</div>
+      <div><strong>Direct Owner Contact</strong><span>Call, WhatsApp aur details</span></div>
+    </div>
   </div>
 
 
@@ -1655,14 +1738,13 @@ header{
 
 <section class="section">
 
-  <div class="section-title">
-
-    <h2>Property Categories</h2>
-
-    <p>
-      Apni requirement ke according property search karein.
-    </p>
-
+  <div class="category-head-row">
+    <div class="section-title">
+      <span class="home-section-kicker">🏠 PROPERTY TYPES</span>
+      <h2>Find the Right Property</h2>
+      <p>Apni requirement ke according property category choose karein.</p>
+    </div>
+    <div class="category-count-note">9 property categories available</div>
   </div>
 
   <div class="categories">
@@ -1772,6 +1854,19 @@ header{
   </div>
 
 </section>
+
+<div class="home-bottom-cta">
+  <div class="home-bottom-cta-card">
+    <div>
+      <h3>🏠 Apni Property bhi list karein</h3>
+      <p>Room, BHK, Flat, House, PG, Hostel ya Shop ki details add karke direct customers tak pahunchiye.</p>
+    </div>
+    <div class="home-bottom-cta-actions">
+      <button type="button" class="primary-btn" onclick="showPost()">➕ Post Property</button>
+      <button type="button" class="secondary-btn" onclick="document.getElementById('rooms').scrollIntoView({behavior:'smooth'})">🔎 View Properties</button>
+    </div>
+  </div>
+</div>
 
 </div>
 
