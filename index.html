@@ -1251,6 +1251,42 @@ header{
   }
 
 }
+
+/* ================= FULL SCREEN LOCATION PICKER ================= */
+#locationPickerWrap{position:fixed;inset:0;z-index:30000;background:rgba(15,23,42,.62);padding:0;display:flex;align-items:stretch;justify-content:center;}
+#locationPickerWrap.hidden{display:none !important;}
+.location-picker-panel{position:relative;width:100%;height:100%;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#fff!important;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 70px rgba(0,0,0,.35);}
+.location-picker-head{flex:0 0 auto;padding:12px 14px 10px;background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 2px 10px rgba(15,23,42,.08);z-index:5;}
+.location-picker-title{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.location-picker-title strong{font-size:16px;color:#111827;}
+.location-picker-title-actions{display:flex;gap:6px;}
+.location-picker-title-actions button{border:0;border-radius:9px;padding:8px 10px;font-weight:800;background:#eef4ff;color:#1d4ed8;}
+.location-picker-title-actions .close-map-btn{background:#fee2e2;color:#b42318;}
+.location-picker-body{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;}
+.location-picker-searchbar{flex:0 0 auto;padding:9px 10px;background:#f8fafc;border-bottom:1px solid #e5e7eb;z-index:4;}
+.location-map-search-row{margin-top:0;display:flex;gap:7px;flex-wrap:nowrap;}
+.location-map-search-row input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;outline:none;background:#fff;}
+.location-map-search-row input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.location-map-search-row button{white-space:nowrap;padding:10px 13px;}
+.location-map-search-status{margin-top:5px;color:#667085;font-size:12px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.location-picker-map{flex:1;min-height:0;width:100%;height:auto!important;border-radius:0!important;border:0!important;margin:0!important;background:#eef4ff;}
+.location-picker-bottom{flex:0 0 auto;padding:9px 10px;background:#fff;border-top:1px solid #e5e7eb;box-shadow:0 -2px 10px rgba(15,23,42,.08);z-index:4;}
+.location-picker-bottom button{width:100%;padding:12px;}
+.location-picker-minimized{display:none;}
+@media(max-width:600px){
+  .location-picker-title strong{font-size:14px;}
+  .location-picker-title-actions button{padding:7px 8px;font-size:12px;}
+  .location-map-search-row button{padding:10px 11px;font-size:13px;}
+}
+.location-picker-panel.is-minimized{height:auto;align-self:flex-end;margin:0!important;border-radius:14px 14px 0 0!important;}
+.location-picker-panel.is-minimized .location-picker-body,.location-picker-panel.is-minimized .location-picker-bottom{display:none;}
+.location-picker-panel.is-minimized .location-picker-head{border-radius:14px 14px 0 0;}
+
+
+.location-map-search-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.location-map-search-row input{flex:1;min-width:200px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;outline:none;background:#fff;}
+.location-map-search-row input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.location-map-search-status{margin-top:7px;color:#667085;font-size:12px;line-height:1.4;}
 </style>
 
 <style>
@@ -1316,14 +1352,9 @@ header{
 
 /* ================= HYBRID LOCATION PICKER ================= */
 .location-picker-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px;}
-.location-picker-map{height:480px;border-radius:14px;overflow:hidden;border:1px solid #dbe5f1;margin-top:10px;background:#eef4ff;}
-.location-map-search-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-.location-map-search-row input{flex:1;min-width:200px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;outline:none;background:#fff;}
-.location-map-search-row input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
-.location-map-search-status{margin-top:7px;color:#667085;font-size:12px;line-height:1.4;}
-@media(max-width:600px){.location-picker-map{height:390px;}}
+
 .location-picker-panel{margin-top:10px;padding:12px;border-radius:12px;background:#f8fbff;border:1px solid #dbe7f5;}
-@media(max-width:600px){.location-picker-actions{grid-template-columns:1fr}.location-picker-map{height:280px}}
+@media(max-width:600px){.location-picker-actions{grid-template-columns:1fr}}
 
 /* ================= PROPERTY FEATURES / COMPARE ================= */
 .facility-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px;}
@@ -1370,6 +1401,15 @@ header{
 .property-detail-gallery-thumb:hover{border-color:#2563eb;}
 @media(max-width:650px){.property-detail-content{padding:17px}.property-detail-title-row{display:block}.property-detail-rent{margin-top:8px}.property-detail-grid{grid-template-columns:1fr}.property-detail-actions{grid-template-columns:1fr}.property-detail-main-photo{height:42vh;}}
 
+
+/* Selected location preview - added only for Pick Exact Location */
+#selectedLocationPreview{margin-top:10px;padding:10px;border:1px solid #dbe5f1;border-radius:12px;background:#f8fbff;}
+#selectedLocationPreview.hidden{display:none !important;}
+.selected-location-preview-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;}
+.selected-location-preview-title{font-weight:800;color:#123b66;font-size:13px;}
+.selected-location-change-btn{border:0;border-radius:9px;padding:7px 10px;background:#eef4ff;color:#1d4ed8;font-weight:800;}
+#selectedLocationMiniMap{height:150px;width:100%;border-radius:10px;overflow:hidden;border:1px solid #dbe5f1;background:#eef4ff;}
+#selectedLocationPreviewText{margin-top:7px;font-size:12px;color:#667085;line-height:1.4;}
 </style>
 </head>
 
@@ -1808,16 +1848,30 @@ header{
         </div>
 
         <div id="locationPickerWrap" class="hidden">
-          <div class="location-picker-panel">
-            <strong>🗺️ Map पर pin को move करें</strong>
-            <div style="font-size:12px;color:#667085;margin-top:3px;">City/Area खोजें, फिर pin को drag करके बिल्कुल सही जगह रखें। Map पर tap करके भी pin move कर सकते हैं।</div>
-            <div class="location-map-search-row">
-              <input id="locationPickerSearch" type="search" placeholder="🔎 City / Area खोजें (जैसे Indore, Bhopal, Betul Bus Stand)">
-              <button type="button" class="primary-btn" onclick="searchLocationPicker()">🔎 Search</button>
+          <div class="location-picker-panel" id="locationPickerPanel">
+            <div class="location-picker-head">
+              <div class="location-picker-title">
+                <strong>🗺️ Exact Location</strong>
+                <div class="location-picker-title-actions">
+                  <button type="button" onclick="minimizeLocationPicker()">➖ Minimize</button>
+                  <button type="button" onclick="closeLocationPicker()" class="close-map-btn">✕ Close</button>
+                </div>
+              </div>
+              <div style="font-size:12px;color:#667085;margin-top:3px;">Pin को सही जगह रखें। Search, tap या drag से location बदल सकते हैं।</div>
             </div>
-            <div id="locationPickerSearchStatus" class="location-map-search-status">Location search करें, फिर pin को जरूरत के अनुसार move करें।</div>
-            <div id="locationPickerMap" class="location-picker-map"></div>
-            <button type="button" class="primary-btn" style="width:100%;margin-top:9px;" onclick="selectPickedLocation()">📍 Select This Location</button>
+            <div class="location-picker-body">
+              <div class="location-picker-searchbar">
+                <div class="location-map-search-row">
+                  <input id="locationPickerSearch" type="search" placeholder="🔎 City / Area खोजें (जैसे Indore, Bhopal, Betul Bus Stand)">
+                  <button type="button" class="primary-btn" onclick="searchLocationPicker()">🔎 Search</button>
+                </div>
+                <div id="locationPickerSearchStatus" class="location-map-search-status">City/Area search करें, फिर pin को जरूरत के अनुसार move करें।</div>
+              </div>
+              <div id="locationPickerMap" class="location-picker-map"></div>
+            </div>
+            <div class="location-picker-bottom">
+              <button type="button" class="primary-btn" onclick="selectPickedLocation()">📍 Select This Location</button>
+            </div>
           </div>
         </div>
 
@@ -1848,6 +1902,15 @@ header{
         <button type="button" class="secondary-btn" style="margin-top:8px;" onclick="clearPostLocation()">
           ✕ Clear Location
         </button>
+
+        <div id="selectedLocationPreview" class="hidden">
+          <div class="selected-location-preview-head">
+            <div class="selected-location-preview-title">📍 Selected Location</div>
+            <button type="button" class="selected-location-change-btn" onclick="changeSelectedLocation()">🗺️ Change Location</button>
+          </div>
+          <div id="selectedLocationMiniMap"></div>
+          <div id="selectedLocationPreviewText">Selected location map preview</div>
+        </div>
 
       </div>
 
@@ -5816,6 +5879,8 @@ window.openLocationPicker = function(){
   const wrap=$("locationPickerWrap");
   if(!wrap) return;
   wrap.classList.remove("hidden");
+  const panel=$("locationPickerPanel");
+  if(panel) panel.classList.remove("is-minimized");
   setTimeout(function(){
     if(typeof L === "undefined"){
       if($("locationStatus")) $("locationStatus").innerHTML="❌ Map picker load नहीं हुआ। Internet connection check करें।";
@@ -5826,8 +5891,8 @@ window.openLocationPicker = function(){
       lat=22.7196; lng=75.8577;
     }
     if(!window._locationPickerMap){
-      window._locationPickerMap=L.map("locationPickerMap").setView([lat,lng],14);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"}).addTo(window._locationPickerMap);
+      window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true,preferCanvas:false}).setView([lat,lng],14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,subdomains:["a","b","c"],attribution:"© OpenStreetMap contributors"}).addTo(window._locationPickerMap);
       window._locationPickerMarker=L.marker([lat,lng],{draggable:true}).addTo(window._locationPickerMap);
       window._locationPickerMarker.on("dragend",function(){
         const p=window._locationPickerMarker.getLatLng();
@@ -5853,22 +5918,61 @@ window.searchLocationPicker = async function(){
   const marker=window._locationPickerMarker;
   if(!input || !map || !marker) return;
   const q=input.value.trim();
-  if(!q){ if(status) status.innerHTML="❌ पहले City / Area का नाम लिखें।"; input.focus(); return; }
+  if(!q){
+    if(status) status.innerHTML="❌ पहले City / Area का नाम लिखें।";
+    input.focus();
+    return;
+  }
   if(status) status.innerHTML="⏳ Location search हो रही है...";
   try{
     const url="https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&accept-language=hi,en&q="+encodeURIComponent(q);
     const response=await fetch(url,{headers:{"Accept":"application/json"}});
     if(!response.ok) throw new Error("Search service unavailable");
     const results=await response.json();
-    if(!Array.isArray(results)||!results.length){ if(status) status.innerHTML="❌ यह location नहीं मिली। दूसरा City / Area नाम try करें।"; return; }
-    const best=results[0],lat=Number(best.lat),lng=Number(best.lon);
-    if(!Number.isFinite(lat)||!Number.isFinite(lng)){ if(status) status.innerHTML="❌ Location coordinates नहीं मिले।"; return; }
-    map.setView([lat,lng],15,{animate:true}); marker.setLatLng([lat,lng]);
-    window._pickedLat=lat; window._pickedLng=lng;
+    if(!Array.isArray(results)||!results.length){
+      if(status) status.innerHTML="❌ यह location नहीं मिली। दूसरा City / Area नाम try करें।";
+      return;
+    }
+    const best=results[0];
+    const lat=Number(best.lat),lng=Number(best.lon);
+    if(!Number.isFinite(lat)||!Number.isFinite(lng)){
+      if(status) status.innerHTML="❌ Location coordinates नहीं मिले।";
+      return;
+    }
+    map.setView([lat,lng],15,{animate:true});
+    marker.setLatLng([lat,lng]);
+    window._pickedLat=lat;
+    window._pickedLng=lng;
     if(status) status.innerHTML="✅ "+escapeHtml(best.display_name||q)+" — pin यहाँ आ गया। चाहें तो pin move करें और Select This Location दबाएँ।";
-  }catch(error){ console.error("Location picker search error:",error); if(status) status.innerHTML="❌ Location search नहीं हो पाई। Internet connection check करें।"; }
+  }catch(error){
+    console.error("Location picker search error:",error);
+    if(status) status.innerHTML="❌ Location search नहीं हो पाई। Internet connection check करें।";
+  }
 };
-window.addEventListener("keydown",function(e){ if(e.key==="Enter" && document.activeElement && document.activeElement.id==="locationPickerSearch"){ e.preventDefault(); window.searchLocationPicker(); }});
+
+window.addEventListener("keydown",function(e){
+  if(e.key==="Enter" && document.activeElement && document.activeElement.id==="locationPickerSearch"){
+    e.preventDefault();
+    window.searchLocationPicker();
+  }
+});
+
+window.minimizeLocationPicker=function(){
+  const panel=$("locationPickerPanel");
+  if(!panel) return;
+  panel.classList.toggle("is-minimized");
+  const btn=panel.querySelector(".location-picker-title-actions button");
+  if(btn) btn.innerHTML=panel.classList.contains("is-minimized")?"⬆️ Open Map":"➖ Minimize";
+  if(window._locationPickerMap && !panel.classList.contains("is-minimized")){
+    setTimeout(function(){window._locationPickerMap.invalidateSize();},150);
+  }
+};
+window.closeLocationPicker=function(){
+  const wrap=$("locationPickerWrap");
+  const panel=$("locationPickerPanel");
+  if(panel) panel.classList.remove("is-minimized");
+  if(wrap) wrap.classList.add("hidden");
+};
 
 window.selectPickedLocation = async function(){
   const lat=Number(window._pickedLat),lng=Number(window._pickedLng);
@@ -5877,7 +5981,39 @@ window.selectPickedLocation = async function(){
   postLongitude=Number(lng.toFixed(7));
   await reverseFillPostLocation(postLatitude,postLongitude);
   if($("locationStatus")) $("locationStatus").innerHTML=`✅ Exact location selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो गए।`;
+  window.updateSelectedLocationPreview();
   if($("locationPickerWrap")) $("locationPickerWrap").classList.add("hidden");
+};
+
+window._selectedLocationMiniMap=null;
+window._selectedLocationMiniMarker=null;
+window.updateSelectedLocationPreview=function(){
+  const box=$("selectedLocationPreview");
+  const mapEl=$("selectedLocationMiniMap");
+  if(!box||!mapEl) return;
+  const lat=Number(postLatitude),lng=Number(postLongitude);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
+  box.classList.remove("hidden");
+  const state=$("state")?.value||"";
+  const city=$("city")?.value||"";
+  const area=$("address")?.value||"";
+  const parts=[area,city,state].filter(Boolean);
+  const txt=$("selectedLocationPreviewText");
+  if(txt) txt.textContent=(parts.length?parts.join(", ")+" • ":"")+`📍 ${lat.toFixed(7)}, ${lng.toFixed(7)}`;
+  if(typeof L === "undefined") return;
+  if(!window._selectedLocationMiniMap){
+    window._selectedLocationMiniMap=L.map("selectedLocationMiniMap",{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false,touchZoom:false}).setView([lat,lng],15);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,subdomains:["a","b","c"],attribution:"© OpenStreetMap contributors"}).addTo(window._selectedLocationMiniMap);
+    window._selectedLocationMiniMarker=L.marker([lat,lng]).addTo(window._selectedLocationMiniMap);
+  }else{
+    window._selectedLocationMiniMap.setView([lat,lng],15);
+    window._selectedLocationMiniMarker.setLatLng([lat,lng]);
+    window._selectedLocationMiniMap.invalidateSize();
+  }
+  setTimeout(function(){if(window._selectedLocationMiniMap) window._selectedLocationMiniMap.invalidateSize();},80);
+};
+window.changeSelectedLocation=function(){
+  window.openLocationPicker();
 };
 
 window.focusManualLocation=function(){
