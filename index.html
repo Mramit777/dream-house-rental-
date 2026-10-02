@@ -1316,7 +1316,12 @@ header{
 
 /* ================= HYBRID LOCATION PICKER ================= */
 .location-picker-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px;}
-.location-picker-map{height:320px;border-radius:14px;overflow:hidden;border:1px solid #dbe5f1;margin-top:10px;background:#eef4ff;}
+.location-picker-map{height:480px;border-radius:14px;overflow:hidden;border:1px solid #dbe5f1;margin-top:10px;background:#eef4ff;}
+.location-map-search-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.location-map-search-row input{flex:1;min-width:200px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;outline:none;background:#fff;}
+.location-map-search-row input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.location-map-search-status{margin-top:7px;color:#667085;font-size:12px;line-height:1.4;}
+@media(max-width:600px){.location-picker-map{height:390px;}}
 .location-picker-panel{margin-top:10px;padding:12px;border-radius:12px;background:#f8fbff;border:1px solid #dbe7f5;}
 @media(max-width:600px){.location-picker-actions{grid-template-columns:1fr}.location-picker-map{height:280px}}
 
@@ -1805,7 +1810,12 @@ header{
         <div id="locationPickerWrap" class="hidden">
           <div class="location-picker-panel">
             <strong>🗺️ Map पर pin को move करें</strong>
-            <div style="font-size:12px;color:#667085;margin-top:3px;">Pin को सही जगह पर रखें, फिर “Select This Location” दबाएँ।</div>
+            <div style="font-size:12px;color:#667085;margin-top:3px;">City/Area खोजें, फिर pin को drag करके बिल्कुल सही जगह रखें। Map पर tap करके भी pin move कर सकते हैं।</div>
+            <div class="location-map-search-row">
+              <input id="locationPickerSearch" type="search" placeholder="🔎 City / Area खोजें (जैसे Indore, Bhopal, Betul Bus Stand)">
+              <button type="button" class="primary-btn" onclick="searchLocationPicker()">🔎 Search</button>
+            </div>
+            <div id="locationPickerSearchStatus" class="location-map-search-status">Location search करें, फिर pin को जरूरत के अनुसार move करें।</div>
             <div id="locationPickerMap" class="location-picker-map"></div>
             <button type="button" class="primary-btn" style="width:100%;margin-top:9px;" onclick="selectPickedLocation()">📍 Select This Location</button>
           </div>
@@ -5812,26 +5822,12 @@ window.openLocationPicker = function(){
       return;
     }
     let lat=Number(postLatitude),lng=Number(postLongitude);
-    // If saved coordinates are empty/invalid, start from a real India location.
-    // Do not allow accidental 0,0 or tiny invalid coordinates to open the map.
-    if(!Number.isFinite(lat)||!Number.isFinite(lng) || Math.abs(lat)<5 || Math.abs(lng)<20 || Math.abs(lat)>38 || Math.abs(lng)>100){
+    if(!Number.isFinite(lat)||!Number.isFinite(lng)){
       lat=22.7196; lng=75.8577;
     }
     if(!window._locationPickerMap){
-      window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true,attributionControl:true}).setView([lat,lng],12);
-
-      // Use OpenStreetMap directly: free, no API key, and includes city/road/place labels.
-      // Do not load Esri/CARTO here because those endpoints may show API-key-required screens.
-      const osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
-        maxZoom:19,
-        crossOrigin:true,
-        attribution:"© OpenStreetMap contributors"
-      });
-      osm.addTo(window._locationPickerMap);
-      window._locationPickerMap.on("moveend zoomend",function(){
-        const c=window._locationPickerMap.getCenter();
-        window._pickedLat=Number(c.lat); window._pickedLng=Number(c.lng);
-      });
+      window._locationPickerMap=L.map("locationPickerMap").setView([lat,lng],14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"}).addTo(window._locationPickerMap);
       window._locationPickerMarker=L.marker([lat,lng],{draggable:true}).addTo(window._locationPickerMap);
       window._locationPickerMarker.on("dragend",function(){
         const p=window._locationPickerMarker.getLatLng();
@@ -5849,6 +5845,30 @@ window.openLocationPicker = function(){
     window._locationPickerMap.invalidateSize();
   },100);
 };
+
+window.searchLocationPicker = async function(){
+  const input=$("locationPickerSearch");
+  const status=$("locationPickerSearchStatus");
+  const map=window._locationPickerMap;
+  const marker=window._locationPickerMarker;
+  if(!input || !map || !marker) return;
+  const q=input.value.trim();
+  if(!q){ if(status) status.innerHTML="❌ पहले City / Area का नाम लिखें।"; input.focus(); return; }
+  if(status) status.innerHTML="⏳ Location search हो रही है...";
+  try{
+    const url="https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&accept-language=hi,en&q="+encodeURIComponent(q);
+    const response=await fetch(url,{headers:{"Accept":"application/json"}});
+    if(!response.ok) throw new Error("Search service unavailable");
+    const results=await response.json();
+    if(!Array.isArray(results)||!results.length){ if(status) status.innerHTML="❌ यह location नहीं मिली। दूसरा City / Area नाम try करें।"; return; }
+    const best=results[0],lat=Number(best.lat),lng=Number(best.lon);
+    if(!Number.isFinite(lat)||!Number.isFinite(lng)){ if(status) status.innerHTML="❌ Location coordinates नहीं मिले।"; return; }
+    map.setView([lat,lng],15,{animate:true}); marker.setLatLng([lat,lng]);
+    window._pickedLat=lat; window._pickedLng=lng;
+    if(status) status.innerHTML="✅ "+escapeHtml(best.display_name||q)+" — pin यहाँ आ गया। चाहें तो pin move करें और Select This Location दबाएँ।";
+  }catch(error){ console.error("Location picker search error:",error); if(status) status.innerHTML="❌ Location search नहीं हो पाई। Internet connection check करें।"; }
+};
+window.addEventListener("keydown",function(e){ if(e.key==="Enter" && document.activeElement && document.activeElement.id==="locationPickerSearch"){ e.preventDefault(); window.searchLocationPicker(); }});
 
 window.selectPickedLocation = async function(){
   const lat=Number(window._pickedLat),lng=Number(window._pickedLng);
@@ -6015,42 +6035,30 @@ function renderRooms(rooms, alreadySorted=false){
 
 async function loadRooms(){
 
-  const loadingTimer = setTimeout(()=>{
-    const status = $("firebaseStatus");
-    if(status && status.textContent.includes("connecting")){
-      status.innerHTML =
-        "⏳ Firebase connection अभी भी चल रहा है... कृपया थोड़ा wait करें।";
-    }
-  }, 8000);
-
   try{
 
     $("firebaseStatus").innerHTML =
-      "⏳ Rooms load हो रहे हैं...";
+      "⏳ Firebase / Firestore connecting...";
+
 
     const snapshot =
-      await Promise.race([
-        getDocs(roomCollection),
-        new Promise((_,reject)=>
-          setTimeout(
-            ()=>reject(
-              new Error(
-                "Firestore connection timeout. Internet/Firebase connection check करें."
-              )
-            ),
-            20000
-          )
-        )
-      ]);
+      await getDocs(
+        roomCollection
+      );
+
 
     currentRooms = [];
 
+
     snapshot.forEach(item=>{
+
       currentRooms.push({
         id:item.id,
         ...item.data()
       });
+
     });
+
 
     currentRooms.sort((a,b)=>{
 
@@ -6068,10 +6076,15 @@ async function loadRooms(){
 
     });
 
+
     $("firebaseStatus").innerHTML =
       "✅ Firebase connected successfully";
 
-    renderRooms(currentRooms);
+
+    renderRooms(
+      currentRooms
+    );
+
 
     if(currentUser){
 
@@ -6080,16 +6093,19 @@ async function loadRooms(){
 
     }
 
+
   }catch(error){
 
-    console.error("loadRooms error:",error);
+    console.error(error);
 
     $("firebaseStatus").innerHTML =
       "❌ Firebase error: " +
       escapeHtml(error.message);
 
+
     $("roomsContainer").innerHTML =
       `
+
       <div style="
         grid-column:1/-1;
         text-align:center;
@@ -6103,11 +6119,8 @@ async function loadRooms(){
         </small>
 
       </div>
+
       `;
-
-  }finally{
-
-    clearTimeout(loadingTimer);
 
   }
 
