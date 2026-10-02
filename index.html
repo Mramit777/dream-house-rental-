@@ -5820,21 +5820,27 @@ window.openLocationPicker = function(){
     if(!window._locationPickerMap){
       window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true,attributionControl:true}).setView([lat,lng],14);
 
-      // Free map tiles with place names/roads. Carto Voyager is used first because
-      // it is more label-rich on mobile; OpenStreetMap is kept as a fallback.
-      const voyager=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
-        maxZoom:20,
-        subdomains:"abcd",
-        attribution:"© OpenStreetMap contributors © CARTO"
+      // City/place-name focused free map: Esri World Street Map first,
+      // with OpenStreetMap as a no-API-key fallback. Keep all other
+      // location-picker behaviour unchanged.
+      const esri=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",{
+        maxZoom:19,
+        crossOrigin:true,
+        attribution:"© Esri, HERE, Garmin, (c) OpenStreetMap contributors"
       });
       const osm=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
         maxZoom:19,
+        crossOrigin:true,
         attribution:"© OpenStreetMap contributors"
       });
-      voyager.addTo(window._locationPickerMap);
-      voyager.on("tileerror",function(){
-        if(!window._locationPickerMap._dreamOsmFallback){
-          window._locationPickerMap._dreamOsmFallback=true;
+      window._locationPickerMap._dreamMapFallback=false;
+      esri.addTo(window._locationPickerMap);
+      let tileErrors=0;
+      esri.on("tileerror",function(){
+        tileErrors++;
+        if(tileErrors>=2 && !window._locationPickerMap._dreamMapFallback){
+          window._locationPickerMap._dreamMapFallback=true;
+          try{ window._locationPickerMap.removeLayer(esri); }catch(e){}
           osm.addTo(window._locationPickerMap);
         }
       });
