@@ -1253,9 +1253,9 @@ header{
 }
 
 /* ================= FULL SCREEN LOCATION PICKER ================= */
-#locationPickerWrap{position:fixed;inset:0;z-index:30000;background:rgba(15,23,42,.62);padding:6vh 4vw;display:flex;align-items:center;justify-content:center;}
+#locationPickerWrap{position:fixed;inset:0;z-index:30000;background:rgba(15,23,42,.45);padding:3vh 4vw;display:flex;align-items:center;justify-content:center;}
 #locationPickerWrap.hidden{display:none !important;}
-.location-picker-panel{position:relative;width:100%;max-width:980px;height:82vh;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#fff!important;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 70px rgba(0,0,0,.35);}
+.location-picker-panel{position:relative;width:100%;max-width:780px;height:64vh;margin:0!important;padding:0!important;border:0!important;border-radius:14px!important;background:#fff!important;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,.28);}
 .location-picker-head{flex:0 0 auto;padding:12px 14px 10px;background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 2px 10px rgba(15,23,42,.08);z-index:5;}
 .location-picker-title{display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .location-picker-title strong{font-size:16px;color:#111827;}
@@ -1275,11 +1275,12 @@ header{
 .location-picker-result:hover{background:#f4f8ff;}
 .location-picker-result strong{display:block;color:#174a80;font-size:13px;margin-bottom:2px;}
 .location-picker-result span{display:block;color:#667085;line-height:1.3;}
-@media(max-width:600px){#locationPickerWrap{padding:3vh 2.5vw}.location-picker-panel{height:88vh;border-radius:14px!important}.location-picker-results{top:58px;max-height:155px;}}
-.location-picker-map{flex:1;min-height:0;width:100%;height:auto!important;border-radius:0!important;border:0!important;margin:0!important;background:#eef4ff;}
+@media(max-width:600px){#locationPickerWrap{padding:2vh 3vw}.location-picker-panel{height:68vh;border-radius:14px!important}.location-picker-results{top:58px;max-height:125px;}}
+.location-picker-map{flex:1 1 auto;min-height:0;width:100%;height:auto!important;border-radius:0!important;border:0!important;margin:0!important;background:#eef4ff;}
 .location-picker-bottom{flex:0 0 auto;padding:9px 10px;background:#fff;border-top:1px solid #e5e7eb;box-shadow:0 -2px 10px rgba(15,23,42,.08);z-index:4;}
 .location-picker-bottom button{width:100%;padding:12px;}
 @media(max-width:600px){
+  .location-picker-map{flex-basis:auto;height:auto!important;}
   .location-picker-title strong{font-size:14px;}
   .location-picker-title-actions button{padding:7px 8px;font-size:12px;}
   .location-map-search-row button{padding:10px 11px;font-size:13px;}
@@ -5893,7 +5894,7 @@ window.openLocationPicker = function(){
     if(!hasSavedLocation){
       lat=22.7196; lng=75.8577;
     }
-    const startZoom=hasSavedLocation?14:10;
+    const startZoom=hasSavedLocation?12:10;
     if(!window._locationPickerMap){
       window._locationPickerMap=L.map("locationPickerMap",{zoomControl:true,preferCanvas:false,scrollWheelZoom:true,doubleClickZoom:true,touchZoom:true,dragging:true}).setView([lat,lng],startZoom);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,subdomains:["a","b","c"],attribution:"© OpenStreetMap contributors"}).addTo(window._locationPickerMap);
@@ -5943,7 +5944,7 @@ window.searchLocationPicker = async function(){
       return;
     }
     if(resultsBox){
-      resultsBox.innerHTML=results.map(function(item,i){
+      resultsBox.innerHTML=results.slice(0,5).map(function(item,i){
         const name=escapeHtml(item.name||item.display_name||q);
         const display=escapeHtml(item.display_name||"");
         return `<button type="button" class="location-picker-result" onclick="chooseLocationSearchResult(${i})"><strong>📍 ${name}</strong><span>${display}</span></button>`;
@@ -5954,7 +5955,7 @@ window.searchLocationPicker = async function(){
     const best=results[0];
     const lat=Number(best.lat),lng=Number(best.lon);
     if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
-    map.setView([lat,lng],14,{animate:true});
+    map.setView([lat,lng],13,{animate:true});
     marker.setLatLng([lat,lng]);
     window._pickedLat=lat; window._pickedLng=lng;
     if(status) status.innerHTML="✅ " + escapeHtml(best.display_name||q) + " — pin यहाँ आया है। नीचे result से location चुनें या pin move करें।";
@@ -5971,7 +5972,7 @@ window.chooseLocationSearchResult=function(index){
   if(!item||!map||!marker) return;
   const lat=Number(item.lat),lng=Number(item.lon);
   if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
-  map.setView([lat,lng],14,{animate:true});
+  map.setView([lat,lng],13,{animate:true});
   marker.setLatLng([lat,lng]);
   window._pickedLat=lat; window._pickedLng=lng;
   const input=$("locationPickerSearch");
