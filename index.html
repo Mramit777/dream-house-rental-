@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Dream House Rental | Find • Rent • Stay</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3V4l5Q5k7JYw5X5c5bQ2Q3Q7f7f8Q=" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <style>
@@ -1252,31 +1251,6 @@ header{
   }
 
 }
-
-/* ================= POST LOCATION MAP ================= */
-#postLocationMap{
-  position:relative;
-  width:100%;
-  height:320px;
-  margin-top:12px;
-  border:1px solid #dbe3ef;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 8px 24px rgba(15,23,42,.08);
-  display:none;
-  background:#eef3f8;
-}
-.location-map-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.location-map-hint{
-  margin-top:8px;
-  color:#667085;
-  font-size:13px;
-}
 </style>
 
 <style>
@@ -1339,6 +1313,58 @@ header{
 .gallery-thumb.active{border-color:#2563eb;}
 .gallery-thumb img{display:block;width:70px;height:52px;object-fit:cover;border-radius:6px;}
 @media(max-width:600px){.property-status-badges{top:42px;left:8px}.gallery-box{padding:9px;border-radius:14px}.gallery-main-image{height:58vh}.gallery-thumb img{width:60px;height:45px;}}
+
+/* ================= HYBRID LOCATION PICKER ================= */
+.location-picker-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px;}
+.location-picker-map{height:320px;border-radius:14px;overflow:hidden;border:1px solid #dbe5f1;margin-top:10px;background:#eef4ff;}
+.location-picker-panel{margin-top:10px;padding:12px;border-radius:12px;background:#f8fbff;border:1px solid #dbe7f5;}
+@media(max-width:600px){.location-picker-actions{grid-template-columns:1fr}.location-picker-map{height:280px}}
+
+/* ================= PROPERTY FEATURES / COMPARE ================= */
+.facility-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px;}
+.facility-option{display:flex;align-items:center;gap:7px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;font-size:13px;font-weight:700;color:#344054;}
+.facility-option input{width:auto;}
+.facility-other{margin-top:9px;}
+.feature-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.feature-chip{display:inline-flex;align-items:center;padding:6px 9px;border-radius:999px;background:#eef4ff;color:#1d4ed8;font-size:12px;font-weight:800;}
+.compare-check{position:absolute;left:10px;bottom:10px;z-index:4;background:rgba(255,255,255,.95);padding:6px 9px;border-radius:9px;font-size:12px;font-weight:800;box-shadow:0 3px 10px rgba(0,0,0,.12);}
+.compare-bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9990;background:#111827;color:#fff;padding:10px 14px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.25);display:none;align-items:center;gap:10px;flex-wrap:wrap;max-width:calc(100% - 20px);}
+.compare-bar.show{display:flex;}
+.compare-bar button{border:0;border-radius:9px;padding:8px 11px;font-weight:800;cursor:pointer;}
+.compare-table{width:100%;border-collapse:collapse;margin-top:14px;overflow:hidden;border-radius:12px;}
+.compare-table th,.compare-table td{padding:10px;border:1px solid #e5e7eb;text-align:left;font-size:13px;vertical-align:top;}
+.compare-table th{background:#f8fafc;color:#344054;}
+.similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;}
+.similar-item{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fff;cursor:pointer;}
+.similar-item img{width:100%;height:110px;object-fit:cover;border-radius:9px;}
+@media(max-width:700px){.facility-grid{grid-template-columns:1fr 1fr}.similar-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:450px){.facility-grid{grid-template-columns:1fr}.similar-grid{grid-template-columns:1fr;}}
+
+/* ================= FULL PROPERTY DETAIL PAGE ================= */
+.property-detail-page{position:fixed;inset:0;z-index:99990;background:#f4f7fb;overflow-y:auto;display:none;}
+.property-detail-page.show{display:block;}
+.property-detail-top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid #e5eaf1;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.property-detail-back{border:0;background:#eef4ff;color:#1d4ed8;border-radius:11px;padding:10px 14px;font-weight:900;}
+.property-detail-inner{max-width:1050px;margin:20px auto 50px;padding:0 16px;}
+.property-detail-card{background:#fff;border:1px solid #e4eaf2;border-radius:22px;overflow:hidden;box-shadow:0 12px 35px rgba(15,23,42,.08);}
+.property-detail-main-photo{width:100%;height:min(58vh,560px);object-fit:cover;display:block;background:#edf2f7;}
+.property-detail-content{padding:24px;}
+.property-detail-title-row{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;}
+.property-detail-title-row h1{font-size:clamp(26px,5vw,42px);color:#111827;}
+.property-detail-rent{font-size:25px;font-weight:900;color:#2563eb;white-space:nowrap;}
+.property-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;}
+.property-detail-info{padding:14px;border-radius:13px;background:#f8fafc;border:1px solid #e8edf4;}
+.property-detail-info strong{display:block;font-size:12px;color:#667085;margin-bottom:4px;}
+.property-detail-info span{color:#172033;font-weight:700;}
+.property-detail-description{margin-top:18px;padding:16px;border-radius:14px;background:#f8fafc;color:#475467;white-space:pre-wrap;}
+.property-detail-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px;}
+.property-detail-location{margin-top:18px;padding:16px;border-radius:15px;background:#eef4ff;border:1px solid #dbe7ff;}
+.property-detail-location strong{color:#1d4ed8;}
+.property-detail-gallery-row{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 0;}
+.property-detail-gallery-thumb{width:80px;height:58px;object-fit:cover;border-radius:9px;cursor:pointer;border:2px solid transparent;flex:0 0 auto;}
+.property-detail-gallery-thumb:hover{border-color:#2563eb;}
+@media(max-width:650px){.property-detail-content{padding:17px}.property-detail-title-row{display:block}.property-detail-rent{margin-top:8px}.property-detail-grid{grid-template-columns:1fr}.property-detail-actions{grid-template-columns:1fr}.property-detail-main-photo{height:42vh;}}
+
 </style>
 </head>
 
@@ -1764,32 +1790,54 @@ header{
 
       <div class="form-group location-box">
 
-        <label>📍 Property Location <span style="font-weight:400;color:#667085;">(Optional)</span></label>
+        <label>📍 Google Location <span style="font-weight:400;color:#667085;">(Optional)</span></label>
 
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button type="button" class="secondary-btn" onclick="openPostLocationPicker()">🗺️ Select Location on Map</button>
+        <div class="location-picker-actions">
           <button type="button" class="secondary-btn" onclick="getPostLocation()">📍 Use Current Location</button>
-          <button type="button" class="secondary-btn" onclick="clearPostLocation()">✕ Clear Location</button>
+          <button type="button" class="secondary-btn" onclick="openLocationPicker()">🗺️ Pick Exact Location</button>
         </div>
 
-        <div id="postLocationPicker" style="display:none;margin-top:10px;">
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <input id="postMapSearch" placeholder="🔎 Map में जगह खोजें (जैसे Betul Bus Stand)" style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
-            <button type="button" class="primary-btn" onclick="searchPostMapLocation()">🔎 Search</button>
-          </div>
-          <div id="postLocationMap"></div>
-          <div class="location-map-actions">
-            <button type="button" class="secondary-btn" onclick="useMapCurrentLocation()">📍 My Current Location</button>
-            <button type="button" class="primary-btn" onclick="confirmPostMapLocation()">✅ Select This Location</button>
-            <button type="button" class="secondary-btn" onclick="openPostGoogleMap()">🧭 Open in Google Maps</button>
-          </div>
-          <div class="location-map-hint">📍 लाल pin map के बीच में रहेगा। Map को उंगली से move करके सही जगह pin के नीचे लाएँ, फिर <b>✅ Select This Location</b> दबाएँ।</div>
-          <div id="postMapResults" style="margin-top:8px;"></div>
+        <div class="location-picker-actions">
+          <button type="button" class="secondary-btn" onclick="focusManualLocation()">✍️ Enter Manually</button>
+          <button type="button" class="secondary-btn" onclick="openPostGoogleMap()">🌐 Open Google Maps</button>
         </div>
+
+        <div id="locationPickerWrap" class="hidden">
+          <div class="location-picker-panel">
+            <strong>🗺️ Map पर pin को move करें</strong>
+            <div style="font-size:12px;color:#667085;margin-top:3px;">Pin को सही जगह पर रखें, फिर “Select This Location” दबाएँ।</div>
+            <div id="locationPickerMap" class="location-picker-map"></div>
+            <button type="button" class="primary-btn" style="width:100%;margin-top:9px;" onclick="selectPickedLocation()">📍 Select This Location</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <input id="postMapSearch"
+                 placeholder="Map में जगह खोजें (जैसे Betul Bus Stand)"
+                 style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
+          <button type="button" class="primary-btn" onclick="searchPostMapLocation()">
+            🔎 Search & Add Location
+          </button>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <input id="postGoogleMapLink"
+                 placeholder="Google Maps link paste करें"
+                 style="flex:1;min-width:220px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;">
+          <button type="button" class="secondary-btn" onclick="addLocationFromGoogleMapLink()">
+            📌 Add Map Link Location
+          </button>
+        </div>
+
+        <div id="postMapResults" style="margin-top:8px;"></div>
 
         <div id="locationStatus" style="margin-top:8px;color:#667085;font-size:13px;">
-          Location optional है। Map से location चुनें या Current Location इस्तेमाल करें।
+          Location add करने के लिए “Get Current Location” दबाएँ।
         </div>
+
+        <button type="button" class="secondary-btn" style="margin-top:8px;" onclick="clearPostLocation()">
+          ✕ Clear Location
+        </button>
 
       </div>
 
@@ -1833,6 +1881,77 @@ header{
 
         </select>
 
+      </div>
+
+      <div class="form-group">
+        <label>Security Deposit ₹</label>
+        <input id="deposit" type="number" placeholder="5000">
+      </div>
+
+      <div class="form-group">
+        <label>Maintenance / Other Charge ₹</label>
+        <input id="maintenance" type="number" placeholder="0">
+      </div>
+
+      <div class="form-group">
+        <label>Electricity</label>
+        <select id="electricityMode">
+          <option value="Extra">Electricity Extra</option>
+          <option value="Included">Electricity Included</option>
+          <option value="Available">Electricity Available</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Rent Negotiable</label>
+        <select id="rentNegotiable">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Suitable For</label>
+        <select id="suitableFor">
+          <option value="">Select</option>
+          <option>Family</option><option>Bachelor</option><option>Female</option>
+          <option>Students</option><option>Working Professionals</option><option>Company / Office</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Property Rules</label>
+        <select id="propertyRules">
+          <option value="">Select</option>
+          <option>Pets Allowed</option><option>Smoking Allowed</option><option>Cooking Allowed</option>
+          <option>Guests Allowed</option><option>No Time Restriction</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="grid-column:1/-1;">
+        <label>✨ Property Facilities / सुविधाएँ</label>
+        <div class="facility-grid">
+          <label class="facility-option"><input type="checkbox" name="facility" value="⚡ 24 घंटे बिजली">⚡ 24 घंटे बिजली</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🔋 Power Backup">🔋 Power Backup</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="💧 24 घंटे पानी">💧 24 घंटे पानी</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🚗 Car Parking">🚗 Car Parking</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🛵 Bike Parking">🛵 Bike Parking</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🚿 Attached Bathroom">🚿 Attached Bathroom</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🍳 Kitchen">🍳 Kitchen</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🌿 Balcony">🌿 Balcony</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🛏️ Furnished">🛏️ Furnished</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="❄️ AC">❄️ AC</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🌀 Cooler">🌀 Cooler</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="📶 Wi-Fi">📶 Wi-Fi</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="📹 CCTV">📹 CCTV</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="👮 Security Guard">👮 Security Guard</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🔐 Gated Property">🔐 Gated Property</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🏪 Nearby Market">🏪 Nearby Market</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🏫 Nearby School">🏫 Nearby School</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🏥 Nearby Hospital">🏥 Nearby Hospital</label>
+          <label class="facility-option"><input type="checkbox" name="facility" value="🚌 Public Transport">🚌 Public Transport</label>
+        </div>
+        <input id="facilityOther" class="facility-other" placeholder="➕ Other facility (optional)">
       </div>
 
       <div class="form-group">
@@ -4514,78 +4633,22 @@ window.previewPhoto = async function(event){
 
 };
 
-/* ================= PROPERTY LOCATION MAP ================= */
-
-let postMap = null;
-let postMapSelected = false;
-
-function ensurePostMap(){
-  const mapEl = $("postLocationMap");
-  if(!mapEl || typeof L === "undefined") return false;
-  if(postMap) return true;
-
-  postMap = L.map(mapEl, {zoomControl:true}).setView([22.9734,78.6569], 5);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom:19,
-    attribution:'&copy; OpenStreetMap contributors'
-  }).addTo(postMap);
-
-  /* Center-pin picker: moving the map changes the location under the pin. */
-  postMap.on("moveend", function(){
-    const c = postMap.getCenter();
-    postLatitude = Number(c.lat.toFixed(7));
-    postLongitude = Number(c.lng.toFixed(7));
-    postMapSelected = true;
-    if($("locationStatus") && !window._postMapConfirming){
-      $("locationStatus").innerHTML = `📍 Pin location ready: ${postLatitude}, ${postLongitude} • अब “Select This Location” दबाएँ।`;
-    }
-  });
-  return true;
-}
-
-function centerPostMap(lat,lng,zoom=16){
-  lat=Number(lat); lng=Number(lng);
-  if(!Number.isFinite(lat)||!Number.isFinite(lng)||!postMap) return;
-  postLatitude=Number(lat.toFixed(7));
-  postLongitude=Number(lng.toFixed(7));
-  postMapSelected=true;
-  postMap.setView([postLatitude,postLongitude], zoom, {animate:true});
-}
-
-window.openPostLocationPicker = function(){
-  const panel=$("postLocationPicker");
-  if(panel) panel.style.display="block";
-  const mapEl=$("postLocationMap");
-  if(mapEl) mapEl.style.display="block";
-  if(!ensurePostMap()){
-    if($("locationStatus")) $("locationStatus").innerHTML="❌ Map load नहीं हुआ। Internet connection check करें।";
-    return;
-  }
-  setTimeout(()=>{
-    postMap.invalidateSize();
-    if(postLatitude!==null && postLongitude!==null){
-      centerPostMap(postLatitude,postLongitude,Math.max(postMap.getZoom(),16));
-    }
-  },100);
-};
+/* ================= GOOGLE LOCATION ================= */
 
 window.getPostLocation = function(){
-  window.openPostLocationPicker();
   if(!navigator.geolocation){
     $("locationStatus").textContent="❌ इस browser में GPS support नहीं है।";
     return;
   }
   $("locationStatus").textContent="⏳ आपकी current location मिल रही है...";
   navigator.geolocation.getCurrentPosition(async function(position){
-    centerPostMap(position.coords.latitude,position.coords.longitude,17);
-    await window.confirmPostMapLocation(true);
+    postLatitude=Number(position.coords.latitude.toFixed(7));
+    postLongitude=Number(position.coords.longitude.toFixed(7));
+    await reverseFillPostLocation(postLatitude,postLongitude);
+    $("locationStatus").innerHTML=`✅ Location saved: ${postLatitude}, ${postLongitude} • State/City/Area भी auto-fill हो गए।`;
   },function(){
     $("locationStatus").textContent="❌ Location नहीं मिली। Phone Location ON करके permission Allow करें।";
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
-};
-
-window.useMapCurrentLocation = function(){
-  window.getPostLocation();
 };
 
 async function reverseFillPostLocation(lat,lng){
@@ -4607,7 +4670,6 @@ async function reverseFillPostLocation(lat,lng){
 window.searchPostMapLocation = async function(){
   const q=$("postMapSearch")?.value.trim();
   if(!q){ $("postMapResults").innerHTML="❌ पहले map में जगह का नाम लिखें।"; return; }
-  if(!ensurePostMap()) return;
   const box=$("postMapResults");
   box.innerHTML="⏳ Location search हो रही है...";
   try{
@@ -4616,11 +4678,11 @@ window.searchPostMapLocation = async function(){
     if(!res.ok) throw new Error("Search failed");
     const items=await res.json();
     if(!items.length){ box.innerHTML="❌ Location नहीं मिली। दूसरा नाम try करें।"; return; }
-    window._postMapResults=items;
     box.innerHTML=items.map((item,i)=>{
       const safeName=escapeHtml(item.display_name||q);
       return `<button type="button" class="secondary-btn" style="display:block;width:100%;text-align:left;margin-top:6px;" onclick="usePostMapResult(${i})">📍 ${safeName}</button>`;
     }).join("");
+    window._postMapResults=items;
   }catch(e){
     console.error(e);
     box.innerHTML="❌ Map search अभी उपलब्ध नहीं है। Internet connection check करें।";
@@ -4630,47 +4692,88 @@ window.searchPostMapLocation = async function(){
 window.usePostMapResult = async function(index){
   const item=window._postMapResults?.[index];
   if(!item) return;
-  window.openPostLocationPicker();
-  centerPostMap(Number(item.lat),Number(item.lon),17);
-  $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br>अब map को थोड़ा move करके exact जगह pin के नीचे रखें और <b>✅ Select This Location</b> दबाएँ।</div>`;
-  $("locationStatus").innerHTML=`📍 Location map पर आ गई है। Exact जगह pin के नीचे रखें।`;
-};
-
-window.confirmPostMapLocation = async function(fromCurrent=false){
-  if(!postMap){
-    if(!fromCurrent){ alert("पहले “Select Location on Map” खोलें।"); }
-    return;
-  }
-  const c=postMap.getCenter();
-  postLatitude=Number(c.lat.toFixed(7));
-  postLongitude=Number(c.lng.toFixed(7));
-  postMapSelected=true;
-  window._postMapConfirming=true;
-  await reverseFillPostLocation(postLatitude,postLongitude);
-  window._postMapConfirming=false;
-  $("locationStatus").innerHTML=`✅ Location selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो गए।`;
+  postLatitude=Number(Number(item.lat).toFixed(7));
+  postLongitude=Number(Number(item.lon).toFixed(7));
+  const a=item.address||{};
+  const stateName=a.state || a.state_district || "";
+  const city=a.city || a.town || a.municipality || a.village || a.county || "";
+  const area=a.suburb || a.neighbourhood || a.quarter || a.residential || a.village || "";
+  if($("state") && INDIA_STATES.includes(stateName)) $("state").value=stateName;
+  if($("city") && city) $("city").value=city;
+  if($("address") && (area || item.display_name)) $("address").value=area || item.display_name;
+  $("locationStatus").innerHTML=`✅ Map location added: ${postLatitude}, ${postLongitude}`;
+  $("postMapResults").innerHTML=`<div style="padding:10px;background:#eef4ff;border-radius:10px;color:#1d4ed8;">📍 ${escapeHtml(item.display_name||"")}<br><button type="button" class="secondary-btn" style="margin-top:7px;" onclick="openPostGoogleMap()">🗺️ Open selected location in Google Maps</button></div>`;
 };
 
 window.clearPostLocation = function(){
-  postLatitude=null;
-  postLongitude=null;
-  postMapSelected=false;
-  if($("postMapSearch")) $("postMapSearch").value="";
-  if($("postMapResults")) $("postMapResults").innerHTML="";
-  if($("locationStatus")) $("locationStatus").innerHTML="📍 Location clear हो गई। अब नई location select कर सकते हैं।";
+  postLatitude = null;
+  postLongitude = null;
+  if($("postMapSearch")) $("postMapSearch").value = "";
+  if($("postGoogleMapLink")) $("postGoogleMapLink").value = "";
+  if($("postMapResults")) $("postMapResults").innerHTML = "";
+  if($("locationStatus")) $("locationStatus").innerHTML = "📍 Location clear हो गई। अब नई location select कर सकते हैं।";
+};
+
+window.addLocationFromGoogleMapLink = async function(){
+  const raw = $("postGoogleMapLink")?.value.trim();
+  if(!raw){
+    if($("locationStatus")) $("locationStatus").innerHTML="❌ पहले Google Maps link paste करें।";
+    return;
+  }
+  let lat=null, lng=null;
+  const at = raw.match(/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);
+  const q = raw.match(/[?&](?:q|query|ll)=(-?\d+(?:\.\d+)?)[,%2C]+(-?\d+(?:\.\d+)?)/i);
+  const pair = raw.match(/(-?\d{1,3}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
+  const m = at || q || pair;
+  if(m){ lat=Number(m[1]); lng=Number(m[2]); }
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180){
+    if($("locationStatus")) $("locationStatus").innerHTML="❌ Link में latitude/longitude नहीं मिला। Google Maps से पूरा link copy करें।";
+    return;
+  }
+  postLatitude=Number(lat.toFixed(7)); postLongitude=Number(lng.toFixed(7));
+  await reverseFillPostLocation(postLatitude,postLongitude);
+  if($("locationStatus")) $("locationStatus").innerHTML=`✅ Google Maps link से location add: ${postLatitude}, ${postLongitude}`;
 };
 
 window.openPostGoogleMap = function(){
-  let url="";
-  if(postLatitude!==null && postLongitude!==null){
-    url="https://www.google.com/maps?q="+encodeURIComponent(postLatitude+","+postLongitude);
+  let url = "";
+  if(postLatitude !== null && postLongitude !== null){
+    url = "https://www.google.com/maps?q=" + encodeURIComponent(postLatitude + "," + postLongitude);
   }else{
-    const query=[$("address")?.value.trim(),$("city")?.value.trim(),$("state")?.value.trim()].filter(Boolean).join(", ");
-    if(!query){ alert("पहले map पर location चुनें या Address / City डालें।"); return; }
-    url="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(query);
+    const query = [$("address").value.trim(),$("city").value.trim(),$("state").value.trim()].filter(Boolean).join(", ");
+    if(!query){ alert("पहले Address / City डालें या Current Location लें।"); return; }
+    url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
   }
   window.open(url,"_blank");
 };
+
+window.openGoogleLocation = function(lat,lng,address,city,state){
+
+  let url = "";
+
+  if(lat !== null && lat !== undefined && lng !== null && lng !== undefined && lat !== "" && lng !== ""){
+    url =
+      "https://www.google.com/maps?q=" +
+      encodeURIComponent(lat + "," + lng);
+  }else{
+    const query = [address,city,state]
+      .filter(Boolean)
+      .join(", ");
+
+    if(!query){
+      alert("Google Location उपलब्ध नहीं है।");
+      return;
+    }
+
+    url =
+      "https://www.google.com/maps/search/?api=1&query=" +
+      encodeURIComponent(query);
+  }
+
+  window.open(url,"_blank");
+
+};
+
 
 /* ================= POST ROOM ================= */
 
@@ -4714,6 +4817,16 @@ window.postRoom = async function(){
 
   const description =
     $("description").value.trim();
+
+  const deposit = Number($("deposit")?.value || 0);
+  const maintenance = Number($("maintenance")?.value || 0);
+  const electricityMode = $("electricityMode")?.value || "Extra";
+  const rentNegotiable = $("rentNegotiable")?.value || "No";
+  const suitableFor = $("suitableFor")?.value || "";
+  const propertyRules = $("propertyRules")?.value || "";
+  const facilities = Array.from(document.querySelectorAll('input[name="facility"]:checked')).map(el=>el.value);
+  const otherFacility = $("facilityOther")?.value.trim() || "";
+  if(otherFacility) facilities.push("➕ " + otherFacility);
 
 
   if(!name){ $("postStatus").innerHTML="❌ Owner Name भरें।"; $("name").focus(); return; }
@@ -4774,6 +4887,13 @@ window.postRoom = async function(){
       rent:Number(rent),
 
       description:description,
+      deposit:deposit,
+      maintenance:maintenance,
+      electricityMode:electricityMode,
+      rentNegotiable:rentNegotiable,
+      suitableFor:suitableFor,
+      propertyRules:propertyRules,
+      facilities:facilities,
 
       image:
         currentPhotoData || "",
@@ -4948,6 +5068,14 @@ window.editRoom = async function(id){
 
   $("description").value =
     room.description || "";
+  if($("deposit")) $("deposit").value = room.deposit || "";
+  if($("maintenance")) $("maintenance").value = room.maintenance || "";
+  if($("electricityMode")) $("electricityMode").value = room.electricityMode || "Extra";
+  if($("rentNegotiable")) $("rentNegotiable").value = room.rentNegotiable || "No";
+  if($("suitableFor")) $("suitableFor").value = room.suitableFor || "";
+  if($("propertyRules")) $("propertyRules").value = room.propertyRules || "";
+  document.querySelectorAll('input[name="facility"]').forEach(el=>el.checked=Array.isArray(room.facilities)&&room.facilities.includes(el.value));
+  if($("facilityOther")) $("facilityOther").value = (Array.isArray(room.facilities)?room.facilities.find(x=>String(x).startsWith("➕ ")):"")?.replace(/^➕ /,"") || "";
 
 
   postLatitude =
@@ -5130,6 +5258,14 @@ function clearPostForm(){
   $("type").value = "Room";
   $("furnishing").value = "Unfurnished";
   $("rent").value = "";
+  if($("deposit")) $("deposit").value = "";
+  if($("maintenance")) $("maintenance").value = "";
+  if($("electricityMode")) $("electricityMode").value = "Extra";
+  if($("rentNegotiable")) $("rentNegotiable").value = "No";
+  if($("suitableFor")) $("suitableFor").value = "";
+  if($("propertyRules")) $("propertyRules").value = "";
+  document.querySelectorAll('input[name="facility"]').forEach(el=>el.checked=false);
+  if($("facilityOther")) $("facilityOther").value = "";
   $("description").value = "";
 
   postLatitude = null;
@@ -5338,7 +5474,10 @@ function renderRoomCard(
   return `
 
     <div class="room-card"
-         data-room-id="${escapeHtml(room.id)}">
+         data-room-id="${escapeHtml(room.id)}"
+         onclick="openPropertyDetails('${escapeJs(room.id)}',event)"
+         role="button"
+         tabindex="0">
 
       <div class="room-image-wrap">
 
@@ -5365,6 +5504,10 @@ function renderRoomCard(
           title="Save Property">
           ${saved ? "❤️" : "♡"}
         </button>
+
+        <label class="compare-check" onclick="event.stopPropagation()">
+          <input type="checkbox" ${window.compareIds?.includes(room.id)?"checked":""} onchange="toggleCompare('${escapeJs(room.id)}',this.checked)"> Compare
+        </label>
 
       </div>
 
@@ -5424,6 +5567,10 @@ function renderRoomCard(
               ${escapeHtml(room.furnishing || "")}
             </span>
           </div>
+
+          ${room.rentNegotiable === "Yes" ? `<div>💬 <span>Rent Negotiable</span></div>` : ""}
+          ${room.suitableFor ? `<div>👨‍👩‍👧 <span>Suitable: ${escapeHtml(room.suitableFor)}</span></div>` : ""}
+          ${Array.isArray(room.facilities) && room.facilities.length ? `<div style="display:block"><strong style="color:#1d4ed8;">✨ Facilities</strong><div class="feature-chips">${room.facilities.slice(0,5).map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}${room.facilities.length>5?`<span class="feature-chip">+${room.facilities.length-5} more</span>`:""}</div></div>` : ""}
 
           ${
             room.createdAt
@@ -5497,6 +5644,8 @@ function renderRoomCard(
             ${saved ? "❤️ Saved" : "♡ Save"}
           </button>
 
+          <button class="small-btn" onclick="toggleCompare('${escapeJs(room.id)}',!window.compareIds.includes('${escapeJs(room.id)}'))">⚖️ Compare</button>
+
           ${ownerActions}
 
         </div>
@@ -5509,6 +5658,198 @@ function renderRoomCard(
 
 }
 
+
+/* ================= FULL PROPERTY DETAIL PAGE ================= */
+window._propertyDetailOpen = false;
+
+window.openPropertyDetails = function(id,event){
+  if(event && event.target && event.target.closest && event.target.closest("button,a,input,select,textarea")) return;
+  const room=currentRooms.find(item=>item.id===id);
+  if(!room) return;
+
+  const gallery = Array.isArray(room.images) && room.images.length
+    ? room.images.slice(0,4)
+    : (room.image ? [room.image] : []);
+  const image = gallery[0] || "https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=80";
+  const modalId="propertyDetailPage";
+  let modal=$(modalId);
+  if(!modal){
+    modal=document.createElement("div");
+    modal.id=modalId;
+    modal.className="property-detail-page";
+    document.body.appendChild(modal);
+  }
+
+  const locationText=[room.address,room.city,room.state].filter(Boolean).join(", ");
+  const hasCoords=Number.isFinite(Number(room.latitude)) && Number.isFinite(Number(room.longitude));
+  const galleryHtml=gallery.length>1 ? `<div class="property-detail-gallery-row">${gallery.map((src,i)=>`<img class="property-detail-gallery-thumb" src="${escapeHtml(src)}" alt="Photo ${i+1}" onclick="openRoomGallery('${escapeJs(room.id)}')">`).join("")}</div>` : "";
+  const ownerActions=currentUser && room.ownerId===currentUser.uid ? `
+    <button class="small-btn edit" onclick="editRoom('${escapeJs(room.id)}')">✏️ Edit Property</button>
+    <button class="small-btn delete" onclick="deleteRoom('${escapeJs(room.id)}')">🗑️ Delete Property</button>` : `
+    <button class="small-btn" onclick="requestPropertyRate('${escapeJs(room.id)}')">💰 Rate Request</button>`;
+
+  modal.innerHTML=`
+    <div class="property-detail-top">
+      <button class="property-detail-back" type="button" onclick="closePropertyDetails()">← Back to Properties</button>
+      <strong>🏠 Property Details</strong>
+      <button class="small-btn" type="button" onclick="closePropertyDetails()">✕</button>
+    </div>
+    <div class="property-detail-inner">
+      <div class="property-detail-card">
+        <img class="property-detail-main-photo" src="${escapeHtml(image)}" alt="Property" onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=80'">
+        ${galleryHtml}
+        <div class="property-detail-content">
+          <div class="property-detail-title-row">
+            <div>
+              <div class="property-badge" style="position:static;display:inline-flex;margin-bottom:8px;">${escapeHtml(room.type||"Property")}</div>
+              <h1>${escapeHtml(room.type||"Property")}</h1>
+            </div>
+            <div class="property-detail-rent">₹${escapeHtml(room.rent||"")}<small style="display:block;text-align:right;color:#98a2b3;font-size:12px;">/ month</small></div>
+          </div>
+          <div class="property-detail-grid">
+            <div class="property-detail-info"><strong>👤 Owner</strong><span>${escapeHtml(room.name||"-")}</span></div>
+            <div class="property-detail-info"><strong>📍 City / State</strong><span>${escapeHtml([room.city,room.state].filter(Boolean).join(", ")||"-")}</span></div>
+            <div class="property-detail-info"><strong>🏠 Area / Address</strong><span>${escapeHtml(room.address||"-")}</span></div>
+            <div class="property-detail-info"><strong>🛋️ Furnishing</strong><span>${escapeHtml(room.furnishing||"-")}</span></div>
+            <div class="property-detail-info"><strong>📅 Posted</strong><span>${escapeHtml(formatDate(room.createdAt)||"-")}</span></div>
+            ${Number.isFinite(Number(room._distanceKm)) ? `<div class="property-detail-info"><strong>📏 Distance</strong><span>${Number(room._distanceKm).toFixed(1)} km away</span></div>` : ""}
+            <div class="property-detail-info"><strong>🔐 Security Deposit</strong><span>₹${escapeHtml(room.deposit||0)}</span></div>
+            <div class="property-detail-info"><strong>🧾 Maintenance</strong><span>₹${escapeHtml(room.maintenance||0)}</span></div>
+            <div class="property-detail-info"><strong>⚡ Electricity</strong><span>${escapeHtml(room.electricityMode||"Extra")}</span></div>
+            <div class="property-detail-info"><strong>👨‍👩‍👧 Suitable For</strong><span>${escapeHtml(room.suitableFor||"-")}</span></div>
+            <div class="property-detail-info"><strong>📋 Rule</strong><span>${escapeHtml(room.propertyRules||"-")}</span></div>
+          </div>
+          ${room.rentNegotiable === "Yes" ? `<div class="property-detail-description"><strong>💬 Rent Negotiable</strong><br>Owner ने rent negotiable रखा है।</div>` : ""}
+          ${Array.isArray(room.facilities)&&room.facilities.length ? `<div class="property-detail-description"><strong>✨ Facilities / सुविधाएँ</strong><div class="feature-chips">${room.facilities.map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}</div></div>` : ""}
+          ${room.description ? `<div class="property-detail-description"><strong>📝 Description</strong><br>${escapeHtml(room.description)}</div>` : ""}
+          <div class="property-detail-actions">
+            <button class="small-btn primary" onclick="contactOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.id)}')">📞 Call Owner</button>
+            <button class="small-btn whatsapp" onclick="whatsappOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.type||"property")}','${escapeJs(room.city||"")}','${escapeJs(room.id)}')">💬 WhatsApp</button>
+            <button class="small-btn save" onclick="toggleSaveRoom('${escapeJs(room.id)}')">${savedRoomIds.includes(room.id)?"❤️ Saved":"♡ Save Property"}</button>
+            ${ownerActions}
+          </div>
+          <div class="property-detail-location">
+            <strong>📍 Property Location</strong>
+            <div style="margin-top:5px;color:#475467;">${escapeHtml(locationText||"Location details available नहीं हैं।")}</div>
+            <button type="button" class="primary-btn" style="margin-top:10px;width:100%;" onclick="openGoogleLocation(${hasCoords?`'${escapeJs(room.latitude)}','${escapeJs(room.longitude)}'`:`null,null`},'${escapeJs(room.address||"")}','${escapeJs(room.city||"")}','${escapeJs(room.state||"")}')">🗺️ Open This Location in Google Maps</button>
+          </div>
+          <div class="property-detail-description" style="background:#fff;border:1px solid #e5e7eb;">
+            <strong>⚖️ Compare / Similar</strong>
+            <button type="button" class="secondary-btn" style="margin-top:9px;" onclick="toggleCompare('${escapeJs(room.id)}',!window.compareIds.includes('${escapeJs(room.id)}'))">⚖️ Add / Remove Compare</button>
+            <div id="similarProperties-${escapeJs(room.id)}"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  modal.classList.add("show");
+  document.body.style.overflow="hidden";
+  const similar=currentRooms.filter(r=>r.id!==room.id && (r.type===room.type || r.city===room.city)).slice(0,3);
+  const simBox=$("similarProperties-"+room.id);
+  if(simBox) simBox.innerHTML=similar.length?`<div class="similar-grid">${similar.map(r=>{const im=(Array.isArray(r.images)&&r.images.length?r.images[0]:r.image)||"https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=600&q=80";return `<div class="similar-item" onclick="openPropertyDetails('${escapeJs(r.id)}',event)"><img src="${escapeHtml(im)}"><strong>${escapeHtml(r.type||"Property")}</strong><div>₹${escapeHtml(r.rent||0)} • ${escapeHtml(r.city||"")}</div></div>`}).join("")}</div>`:`<div style="margin-top:8px;color:#667085">अभी similar property नहीं मिली।</div>`;
+  window._propertyDetailOpen=true;
+  try{history.pushState({propertyDetail:id},"",location.pathname+location.search+"#property-"+encodeURIComponent(id));}catch(e){}
+};
+
+window.closePropertyDetails = function(fromPop){
+  const modal=$("propertyDetailPage");
+  if(modal) modal.classList.remove("show");
+  document.body.style.overflow="";
+  const wasOpen=window._propertyDetailOpen;
+  window._propertyDetailOpen=false;
+  if(wasOpen && !fromPop){
+    try{history.back();}catch(e){}
+  }
+};
+
+window.addEventListener("popstate",function(){
+  if(window._propertyDetailOpen) closePropertyDetails(true);
+});
+
+/* ================= COMPARE PROPERTIES ================= */
+window.compareIds = window.compareIds || [];
+window.toggleCompare = function(id,checked){
+  if(checked){
+    if(!window.compareIds.includes(id)) window.compareIds.push(id);
+    if(window.compareIds.length>3){ window.compareIds.shift(); alert("एक साथ maximum 3 properties compare कर सकते हैं।"); }
+  }else{
+    window.compareIds=window.compareIds.filter(x=>x!==id);
+  }
+  updateCompareBar();
+  renderRooms(currentRooms);
+};
+window.updateCompareBar=function(){
+  let bar=$("compareBar");
+  if(!bar){
+    bar=document.createElement("div");bar.id="compareBar";bar.className="compare-bar";document.body.appendChild(bar);
+  }
+  if(!window.compareIds.length){bar.classList.remove("show");return;}
+  bar.classList.add("show");
+  bar.innerHTML=`<strong>⚖️ ${window.compareIds.length} selected</strong><button onclick="openComparePage()">Compare Now</button><button onclick="window.compareIds=[];updateCompareBar();renderRooms(currentRooms)">Clear</button>`;
+};
+window.openComparePage=function(){
+  const rooms=window.compareIds.map(id=>currentRooms.find(r=>r.id===id)).filter(Boolean);
+  if(rooms.length<2){alert("Compare करने के लिए कम से कम 2 properties चुनें।");return;}
+  let modal=$("comparePage");if(!modal){modal=document.createElement("div");modal.id="comparePage";modal.className="property-detail-page";document.body.appendChild(modal);}
+  const rows=[
+    ["Rent",r=>`₹${r.rent||0}/month`],["Deposit",r=>`₹${r.deposit||0}`],["Maintenance",r=>`₹${r.maintenance||0}`],["Electricity",r=>r.electricityMode||"Extra"],["Furnishing",r=>r.furnishing||"-"],["Suitable For",r=>r.suitableFor||"-"],["Rule",r=>r.propertyRules||"-"],["Parking / Facilities",r=>Array.isArray(r.facilities)?r.facilities.join(", "):"-"],["Location",r=>[r.address,r.city,r.state].filter(Boolean).join(", ")||"-"],["Distance",r=>Number.isFinite(Number(r._distanceKm))?Number(r._distanceKm).toFixed(1)+" km":"-"]
+  ];
+  modal.innerHTML=`<div class="property-detail-top"><button class="property-detail-back" onclick="closeComparePage()">← Back</button><strong>⚖️ Compare Properties</strong><button class="small-btn" onclick="closeComparePage()">✕</button></div><div class="property-detail-inner"><div class="property-detail-card" style="padding:18px;overflow:auto"><table class="compare-table"><thead><tr><th>Feature</th>${rooms.map(r=>`<th>${escapeHtml(r.type||"Property")}<br><span style="font-size:11px;color:#667085">${escapeHtml(r.city||"")}</span></th>`).join("")}</tr></thead><tbody>${rows.map(([label,fn])=>`<tr><th>${escapeHtml(label)}</th>${rooms.map(r=>`<td>${escapeHtml(String(fn(r)))}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>`;
+  modal.classList.add("show");document.body.style.overflow="hidden";
+};
+window.closeComparePage=function(){const m=$("comparePage");if(m)m.classList.remove("show");document.body.style.overflow="";};
+
+/* ================= HYBRID MAP PICKER ================= */
+window._locationPickerMap=null;
+window._locationPickerMarker=null;
+
+window.openLocationPicker = function(){
+  const wrap=$("locationPickerWrap");
+  if(!wrap) return;
+  wrap.classList.remove("hidden");
+  setTimeout(function(){
+    if(typeof L === "undefined"){
+      if($("locationStatus")) $("locationStatus").innerHTML="❌ Map picker load नहीं हुआ। Internet connection check करें।";
+      return;
+    }
+    let lat=Number(postLatitude),lng=Number(postLongitude);
+    if(!Number.isFinite(lat)||!Number.isFinite(lng)){
+      lat=22.7196; lng=75.8577;
+    }
+    if(!window._locationPickerMap){
+      window._locationPickerMap=L.map("locationPickerMap").setView([lat,lng],14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"}).addTo(window._locationPickerMap);
+      window._locationPickerMarker=L.marker([lat,lng],{draggable:true}).addTo(window._locationPickerMap);
+      window._locationPickerMarker.on("dragend",function(){
+        const p=window._locationPickerMarker.getLatLng();
+        window._pickedLat=p.lat; window._pickedLng=p.lng;
+      });
+      window._locationPickerMap.on("click",function(e){
+        window._locationPickerMarker.setLatLng(e.latlng);
+        window._pickedLat=e.latlng.lat; window._pickedLng=e.latlng.lng;
+      });
+    }else{
+      window._locationPickerMap.setView([lat,lng],14);
+      window._locationPickerMarker.setLatLng([lat,lng]);
+    }
+    window._pickedLat=lat; window._pickedLng=lng;
+    window._locationPickerMap.invalidateSize();
+  },100);
+};
+
+window.selectPickedLocation = async function(){
+  const lat=Number(window._pickedLat),lng=Number(window._pickedLng);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
+  postLatitude=Number(lat.toFixed(7));
+  postLongitude=Number(lng.toFixed(7));
+  await reverseFillPostLocation(postLatitude,postLongitude);
+  if($("locationStatus")) $("locationStatus").innerHTML=`✅ Exact location selected: ${postLatitude}, ${postLongitude} • State/City/Area auto-fill हो गए।`;
+  if($("locationPickerWrap")) $("locationPickerWrap").classList.add("hidden");
+};
+
+window.focusManualLocation=function(){
+  const el=$("address");
+  if(el){el.focus();el.scrollIntoView({behavior:"smooth",block:"center"});}
+};
 
 /* ================= PROPERTY GALLERY ================= */
 
@@ -5781,6 +6122,8 @@ window.filterRooms = function(){
     Number(
       $("maxRent").value
     );
+  const searchFacility=$("searchFacility")?.value || "";
+  const searchSuitable=$("searchSuitable")?.value || "";
 
 
   const filtered =
@@ -5845,6 +6188,8 @@ window.filterRooms = function(){
       ){
         return false;
       }
+      if(searchFacility && !(Array.isArray(room.facilities)&&room.facilities.includes(searchFacility))) return false;
+      if(searchSuitable && room.suitableFor!==searchSuitable) return false;
 
 
       return true;
@@ -5866,6 +6211,8 @@ window.clearFilters = function(){
   $("searchArea").value = "";
   $("searchType").value = "";
   $("maxRent").value = "";
+  if($("searchFacility")) $("searchFacility").value="";
+  if($("searchSuitable")) $("searchSuitable").value="";
 
   renderRooms(
     currentRooms
@@ -6151,6 +6498,8 @@ onAuthStateChanged(
 populateStateOptions();
 loadRooms();
 
+
+window.updateCompareBar();
 </script>
 
 </body>
