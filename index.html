@@ -3297,7 +3297,11 @@ header{
   <div class="form-group">
     <label>Mobile</label>
     <input id="editMobile"
-           maxlength="10">
+           type="tel"
+           inputmode="numeric"
+           maxlength="10"
+           pattern="[0-9]{10}"
+           placeholder="10 digit mobile">
   </div>
 
 
@@ -3438,6 +3442,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendEmailVerification,
   signOut,
   onAuthStateChanged
 }
@@ -3710,6 +3715,21 @@ window.showDashboard = async function(){
 
   }
 
+  /* Refresh Firebase auth state before opening My Account.
+     This is important after the user verifies the email in another tab. */
+  try{
+    await currentUser.reload();
+    currentUser = auth.currentUser || currentUser;
+  }catch(error){
+    console.error("My Account auth refresh error:", error);
+  }
+
+  if(!currentUser.emailVerified){
+    $("authStatus").innerHTML = `⚠️ Dashboard खोलने से पहले email verify करें।<br><br><button type="button" class="btn-primary" onclick="resendVerificationEmail()">📧 Resend Verification Email</button> <button type="button" class="btn-secondary" onclick="checkEmailVerification()">🔄 Check Again</button>`;
+    showLogin();
+    return;
+  }
+
   $("homePage").classList.add("hidden");
   $("postPage").classList.add("hidden");
   $("loginPage").classList.add("hidden");
@@ -3727,7 +3747,15 @@ window.showDashboard = async function(){
 
   closeMenu();
 
-  await loadDashboard();
+  try{
+    await loadDashboard();
+  }catch(error){
+    console.error("My Account dashboard load error:", error);
+    const status = $("authStatus");
+    if(status){
+      status.innerHTML = "⚠️ My Account खुल गया है, लेकिन कुछ profile data अभी load नहीं हो पाया।";
+    }
+  }
 
 };
 
@@ -3925,6 +3953,43 @@ window.sendForgotPasswordEmail = async function(){
 };
 
 
+/* ================= EMAIL VERIFICATION ================= */
+
+window.resendVerificationEmail = async function(){
+  const status = $("authStatus");
+  if(!currentUser){ status.innerHTML = "❌ पहले Login करें।"; return; }
+  try{
+    await currentUser.reload();
+    if(currentUser.emailVerified){
+      status.innerHTML = "✅ Email पहले ही verify हो चुका है।";
+      return;
+    }
+    await sendEmailVerification(currentUser);
+    status.innerHTML = "✅ Verification email दोबारा भेज दिया गया है। Inbox/Spam/Promotions check करें।";
+  }catch(error){
+    console.error(error);
+    status.innerHTML = "❌ Verification email नहीं भेजा जा सका। थोड़ी देर बाद फिर कोशिश करें।";
+  }
+};
+
+window.checkEmailVerification = async function(){
+  const status = $("authStatus");
+  if(!currentUser){ showLogin(); return; }
+  try{
+    await currentUser.reload();
+    if(currentUser.emailVerified){
+      status.innerHTML = "✅ Email verified! अब आपका account active है।";
+      updateNavbar();
+      setTimeout(()=>showDashboard(),500);
+    }else{
+      status.innerHTML = `⚠️ Email अभी verify नहीं हुआ है। पहले email में Verify Email link खोलें।<br><br><button type="button" class="btn-primary" onclick="resendVerificationEmail()">📧 Resend Verification Email</button> <button type="button" class="btn-secondary" onclick="checkEmailVerification()">🔄 Check Again</button>`;
+    }
+  }catch(error){
+    console.error(error);
+    status.innerHTML = "❌ Verification status check नहीं हो सका।";
+  }
+};
+
 /* ================= SIGNUP ================= */
 
 window.signupUser = async function(){
@@ -4046,19 +4111,13 @@ window.signupUser = async function(){
       }
     );
 
+    await sendEmailVerification(credential.user);
 
     status.innerHTML =
-      "✅ Signup successful! Account automatically login हो गया।";
-
+      `✅ Account बन गया है। Verification email भेज दिया गया है।<br><br>📧 Inbox/Spam/Promotions में <b>Verify Email</b> link खोलें। फिर नीचे <b>Check Again</b> दबाएँ।<br><br><button type="button" class="btn-primary" onclick="resendVerificationEmail()">📧 Resend Verification Email</button> <button type="button" class="btn-secondary" onclick="checkEmailVerification()">🔄 Check Again</button>`;
 
     await loadUserProfile();
-
     updateNavbar();
-
-
-    setTimeout(()=>{
-      showDashboard();
-    },700);
 
 
   }catch(error){
@@ -4134,6 +4193,17 @@ window.loginUser = async function(){
       password
     );
 
+    await auth.currentUser.reload();
+
+    if(!auth.currentUser.emailVerified){
+      status.innerHTML =
+        `⚠️ Email verify नहीं हुआ है। पहले email में <b>Verify Email</b> link खोलें।<br><br>📧 Inbox/Spam/Promotions check करें।<br><br><button type="button" class="btn-primary" onclick="resendVerificationEmail()">📧 Resend Verification Email</button> <button type="button" class="btn-secondary" onclick="checkEmailVerification()">🔄 Check Again</button>`;
+      $("loginPassword").value = "";
+      const loginToggleUnverified = $("loginPasswordToggle");
+      if(loginToggleUnverified) loginToggleUnverified.textContent = "👁️";
+      $("loginPassword").type = "password";
+      return;
+    }
 
     status.innerHTML =
       "✅ Login successful!";
@@ -4194,7 +4264,8 @@ window.logoutUser = async function(){
     if(loginToggle) loginToggle.textContent = "👁️";
     $("loginPassword").type = "password";
 
-    showHome();
+    showLogin(false);
+    showLoginTab();
 
     alert("✅ Logout successful.");
 
@@ -4533,10 +4604,10 @@ window.saveProfile = async function(){
   }
 
 
-  if(!/^[0-9]{10}$/.test(mobile)){
+  if(!/^[6-9][0-9]{9}$/.test(mobile)){
 
     $("editProfileStatus").innerHTML =
-      "❌ Mobile number 10 digits का होना चाहिए।";
+      "❌ Valid Indian mobile number डालें (10 digits, 6-9 से शुरू)।";
 
     return;
 
@@ -4549,15 +4620,17 @@ window.saveProfile = async function(){
 
   try{
 
-    await updateDoc(
+    await setDoc(
       doc(db,"users",currentUser.uid),
       {
         name:name,
         mobile:mobile,
         city:city,
         address:address,
+        email:currentUser.email || "",
         updatedAt:serverTimestamp()
-      }
+      },
+      {merge:true}
     );
 
 
@@ -5530,6 +5603,12 @@ window.postRoom = async function(){
 
     return;
 
+  }
+
+  if(!currentUser.emailVerified){
+    $("postStatus").innerHTML = `⚠️ Room Post करने से पहले email verify करें।<br><br><button type="button" class="btn-primary" onclick="resendVerificationEmail()">📧 Resend Verification Email</button> <button type="button" class="btn-secondary" onclick="checkEmailVerification()">🔄 Check Again</button>`;
+    showLogin();
+    return;
   }
 
 
