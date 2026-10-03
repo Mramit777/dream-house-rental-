@@ -134,6 +134,17 @@ header{
   color:#2563eb;
 }
 
+.nav-links .post-nav-btn{
+  background:#2563eb;
+  color:#fff;
+  box-shadow:0 5px 14px rgba(37,99,235,.18);
+}
+
+.nav-links .post-nav-btn:hover{
+  background:#1d4ed8;
+  color:#fff;
+}
+
 .menu-btn{
   display:none;
   border:0;
@@ -1427,7 +1438,7 @@ header{
 .post-nav-btn{display:inline-flex;align-items:center;gap:5px;}
 @media(max-width:760px){
   .post-nav-btn{padding:9px 10px !important;border-radius:12px !important;}
-  .post-nav-label{display:none;}
+  .post-nav-label{display:inline !important;}
   .search-box .location-search-btn{width:100%;}
 }
 
@@ -1696,13 +1707,6 @@ header{
   .pro-search-box{margin-top:24px !important;width:100% !important;}
   .hero-actions{margin-top:12px !important;}
 }
-.nav-links .post-nav-btn{background:transparent !important;color:#344054 !important;box-shadow:none !important;}
-.nav-links .post-nav-btn:hover{background:#eef4ff !important;color:#2563eb !important;}
-</style>
-
-<style id="final-post-nav-neutral">
-.nav-links .post-nav-btn{background:transparent !important;color:#344054 !important;box-shadow:none !important;}
-.nav-links .post-nav-btn:hover{background:#eef4ff !important;color:#2563eb !important;}
 </style>
 
 </head>
@@ -2381,41 +2385,51 @@ header{
       </div>
 
       <div class="form-group">
-        <label>🔐 Property Rules <span style="color:#667085;font-size:12px;font-weight:600;">(Not Allowed)</span></label>
-        <div class="multi-select-box" data-multi="propertyRules">
-          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>🔐 Not Allowed<span class="multi-select-summary" id="summary-propertyRules">Select rules</span></span><span class="multi-select-arrow">⌄</span></button>
+        <label>🥗🍗 Food Preference</label>
+        <div class="multi-select-box" data-multi="foodPreference">
+          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>🍽️ Food Preference<span class="multi-select-summary" id="summary-foodPreference">Select options</span></span><span class="multi-select-arrow">⌄</span></button>
           <div class="multi-select-options">
-            <div class="rule-group"><div class="rule-group-title">🚫 Not Allowed</div><div class="facility-grid">
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Cooking" data-rule-key="cooking">🍳 Cooking</label>
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Guests" data-rule-key="guests">👥 Guests</label>
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Smoking" data-rule-key="smoking">🚬 Smoking</label>
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Pets" data-rule-key="pets">🐶 Pets</label>
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Alcohol" data-rule-key="alcohol">🍺 Alcohol</label>
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parties" data-rule-key="parties">🎉 Parties</label>
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Late Night Entry" data-rule-key="lateNight">🌙 Late Night Entry</label>
-              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Non-Veg Food Not Allowed" data-rule-key="nonveg">🍗 Non-Veg Food</label>
-            </div></div>
-            <input id="propertyRuleOther" type="text" placeholder="✏️ Other Rule (optional)" style="margin-top:10px;">
+            <div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="foodPreference" value="🥗 Veg">🥗 Veg</label>
+              <label class="facility-option"><input type="checkbox" name="foodPreference" value="🍗 Non-Veg">🍗 Non-Veg</label>
+              <label class="facility-option"><input type="checkbox" name="foodPreference" value="Other" id="foodPreferenceOtherCheck">🔹 Other</label>
+            </div>
+            <input id="foodPreferenceOther" type="text" placeholder="Other food preference" style="margin-top:8px;display:none;">
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label>👥 Maximum Persons Allowed <span style="color:#667085;font-size:12px;font-weight:600;">(Optional)</span></label>
-        <div class="multi-select-box" id="maxOccupancyBox">
-          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>👥 Maximum Persons Allowed<span class="multi-select-summary" id="summary-maxOccupancy">Not specified</span></span><span class="multi-select-arrow">⌄</span></button>
+        <label>🔐 Property Rules <span style="color:#667085;font-size:12px;font-weight:600;">(Allowed / Not Allowed)</span></label>
+        <div class="multi-select-box" data-multi="propertyRules">
+          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>🔐 Select Property Rules<span class="multi-select-summary" id="summary-propertyRules">Select rules</span></span><span class="multi-select-arrow">⌄</span></button>
           <div class="multi-select-options">
-            <label class="facility-option" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><input type="checkbox" id="maxOccupancyEnabled"> Enable maximum occupancy</label>
-            <select id="maxOccupancy" disabled style="width:100%;">
-              <option value="">Select maximum persons</option>
-              <option value="1">1 Person</option>
-              <option value="2">2 Persons</option>
-              <option value="3">3 Persons</option>
-              <option value="4">4 Persons</option>
-              <option value="5">5 Persons</option>
-              <option value="6">6 Persons</option>
-              <option value="7+">7+ Persons</option>
-            </select>
+            <div class="rule-group"><div class="rule-group-title">✅ Allowed</div><div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Pets Allowed" data-rule-key="pets">🐾 Pets Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Smoking Allowed" data-rule-key="smoking">🚬 Smoking Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Cooking Allowed" data-rule-key="cooking">🍳 Cooking Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Guests Allowed" data-rule-key="guests">👥 Guests Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Time Restriction" data-rule-key="time">🕐 No Time Restriction</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parking Allowed" data-rule-key="parking">🚗 Parking Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parties Allowed" data-rule-key="parties">🎉 Parties Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Alcohol Allowed" data-rule-key="alcohol">🍺 Alcohol Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Maid Allowed" data-rule-key="maid">🧹 Maid Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Move-in Allowed" data-rule-key="movein">🚚 Move-in Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Bike Allowed" data-rule-key="bike">🏍️ Bike Allowed</label>
+            </div></div>
+            <div class="rule-group"><div class="rule-group-title">🚫 Not Allowed</div><div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Pets" data-rule-key="pets">🐾 No Pets</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Smoking" data-rule-key="smoking">🚭 No Smoking</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Cooking" data-rule-key="cooking">🚫 No Cooking</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Guests" data-rule-key="guests">🚷 No Guests</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Curfew / Time Restriction" data-rule-key="time">🕙 Curfew / Time Restriction</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parking" data-rule-key="parking">🚗 No Parking</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parties" data-rule-key="parties">🎉 No Parties</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Alcohol" data-rule-key="alcohol">🍺 No Alcohol</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Maid" data-rule-key="maid">🧹 No Maid</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Bike" data-rule-key="bike">🏍️ No Bike</label>
+            </div></div>
+            <input id="propertyRuleOther" type="text" placeholder="✏️ Other Rule (optional)" style="margin-top:10px;">
           </div>
         </div>
       </div>
@@ -2541,11 +2555,6 @@ header{
 
     <h2>🔐 Account Login</h2>
 
-    <div id="postLoginPrompt" class="hidden" style="margin:12px 0;padding:12px 14px;border-radius:12px;background:#eef6ff;border:1px solid #cfe3ff;color:#173b67;font-weight:700;line-height:1.45;">
-      🔐 Room Post करने के लिए पहले Login करें.<br>
-      नया account है? <strong>Sign Up करें</strong> नीचे से.
-    </div>
-
     <p>
       Apne Dream House Rental account में login करें.
     </p>
@@ -2619,6 +2628,36 @@ header{
       <button class="secondary-btn"
               onclick="showSignupTab()">
         🆕 पहली बार हैं? Signup करें
+      </button>
+
+      <button type="button"
+              class="secondary-btn"
+              onclick="showForgotPassword()"
+              style="margin-top:8px;">
+        🔓 Forgot Password?
+      </button>
+
+    </div>
+
+    <div id="forgotPasswordForm" class="hidden">
+
+      <div class="form-group">
+        <label>Registered Email</label>
+        <input id="forgotPasswordEmail"
+               type="email"
+               placeholder="your@email.com">
+      </div>
+
+      <p style="font-size:13px;color:#667085;margin:0 0 12px;line-height:1.5;">
+        आपके registered email पर password reset link भेजा जाएगा।
+      </p>
+
+      <button class="primary-btn" type="button" onclick="sendForgotPasswordEmail()">
+        📩 Send Reset Link
+      </button>
+
+      <button class="secondary-btn" type="button" onclick="showLoginTab()">
+        ← वापस Login
       </button>
 
     </div>
@@ -3394,6 +3433,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
   onAuthStateChanged
 }
@@ -3608,14 +3648,7 @@ window.showPost = function(){
 
   if(!currentUser){
     showLogin();
-    if($("postLoginPrompt")){
-      $("postLoginPrompt").classList.remove("hidden");
-    }
     return;
-  }
-
-  if($("postLoginPrompt")){
-    $("postLoginPrompt").classList.add("hidden");
   }
 
   $("homePage").classList.add("hidden");
@@ -3804,9 +3837,26 @@ window.showLoginTab = function(){
 
   $("loginForm").classList.remove("hidden");
   $("signupForm").classList.add("hidden");
+  $("forgotPasswordForm").classList.add("hidden");
 
   $("loginTab").classList.add("active");
   $("signupTab").classList.remove("active");
+
+  $("authStatus").innerHTML = "";
+
+};
+
+window.showForgotPassword = function(){
+
+  $("loginForm").classList.add("hidden");
+  $("signupForm").classList.add("hidden");
+  $("forgotPasswordForm").classList.remove("hidden");
+
+  $("loginTab").classList.remove("active");
+  $("signupTab").classList.remove("active");
+
+  const email = $("loginEmail").value.trim();
+  if(email){ $("forgotPasswordEmail").value = email; }
 
   $("authStatus").innerHTML = "";
 
@@ -3817,11 +3867,45 @@ window.showSignupTab = function(){
 
   $("loginForm").classList.add("hidden");
   $("signupForm").classList.remove("hidden");
+  $("forgotPasswordForm").classList.add("hidden");
 
   $("loginTab").classList.remove("active");
   $("signupTab").classList.add("active");
 
   $("authStatus").innerHTML = "";
+
+};
+
+
+/* ================= FORGOT PASSWORD ================= */
+
+window.sendForgotPasswordEmail = async function(){
+
+  const email = $("forgotPasswordEmail").value.trim();
+  const status = $("authStatus");
+
+  if(!email){
+    status.innerHTML = "❌ अपना registered Email भरें।";
+    return;
+  }
+
+  status.innerHTML = "⏳ Reset link भेजा जा रहा है...";
+
+  try{
+    await sendPasswordResetEmail(auth, email);
+    status.innerHTML = "✅ Password reset link आपके email पर भेज दिया गया है। Email inbox और Spam/Junk folder भी check करें।";
+  }catch(error){
+    console.error(error);
+    if(error.code === "auth/invalid-email"){
+      status.innerHTML = "❌ Email सही नहीं है।";
+    }else if(error.code === "auth/user-not-found"){
+      status.innerHTML = "❌ इस email से कोई account नहीं मिला।";
+    }else if(error.code === "auth/too-many-requests"){
+      status.innerHTML = "❌ बहुत ज्यादा कोशिशें हुई हैं। थोड़ी देर बाद फिर कोशिश करें।";
+    }else{
+      status.innerHTML = "❌ Password reset नहीं हो सका। कृपया थोड़ी देर बाद फिर कोशिश करें।";
+    }
+  }
 
 };
 
@@ -5300,7 +5384,7 @@ window.toggleMultiSelectPanel = function(button){
 function updateMultiSummary(name){
   const summary=document.getElementById('summary-'+name); if(!summary) return;
   const vals=getCheckedValues(name).slice();
-  const custom={propertyType:'propertyTypeOther',suitableFor:'suitableForOther',propertyRules:'propertyRuleOther'}[name];
+  const custom={propertyType:'propertyTypeOther',suitableFor:'suitableForOther',foodPreference:'foodPreferenceOther',propertyRules:'propertyRuleOther'}[name];
   const text=custom ? ($(custom)?.value.trim()||'') : '';
   if(name==='propertyType' && text && vals.includes('Other')) vals[vals.indexOf('Other')]='Other: '+text;
   else if(text && name!=='propertyRules' && vals.includes('Other')) vals[vals.indexOf('Other')]='Other: '+text;
@@ -5333,7 +5417,7 @@ function updatePropertyRulesSummary(){
   });
   const other=document.getElementById('propertyRuleOther');
   const otherText=other ? other.value.trim() : '';
-  if(otherText) notAllowed.push('Other Rule: '+otherText);
+  if(otherText) allowed.push('Other Rule: '+otherText);
 
   const lines=[];
   if(allowed.length) lines.push('<span class="rules-summary-line"><b>Allowed:</b> '+escapeHtml(allowed.join(', '))+'</span>');
@@ -5345,7 +5429,7 @@ if(typeof escapeHtml!=='function'){
   window.escapeHtml=function(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));};
 }
 
-function updateAllMultiSummaries(){['propertyType','suitableFor','facility'].forEach(updateMultiSummary); updatePropertyRulesSummary();}
+function updateAllMultiSummaries(){['propertyType','suitableFor','foodPreference','facility'].forEach(updateMultiSummary); updatePropertyRulesSummary();}
 function enforceRulePair(changed){
   if(!changed || changed.name!=='propertyRules' || !changed.dataset.ruleKey || !changed.checked) return;
   document.querySelectorAll('input[name="propertyRules"][data-rule-key="'+changed.dataset.ruleKey+'"]').forEach(el=>{if(el!==changed)el.checked=false;});
@@ -5405,25 +5489,11 @@ document.addEventListener("change",function(e){
   if(!e.target) return;
   if(e.target.id==="propertyTypeOtherCheck") updateOtherPropertyTypeField();
   if(e.target.name==="propertyRules") enforceRulePair(e.target); updatePropertyRulesSummary();
-  if(e.target.name && ["propertyType","suitableFor","propertyRules","facility"].includes(e.target.name)) updateAllMultiSummaries();
+  if(e.target.name && ["propertyType","suitableFor","foodPreference","propertyRules","facility"].includes(e.target.name)) updateAllMultiSummaries();
 });
 document.addEventListener("input",function(e){
-  if(e.target && ["propertyTypeOther","suitableForOther","propertyRuleOther","facilityOther"].includes(e.target.id)) updateAllMultiSummaries();
+  if(e.target && ["propertyTypeOther","suitableForOther","foodPreferenceOther","propertyRuleOther","facilityOther"].includes(e.target.id)) updateAllMultiSummaries();
 });
-
-(function(){
-  function syncMaxOccupancy(){
-    const en=$("maxOccupancyEnabled"), sel=$("maxOccupancy"), sum=$("summary-maxOccupancy");
-    if(!en || !sel) return;
-    sel.disabled=!en.checked;
-    if(!en.checked){ sel.value=""; if(sum) sum.textContent="Not specified"; return; }
-    if(sum) sum.textContent=sel.value ? (sel.options[sel.selectedIndex]?.text || "Not specified") : "Select maximum persons";
-  }
-  document.addEventListener("change",function(e){
-    if(e.target && e.target.id==="maxOccupancyEnabled"){ syncMaxOccupancy(); }
-    if(e.target && e.target.id==="maxOccupancy"){ syncMaxOccupancy(); }
-  });
-})();
 
 window.postRoom = async function(){
 
@@ -5476,8 +5546,9 @@ window.postRoom = async function(){
   const suitableFor = getCheckedValues("suitableFor");
   const suitableOther = $("suitableForOther")?.value.trim() || "";
   if(suitableOther && suitableFor.includes("Other")) suitableFor[suitableFor.indexOf("Other")] = "Other: " + suitableOther;
-  const maxOccupancyEnabled = $("maxOccupancyEnabled")?.checked || false;
-  const maxOccupancy = maxOccupancyEnabled ? ($("maxOccupancy")?.value || "") : "";
+  const foodPreference = getCheckedValues("foodPreference");
+  const foodOther = $("foodPreferenceOther")?.value.trim() || "";
+  if(foodOther && foodPreference.includes("Other")) foodPreference[foodPreference.indexOf("Other")] = "Other: " + foodOther;
   const propertyRules = getCheckedValues("propertyRules");
   const otherRule = $("propertyRuleOther")?.value.trim() || "";
   if(otherRule) propertyRules.push("Other Rule: " + otherRule);
@@ -5551,8 +5622,7 @@ window.postRoom = async function(){
       electricityMode:electricityMode,
       rentNegotiable:rentNegotiable,
       suitableFor:suitableFor,
-      maxOccupancyEnabled:maxOccupancyEnabled,
-      maxOccupancy:maxOccupancy,
+      foodPreference:foodPreference,
       propertyRules:propertyRules,
       facilities:facilities,
 
@@ -5737,11 +5807,12 @@ window.editRoom = async function(id){
   if($("maintenance")) $("maintenance").value = room.maintenance || "";
   if($("electricityMode")) $("electricityMode").value = room.electricityMode || "Extra";
   if($("rentNegotiable")) $("rentNegotiable").value = room.rentNegotiable || "No";
-  if($("maxOccupancyEnabled")){ $("maxOccupancyEnabled").checked = !!room.maxOccupancyEnabled && !!room.maxOccupancy; }
-  if($("maxOccupancy")){ $("maxOccupancy").value = room.maxOccupancy || ""; $("maxOccupancy").disabled = !$("maxOccupancyEnabled")?.checked; }
   const sfList=normalizeMultiValue(room.suitableFor);
   setMultiChecks("suitableFor", sfList.map(x=>x.startsWith("Other:")?"Other":x));
   if($("suitableForOther")){ const x=sfList.find(v=>v.startsWith("Other:")); $("suitableForOther").value=x?x.replace(/^Other:\s*/,""):""; $("suitableForOther").style.display=x?"block":"none"; }
+  const foodList=normalizeMultiValue(room.foodPreference);
+  setMultiChecks("foodPreference", foodList.map(x=>x.startsWith("Other:")?"Other":x));
+  if($("foodPreferenceOther")){ const x=foodList.find(v=>v.startsWith("Other:")); $("foodPreferenceOther").value=x?x.replace(/^Other:\s*/,""):""; $("foodPreferenceOther").style.display=x?"block":"none"; }
   const ruleList=normalizeMultiValue(room.propertyRules);
   setMultiChecks("propertyRules", ruleList.filter(x=>!x.startsWith("Other Rule:")));
   if($("propertyRuleOther")){ const x=ruleList.find(v=>v.startsWith("Other Rule:")); $("propertyRuleOther").value=x?x.replace(/^Other Rule:\s*/,""):""; }
@@ -5937,12 +6008,12 @@ function clearPostForm(){
   if($("maintenance")) $("maintenance").value = "";
   if($("electricityMode")) $("electricityMode").value = "Extra";
   if($("rentNegotiable")) $("rentNegotiable").value = "No";
-  if($("maxOccupancyEnabled")) $("maxOccupancyEnabled").checked = false;
-  if($("maxOccupancy")){ $("maxOccupancy").value = ""; $("maxOccupancy").disabled = true; }
   setMultiChecks("suitableFor", []);
+  setMultiChecks("foodPreference", []);
   setMultiChecks("propertyRules", []);
   document.querySelectorAll('input[name="facility"]').forEach(el=>el.checked=false);
   if($("suitableForOther")){ $("suitableForOther").value=""; $("suitableForOther").style.display="none"; }
+  if($("foodPreferenceOther")){ $("foodPreferenceOther").value=""; $("foodPreferenceOther").style.display="none"; }
   if($("propertyRuleOther")) $("propertyRuleOther").value = "";
   if($("facilityOther")) $("facilityOther").value = "";
   updateAllMultiSummaries();
@@ -6314,8 +6385,8 @@ window.openPropertyDetails = function(id,event){
             <div class="property-detail-info"><strong>🧾 Maintenance</strong><span>₹${escapeHtml(room.maintenance||0)}</span></div>
             <div class="property-detail-info"><strong>⚡ Electricity</strong><span>${escapeHtml(room.electricityMode||"Extra")}</span></div>
             <div class="property-detail-info"><strong>👨‍👩‍👧 Suitable For</strong><span>${escapeHtml(Array.isArray(room.suitableFor)?room.suitableFor.join(", "):(room.suitableFor||"-"))}</span></div>
-            ${room.maxOccupancyEnabled && room.maxOccupancy ? `<div class="property-detail-info"><strong>👥 Maximum Persons Allowed</strong><span>${escapeHtml(String(room.maxOccupancy))}${String(room.maxOccupancy)==="1" ? " Person" : " Persons"}</span></div>` : ""}
-            ${((Array.isArray(room.propertyRules) && room.propertyRules.length) || room.propertyRuleOther) ? `<div class="property-detail-info"><strong>🚫 Not Allowed</strong><span>${escapeHtml(Array.isArray(room.propertyRules)?room.propertyRules.join(", "):(room.propertyRules||""))}${room.propertyRuleOther ? (Array.isArray(room.propertyRules)&&room.propertyRules.length ? ", " : "") + escapeHtml("Other Rule: " + room.propertyRuleOther) : ""}</span></div>` : ""}
+            <div class="property-detail-info"><strong>🥗🍗 Food Preference</strong><span>${escapeHtml(Array.isArray(room.foodPreference)?room.foodPreference.join(", "):(room.foodPreference||"-"))}</span></div>
+            <div class="property-detail-info"><strong>📋 Rules</strong><span>${escapeHtml(Array.isArray(room.propertyRules)?room.propertyRules.join(", "):(room.propertyRules||"-"))}</span></div>
           </div>
           ${room.rentNegotiable === "Yes" ? `<div class="property-detail-description"><strong>💬 Rent Negotiable</strong><br>Owner ने rent negotiable रखा है।</div>` : ""}
           ${Array.isArray(room.facilities)&&room.facilities.length ? `<div class="property-detail-description"><strong>✨ Facilities / सुविधाएँ</strong><div class="feature-chips">${room.facilities.map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}</div></div>` : ""}
