@@ -1421,6 +1421,17 @@ header{
 .location-map-search-row input{flex:1;min-width:200px;border:1px solid #d0d5dd;border-radius:11px;padding:12px;outline:none;background:#fff;}
 .location-map-search-row input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
 .location-map-search-status{margin-top:7px;color:#667085;font-size:12px;line-height:1.4;}
+
+/* FINAL APPROVED RULES/FACILITIES SUMMARY */
+.multi-select-summary.rules-summary{white-space:normal;line-height:1.45;}
+.rules-summary-line{display:block;}
+
+
+/* FINAL COMPACT PANEL OPEN FIX */
+.multi-select-box .multi-select-options{display:none !important;}
+.multi-select-box.open .multi-select-options{display:block !important;}
+.multi-select-toggle{cursor:pointer;}
+
 </style>
 
 <style>
@@ -2389,37 +2400,36 @@ header{
       </div>
 
       <div class="form-group">
-        <label>🔐 Property Rules</label>
+        <label>🔐 Property Rules <span style="color:#667085;font-size:12px;font-weight:600;">(Allowed / Not Allowed)</span></label>
         <div class="multi-select-box" data-multi="propertyRules">
           <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>🔐 Select Property Rules<span class="multi-select-summary" id="summary-propertyRules">Select rules</span></span><span class="multi-select-arrow">⌄</span></button>
           <div class="multi-select-options">
-            <div class="rule-group">
-              <div class="rule-group-title">✅ Available / Allowed</div>
-              <div class="facility-grid">
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Cooking Allowed" data-rule-key="cooking">🍳 Cooking</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Guests Allowed" data-rule-key="guests">👥 Guests</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Pets Allowed" data-rule-key="pets">🐾 Pets</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parking Allowed" data-rule-key="parking">🚗 Parking</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Bike Parking Allowed" data-rule-key="bike">🛵 Bike Parking</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Maid Allowed" data-rule-key="maid">🧹 Maid Service</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parties Allowed" data-rule-key="parties">🎉 Parties</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Alcohol Allowed" data-rule-key="alcohol">🍺 Alcohol</label>
-              </div>
-            </div>
-            <div class="rule-group">
-              <div class="rule-group-title">🚫 Not Allowed</div>
-              <div class="facility-grid">
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Smoking" data-rule-key="smoking">🚭 Smoking</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Pets" data-rule-key="pets">🐾 Pets</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Guests" data-rule-key="guests">🚷 Guests</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parties" data-rule-key="parties">🎉 Parties</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Alcohol" data-rule-key="alcohol">🍺 Alcohol</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Late Night Entry Not Allowed" data-rule-key="lateNight">🌙 Late Night Entry</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Cooking" data-rule-key="cooking">🚫 Cooking</label>
-                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parking" data-rule-key="parking">🚗 Parking</label>
-              </div>
-            </div>
-            <input id="propertyRuleOther" type="text" placeholder="✏️ Other Rule (optional)" style="margin-top:8px;">
+            <div class="rule-group"><div class="rule-group-title">✅ Allowed</div><div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Pets Allowed" data-rule-key="pets">🐾 Pets Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Smoking Allowed" data-rule-key="smoking">🚬 Smoking Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Cooking Allowed" data-rule-key="cooking">🍳 Cooking Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Guests Allowed" data-rule-key="guests">👥 Guests Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Time Restriction" data-rule-key="time">🕐 No Time Restriction</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parking Allowed" data-rule-key="parking">🚗 Parking Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parties Allowed" data-rule-key="parties">🎉 Parties Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Alcohol Allowed" data-rule-key="alcohol">🍺 Alcohol Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Maid Allowed" data-rule-key="maid">🧹 Maid Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Move-in Allowed" data-rule-key="movein">🚚 Move-in Allowed</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Bike Allowed" data-rule-key="bike">🏍️ Bike Allowed</label>
+            </div></div>
+            <div class="rule-group"><div class="rule-group-title">🚫 Not Allowed</div><div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Pets" data-rule-key="pets">🐾 No Pets</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Smoking" data-rule-key="smoking">🚭 No Smoking</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Cooking" data-rule-key="cooking">🚫 No Cooking</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Guests" data-rule-key="guests">🚷 No Guests</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="Curfew / Time Restriction" data-rule-key="time">🕙 Curfew / Time Restriction</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parking" data-rule-key="parking">🚗 No Parking</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parties" data-rule-key="parties">🎉 No Parties</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Alcohol" data-rule-key="alcohol">🍺 No Alcohol</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Maid" data-rule-key="maid">🧹 No Maid</label>
+              <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Bike" data-rule-key="bike">🏍️ No Bike</label>
+            </div></div>
+            <input id="propertyRuleOther" type="text" placeholder="✏️ Other Rule (optional)" style="margin-top:10px;">
           </div>
         </div>
       </div>
@@ -2430,25 +2440,27 @@ header{
           <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>✨ Select Facilities<span class="multi-select-summary" id="summary-facility">Select facilities</span></span><span class="multi-select-arrow">⌄</span></button>
           <div class="multi-select-options">
             <div class="facility-grid">
-              <label class="facility-option"><input type="checkbox" name="facility" value="⚡ 24 घंटे बिजली">⚡ 24 घंटे बिजली</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🔋 Power Backup">🔋 Power Backup</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="💧 24 घंटे पानी">💧 24 घंटे पानी</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🚗 Car Parking">🚗 Car Parking</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🛵 Bike Parking">🛵 Bike Parking</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🛏️ Bed">🛏️ Bed</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🌀 Fan">🌀 Fan</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="❄️ AC">❄️ AC</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🧊 Cooler">🧊 Cooler</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="📺 TV">📺 TV</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🧊 Refrigerator">🧊 Refrigerator</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🧺 Washing Machine">🧺 Washing Machine</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🚿 Geyser">🚿 Geyser</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="📶 Wi-Fi">📶 Wi-Fi</label>
               <label class="facility-option"><input type="checkbox" name="facility" value="🚿 Attached Bathroom">🚿 Attached Bathroom</label>
               <label class="facility-option"><input type="checkbox" name="facility" value="🍳 Kitchen">🍳 Kitchen</label>
               <label class="facility-option"><input type="checkbox" name="facility" value="🌿 Balcony">🌿 Balcony</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🛏️ Furnished">🛏️ Furnished</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="❄️ AC">❄️ AC</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🌀 Cooler">🌀 Cooler</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="📶 Wi-Fi">📶 Wi-Fi</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🅿️ Parking">🅿️ Parking</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="💧 Water Supply">💧 Water Supply</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🔋 Power Backup">🔋 Power Backup</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🛗 Lift">🛗 Lift</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="👮 Security">👮 Security</label>
               <label class="facility-option"><input type="checkbox" name="facility" value="📹 CCTV">📹 CCTV</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="👮 Security Guard">👮 Security Guard</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🔐 Gated Property">🔐 Gated Property</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🏪 Nearby Market">🏪 Nearby Market</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🏫 Nearby School">🏫 Nearby School</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🏥 Nearby Hospital">🏥 Nearby Hospital</label>
-              <label class="facility-option"><input type="checkbox" name="facility" value="🚌 Public Transport">🚌 Public Transport</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🚗 Car Parking">🚗 Car Parking</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🛵 Bike Parking">🛵 Bike Parking</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🧹 Housekeeping">🧹 Housekeeping</label>
             </div>
             <input id="facilityOther" class="facility-other" placeholder="➕ Other facility (optional)">
           </div>
@@ -5280,12 +5292,13 @@ window.openGoogleLocation = function(lat,lng,address,city,state){
 
 /* ================= POST ROOM ================= */
 
-function toggleMultiSelectPanel(button){
-  const box=button?.closest('.multi-select-box'); if(!box) return;
+window.toggleMultiSelectPanel = function(button){
+  const box=button && button.closest ? button.closest('.multi-select-box') : null;
+  if(!box) return;
   const wasOpen=box.classList.contains('open');
   document.querySelectorAll('.multi-select-box.open').forEach(x=>x.classList.remove('open'));
   if(!wasOpen) box.classList.add('open');
-}
+};
 function updateMultiSummary(name){
   const summary=document.getElementById('summary-'+name); if(!summary) return;
   const vals=getCheckedValues(name).slice();
@@ -5296,7 +5309,45 @@ function updateMultiSummary(name){
   if(name==='propertyRules' && text) vals.push('Other Rule: '+text);
   summary.textContent=vals.length ? vals.join(', ') : (name==='propertyType'?'Select property type':'Select options');
 }
-function updateAllMultiSummaries(){['propertyType','suitableFor','foodPreference','propertyRules','facility'].forEach(updateMultiSummary);}
+
+function updatePropertyRulesSummary(){
+  const summary=document.getElementById('summary-propertyRules');
+  if(!summary) return;
+  const allowed=[], notAllowed=[];
+  document.querySelectorAll('input[name="propertyRules"]:checked').forEach(el=>{
+    const key=el.dataset.ruleKey||'';
+    const value=(el.value||'').trim();
+    if(!value) return;
+    if(key.endsWith('_allowed')) allowed.push(value);
+    else if(key.endsWith('_not_allowed')) notAllowed.push(value);
+  });
+  /* Section-aware detection: Allowed labels are in the first rule-group,
+     Not Allowed labels are in the second rule-group. */
+  document.querySelectorAll('input[name="propertyRules"]:checked').forEach(el=>{
+    const group=el.closest('.rule-group');
+    const title=group?.querySelector('.rule-group-title')?.textContent || '';
+    const value=(el.value||'').trim();
+    if(title.includes('Allowed') && !title.includes('Not Allowed')) {
+      if(!allowed.includes(value)) allowed.push(value);
+    } else if(title.includes('Not Allowed')) {
+      if(!notAllowed.includes(value)) notAllowed.push(value);
+    }
+  });
+  const other=document.getElementById('propertyRuleOther');
+  const otherText=other ? other.value.trim() : '';
+  if(otherText) allowed.push('Other Rule: '+otherText);
+
+  const lines=[];
+  if(allowed.length) lines.push('<span class="rules-summary-line"><b>Allowed:</b> '+escapeHtml(allowed.join(', '))+'</span>');
+  if(notAllowed.length) lines.push('<span class="rules-summary-line"><b>Not Allowed:</b> '+escapeHtml(notAllowed.join(', '))+'</span>');
+  summary.innerHTML=lines.length ? lines.join('') : 'Select rules';
+}
+
+if(typeof escapeHtml!=='function'){
+  window.escapeHtml=function(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));};
+}
+
+function updateAllMultiSummaries(){['propertyType','suitableFor','foodPreference','facility'].forEach(updateMultiSummary); updatePropertyRulesSummary();}
 function enforceRulePair(changed){
   if(!changed || changed.name!=='propertyRules' || !changed.dataset.ruleKey || !changed.checked) return;
   document.querySelectorAll('input[name="propertyRules"][data-rule-key="'+changed.dataset.ruleKey+'"]').forEach(el=>{if(el!==changed)el.checked=false;});
@@ -5355,7 +5406,7 @@ function updateOtherPropertyTypeField(){
 document.addEventListener("change",function(e){
   if(!e.target) return;
   if(e.target.id==="propertyTypeOtherCheck") updateOtherPropertyTypeField();
-  if(e.target.name==="propertyRules") enforceRulePair(e.target);
+  if(e.target.name==="propertyRules") enforceRulePair(e.target); updatePropertyRulesSummary();
   if(e.target.name && ["propertyType","suitableFor","foodPreference","propertyRules","facility"].includes(e.target.name)) updateAllMultiSummaries();
 });
 document.addEventListener("input",function(e){
@@ -7149,6 +7200,29 @@ loadRooms();
 
 
 window.updateCompareBar();
+</script>
+
+
+<script>
+/* FINAL COMPACT PANEL CLICK FALLBACK */
+(function(){
+  function openPanel(button){
+    var box = button && button.closest ? button.closest('.multi-select-box') : null;
+    if(!box) return;
+    var wasOpen = box.classList.contains('open');
+    document.querySelectorAll('.multi-select-box.open').forEach(function(x){
+      x.classList.remove('open');
+    });
+    if(!wasOpen) box.classList.add('open');
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target && e.target.closest ? e.target.closest('.multi-select-toggle') : null;
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openPanel(btn);
+  }, true);
+})();
 </script>
 
 </body>
