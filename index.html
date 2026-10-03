@@ -554,6 +554,15 @@ header{
   font-size:14px;
 }
 
+.category.active{border-color:#2563eb;background:#f5f8ff;box-shadow:0 8px 20px rgba(37,99,235,.10);}
+.category-count-badge{display:inline-flex;align-items:center;justify-content:center;margin-left:5px;min-width:22px;height:20px;padding:0 6px;border-radius:999px;background:#eef2f7;color:#475467;font-size:11px;font-weight:900;vertical-align:middle;}
+.category.active .category-count-badge{background:#2563eb;color:#fff;}
+.category-selection-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 14px;padding:10px 13px;border:1px solid #dbe7ff;border-radius:13px;background:#f7faff;}
+.category-selection-info{font-size:12px;font-weight:800;color:#344054;}
+.category-clear-btn{border:1px solid #cbd5e1;background:#fff;color:#344054;border-radius:9px;padding:7px 11px;font-size:12px;font-weight:900;cursor:pointer;}
+.category-clear-btn:hover{background:#f8fafc;}
+@media(max-width:760px){.category-selection-bar{align-items:flex-start;}.category-clear-btn{white-space:nowrap;}}
+
 /* ================= FORMS ================= */
 
 .auth-box,
@@ -2052,6 +2061,11 @@ header{
 
   </div>
 
+  <div id="categorySelectionBar" class="category-selection-bar" style="display:none;">
+    <div id="categorySelectionInfo" class="category-selection-info"></div>
+    <button type="button" class="category-clear-btn" onclick="clearCategoryPriority()">✕ Clear Selection</button>
+  </div>
+
 </section>
 
 
@@ -3503,6 +3517,7 @@ const notificationsCollection =
 
 let currentUser = null;
 let currentRooms = [];
+let categoryPriorityType = "";
 let editingId = null;
 let currentPhotoData = "";
 let currentPhotoGallery = [];
@@ -5059,6 +5074,7 @@ window.toggleSaveRoom = async function(id){
 
 
     renderRooms(currentRooms);
+  updateCategoryUI();
 
 
     if(
@@ -6549,6 +6565,7 @@ window.toggleCompare = function(id,checked){
   }
   updateCompareBar();
   renderRooms(currentRooms);
+  updateCategoryUI();
 };
 window.updateCompareBar=function(){
   let bar=$("compareBar");
@@ -7082,9 +7099,21 @@ window.filterRooms = function(){
     });
 
 
-  renderRooms(
-    filtered
-  );
+  let displayRooms = filtered;
+
+  // Category cards now prioritize the selected category instead of hiding other properties.
+  if(categoryPriorityType){
+    const selected = [];
+    const others = [];
+    filtered.forEach(room=>{
+      if(typeMatchesRoom(room, categoryPriorityType)) selected.push(room);
+      else others.push(room);
+    });
+    displayRooms = selected.concat(others);
+  }
+
+  renderRooms(displayRooms);
+  updateCategoryUI();
 
 };
 
@@ -7098,6 +7127,8 @@ window.clearFilters = function(){
   $("maxRent").value = "";
   if($("searchFacility")) $("searchFacility").value="";
   if($("searchSuitable")) $("searchSuitable").value="";
+  categoryPriorityType = "";
+  updateCategoryUI();
 
   renderRooms(
     currentRooms
@@ -7167,21 +7198,63 @@ window.selectType = function(type){
 
   showHome();
 
-  $("searchType").value =
-    type;
+  // Category click is a priority/sort action, not a hard filter.
+  // Clicking the same category again clears the priority.
+  categoryPriorityType = type || "";
+  $("searchType").value = "";
 
   filterRooms();
 
-
   setTimeout(()=>{
-
     $("rooms").scrollIntoView({
       behavior:"smooth"
     });
-
   },100);
 
 };
+
+window.clearCategoryPriority = function(){
+  categoryPriorityType = "";
+  $("searchType").value = "";
+  filterRooms();
+};
+
+window.updateCategoryUI = function(){
+  const bar=$("categorySelectionBar");
+  const info=$("categorySelectionInfo");
+  const cards=document.querySelectorAll(".categories .category");
+  cards.forEach(card=>{
+    card.classList.remove("active");
+    const title=card.querySelector("h3");
+    if(!title) return;
+    let badge=title.querySelector(".category-count-badge");
+    if(!badge){
+      badge=document.createElement("span");
+      badge.className="category-count-badge";
+      title.appendChild(badge);
+    }
+    const click=card.getAttribute("onclick") || "";
+    const match=click.match(/selectType\('([^']*)'\)/);
+    const typeValue=match ? match[1] : "";
+    const label=typeValue || "All";
+    let count=currentRooms.length;
+    if(label!=="All"){
+      count=currentRooms.filter(room=>typeMatchesRoom(room,label)).length;
+    }
+    badge.textContent=String(count);
+    if(categoryPriorityType && label===categoryPriorityType) card.classList.add("active");
+  });
+  if(bar && info){
+    if(categoryPriorityType){
+      const count=currentRooms.filter(room=>typeMatchesRoom(room,categoryPriorityType)).length;
+      info.textContent=`Showing ${categoryPriorityType} properties first • ${count} available`;
+      bar.style.display="flex";
+    }else{
+      bar.style.display="none";
+    }
+  }
+};
+
 
 
 window.heroSearch = function(){
