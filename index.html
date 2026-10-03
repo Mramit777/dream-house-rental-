@@ -1494,6 +1494,19 @@ header{
 
 /* ================= PROPERTY FEATURES / COMPARE ================= */
 .facility-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px;}
+/* ===== COMPACT MULTI-SELECT PANELS ===== */
+.multi-select-box{border:1px solid #dbe3ef;border-radius:12px;background:#fff;overflow:hidden;margin-top:8px;}
+.multi-select-toggle{width:100%;border:0;background:#f8fafc;padding:12px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;color:#172033;font-weight:800;}
+.multi-select-toggle:hover{background:#f1f5f9;}
+.multi-select-summary{display:block;color:#667085;font-size:12px;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.multi-select-arrow{font-size:16px;color:#2563eb;flex:0 0 auto;}
+.multi-select-options{display:none;padding:10px;border-top:1px solid #e7ebf2;background:#fff;}
+.multi-select-box.open .multi-select-options{display:block;}
+.multi-select-options .facility-grid{margin-top:0;}
+.rule-group-title{font-size:12px;font-weight:900;color:#475467;margin:2px 0 7px;}
+.rule-group+.rule-group{margin-top:12px;padding-top:11px;border-top:1px dashed #dbe3ef;}
+@media(max-width:700px){.multi-select-options{padding:9px}.multi-select-toggle{padding:11px 12px}.multi-select-options .facility-grid{grid-template-columns:1fr;}}
+
 .facility-option{display:flex;align-items:center;gap:7px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;font-size:13px;font-weight:700;color:#344054;}
 .facility-option input{width:auto;}
 .facility-other{margin-top:9px;}
@@ -2269,25 +2282,29 @@ header{
       </div>
 
       <div class="form-group">
-
         <label>🏠 Property Type <span style="color:#667085;font-size:12px;font-weight:600;">(Multiple select)</span></label>
-        <div class="facility-grid property-type-checks">
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="Room" checked>🛏️ Room</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="1 BHK">🏠 1 BHK</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="2 BHK">🏡 2 BHK</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="3 BHK">🏘️ 3 BHK</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="Flat">🏢 Flat</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="House">🏠 House</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="PG">🛌 PG</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="Hostel">🏨 Hostel</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="Shop">🏪 Shop</label>
-          <label class="facility-option"><input type="checkbox" name="propertyType" value="Other" id="propertyTypeOtherCheck">🔹 Other</label>
+        <div class="multi-select-box" data-multi="propertyType">
+          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>🏠 Select Property Type<span class="multi-select-summary" id="summary-propertyType">Room</span></span><span class="multi-select-arrow">⌄</span></button>
+          <div class="multi-select-options">
+            <div class="facility-grid property-type-checks">
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="Room" checked>🛏️ Room</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="1 BHK">🏠 1 BHK</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="2 BHK">🏡 2 BHK</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="3 BHK">🏘️ 3 BHK</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="Flat">🏢 Flat</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="House">🏠 House</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="PG">🛌 PG</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="Hostel">🏨 Hostel</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="Shop">🏪 Shop</label>
+              <label class="facility-option"><input type="checkbox" name="propertyType" value="Other" id="propertyTypeOtherCheck">🔹 Other</label>
+            </div>
+            <input id="propertyTypeOther" type="text" placeholder="Other property type (e.g. Farm House)" style="margin-top:8px;display:none;">
+          </div>
         </div>
-        <input id="propertyTypeOther" type="text" placeholder="Other property type (e.g. Farm House)" style="margin-top:8px;display:none;">
-
       </div>
 
-      <div class="form-group">
+      
+<div class="form-group">
 
         <label>Furnishing</label>
 
@@ -2337,56 +2354,110 @@ header{
       </div>
 
       <div class="form-group">
-        <label>Suitable For <span style="color:#667085;font-size:12px;font-weight:600;">(Multiple select)</span></label>
-        <div class="facility-grid">
-          <label class="facility-option"><input type="checkbox" name="suitableFor" value="👨 Boys">👨 Boys</label>
-          <label class="facility-option"><input type="checkbox" name="suitableFor" value="👩 Girls">👩 Girls</label>
-          <label class="facility-option"><input type="checkbox" name="suitableFor" value="👨‍👩‍👧 Family">👨‍👩‍👧 Family</label>
-          <label class="facility-option"><input type="checkbox" name="suitableFor" value="🎓 Students">🎓 Students</label>
-          <label class="facility-option"><input type="checkbox" name="suitableFor" value="💼 Working Professionals">💼 Working Professionals</label>
-          <label class="facility-option"><input type="checkbox" name="suitableFor" value="🧑‍🤝‍🧑 Couples">🧑‍🤝‍🧑 Couples</label>
-          <label class="facility-option"><input type="checkbox" name="suitableFor" value="👥 Anyone">👥 Anyone</label>
+        <label>👤 Suitable For <span style="color:#667085;font-size:12px;font-weight:600;">(Multiple select)</span></label>
+        <div class="multi-select-box" data-multi="suitableFor">
+          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>👤 Who can stay?<span class="multi-select-summary" id="summary-suitableFor">Select options</span></span><span class="multi-select-arrow">⌄</span></button>
+          <div class="multi-select-options">
+            <div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="👨 Boys">👨 Boys</label>
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="👩 Girls">👩 Girls</label>
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="👨‍👩‍👧 Family">👨‍👩‍👧 Family</label>
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="🎓 Students">🎓 Students</label>
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="💼 Working Professionals">💼 Working Professionals</label>
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="🧑‍🤝‍🧑 Couples">🧑‍🤝‍🧑 Couples</label>
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="👥 Anyone">👥 Anyone</label>
+              <label class="facility-option"><input type="checkbox" name="suitableFor" value="Other" id="suitableForOtherCheck">🔹 Other</label>
+            </div>
+            <input id="suitableForOther" type="text" placeholder="Other suitable-for option" style="margin-top:8px;display:none;">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Property Rules <span style="color:#667085;font-size:12px;font-weight:600;">(Multiple select)</span></label>
-        <div class="facility-grid">
-          <label class="facility-option"><input type="checkbox" name="propertyRules" value="Pets Allowed">🐾 Pets Allowed</label>
-          <label class="facility-option"><input type="checkbox" name="propertyRules" value="Smoking Allowed">🚬 Smoking Allowed</label>
-          <label class="facility-option"><input type="checkbox" name="propertyRules" value="Cooking Allowed">🍳 Cooking Allowed</label>
-          <label class="facility-option"><input type="checkbox" name="propertyRules" value="Guests Allowed">👥 Guests Allowed</label>
-          <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Time Restriction">🕐 No Time Restriction</label>
+        <label>🥗🍗 Food Preference</label>
+        <div class="multi-select-box" data-multi="foodPreference">
+          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>🍽️ Food Preference<span class="multi-select-summary" id="summary-foodPreference">Select options</span></span><span class="multi-select-arrow">⌄</span></button>
+          <div class="multi-select-options">
+            <div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="foodPreference" value="🥗 Veg">🥗 Veg</label>
+              <label class="facility-option"><input type="checkbox" name="foodPreference" value="🍗 Non-Veg">🍗 Non-Veg</label>
+              <label class="facility-option"><input type="checkbox" name="foodPreference" value="Other" id="foodPreferenceOtherCheck">🔹 Other</label>
+            </div>
+            <input id="foodPreferenceOther" type="text" placeholder="Other food preference" style="margin-top:8px;display:none;">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>🔐 Property Rules</label>
+        <div class="multi-select-box" data-multi="propertyRules">
+          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>🔐 Select Property Rules<span class="multi-select-summary" id="summary-propertyRules">Select rules</span></span><span class="multi-select-arrow">⌄</span></button>
+          <div class="multi-select-options">
+            <div class="rule-group">
+              <div class="rule-group-title">✅ Available / Allowed</div>
+              <div class="facility-grid">
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Cooking Allowed" data-rule-key="cooking">🍳 Cooking</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Guests Allowed" data-rule-key="guests">👥 Guests</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Pets Allowed" data-rule-key="pets">🐾 Pets</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parking Allowed" data-rule-key="parking">🚗 Parking</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Bike Parking Allowed" data-rule-key="bike">🛵 Bike Parking</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Maid Allowed" data-rule-key="maid">🧹 Maid Service</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Parties Allowed" data-rule-key="parties">🎉 Parties</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Alcohol Allowed" data-rule-key="alcohol">🍺 Alcohol</label>
+              </div>
+            </div>
+            <div class="rule-group">
+              <div class="rule-group-title">🚫 Not Allowed</div>
+              <div class="facility-grid">
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Smoking" data-rule-key="smoking">🚭 Smoking</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Pets" data-rule-key="pets">🐾 Pets</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Guests" data-rule-key="guests">🚷 Guests</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parties" data-rule-key="parties">🎉 Parties</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Alcohol" data-rule-key="alcohol">🍺 Alcohol</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="Late Night Entry Not Allowed" data-rule-key="lateNight">🌙 Late Night Entry</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Cooking" data-rule-key="cooking">🚫 Cooking</label>
+                <label class="facility-option"><input type="checkbox" name="propertyRules" value="No Parking" data-rule-key="parking">🚗 Parking</label>
+              </div>
+            </div>
+            <input id="propertyRuleOther" type="text" placeholder="✏️ Other Rule (optional)" style="margin-top:8px;">
+          </div>
         </div>
       </div>
 
       <div class="form-group" style="grid-column:1/-1;">
         <label>✨ Property Facilities / सुविधाएँ</label>
-        <div class="facility-grid">
-          <label class="facility-option"><input type="checkbox" name="facility" value="⚡ 24 घंटे बिजली">⚡ 24 घंटे बिजली</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🔋 Power Backup">🔋 Power Backup</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="💧 24 घंटे पानी">💧 24 घंटे पानी</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🚗 Car Parking">🚗 Car Parking</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🛵 Bike Parking">🛵 Bike Parking</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🚿 Attached Bathroom">🚿 Attached Bathroom</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🍳 Kitchen">🍳 Kitchen</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🌿 Balcony">🌿 Balcony</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🛏️ Furnished">🛏️ Furnished</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="❄️ AC">❄️ AC</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🌀 Cooler">🌀 Cooler</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="📶 Wi-Fi">📶 Wi-Fi</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="📹 CCTV">📹 CCTV</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="👮 Security Guard">👮 Security Guard</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🔐 Gated Property">🔐 Gated Property</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🏪 Nearby Market">🏪 Nearby Market</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🏫 Nearby School">🏫 Nearby School</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🏥 Nearby Hospital">🏥 Nearby Hospital</label>
-          <label class="facility-option"><input type="checkbox" name="facility" value="🚌 Public Transport">🚌 Public Transport</label>
+        <div class="multi-select-box" data-multi="facility">
+          <button type="button" class="multi-select-toggle" onclick="toggleMultiSelectPanel(this)"><span>✨ Select Facilities<span class="multi-select-summary" id="summary-facility">Select facilities</span></span><span class="multi-select-arrow">⌄</span></button>
+          <div class="multi-select-options">
+            <div class="facility-grid">
+              <label class="facility-option"><input type="checkbox" name="facility" value="⚡ 24 घंटे बिजली">⚡ 24 घंटे बिजली</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🔋 Power Backup">🔋 Power Backup</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="💧 24 घंटे पानी">💧 24 घंटे पानी</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🚗 Car Parking">🚗 Car Parking</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🛵 Bike Parking">🛵 Bike Parking</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🚿 Attached Bathroom">🚿 Attached Bathroom</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🍳 Kitchen">🍳 Kitchen</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🌿 Balcony">🌿 Balcony</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🛏️ Furnished">🛏️ Furnished</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="❄️ AC">❄️ AC</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🌀 Cooler">🌀 Cooler</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="📶 Wi-Fi">📶 Wi-Fi</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="📹 CCTV">📹 CCTV</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="👮 Security Guard">👮 Security Guard</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🔐 Gated Property">🔐 Gated Property</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🏪 Nearby Market">🏪 Nearby Market</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🏫 Nearby School">🏫 Nearby School</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🏥 Nearby Hospital">🏥 Nearby Hospital</label>
+              <label class="facility-option"><input type="checkbox" name="facility" value="🚌 Public Transport">🚌 Public Transport</label>
+            </div>
+            <input id="facilityOther" class="facility-other" placeholder="➕ Other facility (optional)">
+          </div>
         </div>
-        <input id="facilityOther" class="facility-other" placeholder="➕ Other facility (optional)">
       </div>
 
-      <div class="form-group">
+      
+
+<div class="form-group">
 
         <label>Monthly Rent ₹</label>
 
@@ -5209,6 +5280,27 @@ window.openGoogleLocation = function(lat,lng,address,city,state){
 
 /* ================= POST ROOM ================= */
 
+function toggleMultiSelectPanel(button){
+  const box=button?.closest('.multi-select-box'); if(!box) return;
+  const wasOpen=box.classList.contains('open');
+  document.querySelectorAll('.multi-select-box.open').forEach(x=>x.classList.remove('open'));
+  if(!wasOpen) box.classList.add('open');
+}
+function updateMultiSummary(name){
+  const summary=document.getElementById('summary-'+name); if(!summary) return;
+  const vals=getCheckedValues(name).slice();
+  const custom={propertyType:'propertyTypeOther',suitableFor:'suitableForOther',foodPreference:'foodPreferenceOther',propertyRules:'propertyRuleOther'}[name];
+  const text=custom ? ($(custom)?.value.trim()||'') : '';
+  if(name==='propertyType' && text && vals.includes('Other')) vals[vals.indexOf('Other')]='Other: '+text;
+  else if(text && name!=='propertyRules' && vals.includes('Other')) vals[vals.indexOf('Other')]='Other: '+text;
+  if(name==='propertyRules' && text) vals.push('Other Rule: '+text);
+  summary.textContent=vals.length ? vals.join(', ') : (name==='propertyType'?'Select property type':'Select options');
+}
+function updateAllMultiSummaries(){['propertyType','suitableFor','foodPreference','propertyRules','facility'].forEach(updateMultiSummary);}
+function enforceRulePair(changed){
+  if(!changed || changed.name!=='propertyRules' || !changed.dataset.ruleKey || !changed.checked) return;
+  document.querySelectorAll('input[name="propertyRules"][data-rule-key="'+changed.dataset.ruleKey+'"]').forEach(el=>{if(el!==changed)el.checked=false;});
+}
 function getCheckedValues(name){
   return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(el=>el.value);
 }
@@ -5261,7 +5353,13 @@ function updateOtherPropertyTypeField(){
 }
 
 document.addEventListener("change",function(e){
-  if(e.target && e.target.id==="propertyTypeOtherCheck") updateOtherPropertyTypeField();
+  if(!e.target) return;
+  if(e.target.id==="propertyTypeOtherCheck") updateOtherPropertyTypeField();
+  if(e.target.name==="propertyRules") enforceRulePair(e.target);
+  if(e.target.name && ["propertyType","suitableFor","foodPreference","propertyRules","facility"].includes(e.target.name)) updateAllMultiSummaries();
+});
+document.addEventListener("input",function(e){
+  if(e.target && ["propertyTypeOther","suitableForOther","foodPreferenceOther","propertyRuleOther","facilityOther"].includes(e.target.id)) updateAllMultiSummaries();
 });
 
 window.postRoom = async function(){
@@ -5313,7 +5411,14 @@ window.postRoom = async function(){
   const electricityMode = $("electricityMode")?.value || "Extra";
   const rentNegotiable = $("rentNegotiable")?.value || "No";
   const suitableFor = getCheckedValues("suitableFor");
+  const suitableOther = $("suitableForOther")?.value.trim() || "";
+  if(suitableOther && suitableFor.includes("Other")) suitableFor[suitableFor.indexOf("Other")] = "Other: " + suitableOther;
+  const foodPreference = getCheckedValues("foodPreference");
+  const foodOther = $("foodPreferenceOther")?.value.trim() || "";
+  if(foodOther && foodPreference.includes("Other")) foodPreference[foodPreference.indexOf("Other")] = "Other: " + foodOther;
   const propertyRules = getCheckedValues("propertyRules");
+  const otherRule = $("propertyRuleOther")?.value.trim() || "";
+  if(otherRule) propertyRules.push("Other Rule: " + otherRule);
   const facilities = Array.from(document.querySelectorAll('input[name="facility"]:checked')).map(el=>el.value);
   const otherFacility = $("facilityOther")?.value.trim() || "";
   if(otherFacility) facilities.push("➕ " + otherFacility);
@@ -5384,6 +5489,7 @@ window.postRoom = async function(){
       electricityMode:electricityMode,
       rentNegotiable:rentNegotiable,
       suitableFor:suitableFor,
+      foodPreference:foodPreference,
       propertyRules:propertyRules,
       facilities:facilities,
 
@@ -5568,10 +5674,18 @@ window.editRoom = async function(id){
   if($("maintenance")) $("maintenance").value = room.maintenance || "";
   if($("electricityMode")) $("electricityMode").value = room.electricityMode || "Extra";
   if($("rentNegotiable")) $("rentNegotiable").value = room.rentNegotiable || "No";
-  setMultiChecks("suitableFor", room.suitableFor);
-  setMultiChecks("propertyRules", room.propertyRules);
+  const sfList=normalizeMultiValue(room.suitableFor);
+  setMultiChecks("suitableFor", sfList.map(x=>x.startsWith("Other:")?"Other":x));
+  if($("suitableForOther")){ const x=sfList.find(v=>v.startsWith("Other:")); $("suitableForOther").value=x?x.replace(/^Other:\s*/,""):""; $("suitableForOther").style.display=x?"block":"none"; }
+  const foodList=normalizeMultiValue(room.foodPreference);
+  setMultiChecks("foodPreference", foodList.map(x=>x.startsWith("Other:")?"Other":x));
+  if($("foodPreferenceOther")){ const x=foodList.find(v=>v.startsWith("Other:")); $("foodPreferenceOther").value=x?x.replace(/^Other:\s*/,""):""; $("foodPreferenceOther").style.display=x?"block":"none"; }
+  const ruleList=normalizeMultiValue(room.propertyRules);
+  setMultiChecks("propertyRules", ruleList.filter(x=>!x.startsWith("Other Rule:")));
+  if($("propertyRuleOther")){ const x=ruleList.find(v=>v.startsWith("Other Rule:")); $("propertyRuleOther").value=x?x.replace(/^Other Rule:\s*/,""):""; }
   document.querySelectorAll('input[name="facility"]').forEach(el=>el.checked=Array.isArray(room.facilities)&&room.facilities.includes(el.value));
   if($("facilityOther")) $("facilityOther").value = (Array.isArray(room.facilities)?room.facilities.find(x=>String(x).startsWith("➕ ")):"")?.replace(/^➕ /,"") || "";
+  updateAllMultiSummaries();
 
 
   postLatitude =
@@ -5762,9 +5876,14 @@ function clearPostForm(){
   if($("electricityMode")) $("electricityMode").value = "Extra";
   if($("rentNegotiable")) $("rentNegotiable").value = "No";
   setMultiChecks("suitableFor", []);
+  setMultiChecks("foodPreference", []);
   setMultiChecks("propertyRules", []);
   document.querySelectorAll('input[name="facility"]').forEach(el=>el.checked=false);
+  if($("suitableForOther")){ $("suitableForOther").value=""; $("suitableForOther").style.display="none"; }
+  if($("foodPreferenceOther")){ $("foodPreferenceOther").value=""; $("foodPreferenceOther").style.display="none"; }
+  if($("propertyRuleOther")) $("propertyRuleOther").value = "";
   if($("facilityOther")) $("facilityOther").value = "";
+  updateAllMultiSummaries();
   $("description").value = "";
 
   postLatitude = null;
@@ -6132,8 +6251,9 @@ window.openPropertyDetails = function(id,event){
             <div class="property-detail-info"><strong>🔐 Security Deposit</strong><span>₹${escapeHtml(room.deposit||0)}</span></div>
             <div class="property-detail-info"><strong>🧾 Maintenance</strong><span>₹${escapeHtml(room.maintenance||0)}</span></div>
             <div class="property-detail-info"><strong>⚡ Electricity</strong><span>${escapeHtml(room.electricityMode||"Extra")}</span></div>
-            <div class="property-detail-info"><strong>👨‍👩‍👧 Suitable For</strong><span>${escapeHtml(room.suitableFor||"-")}</span></div>
-            <div class="property-detail-info"><strong>📋 Rule</strong><span>${escapeHtml(room.propertyRules||"-")}</span></div>
+            <div class="property-detail-info"><strong>👨‍👩‍👧 Suitable For</strong><span>${escapeHtml(Array.isArray(room.suitableFor)?room.suitableFor.join(", "):(room.suitableFor||"-"))}</span></div>
+            <div class="property-detail-info"><strong>🥗🍗 Food Preference</strong><span>${escapeHtml(Array.isArray(room.foodPreference)?room.foodPreference.join(", "):(room.foodPreference||"-"))}</span></div>
+            <div class="property-detail-info"><strong>📋 Rules</strong><span>${escapeHtml(Array.isArray(room.propertyRules)?room.propertyRules.join(", "):(room.propertyRules||"-"))}</span></div>
           </div>
           ${room.rentNegotiable === "Yes" ? `<div class="property-detail-description"><strong>💬 Rent Negotiable</strong><br>Owner ने rent negotiable रखा है।</div>` : ""}
           ${Array.isArray(room.facilities)&&room.facilities.length ? `<div class="property-detail-description"><strong>✨ Facilities / सुविधाएँ</strong><div class="feature-chips">${room.facilities.map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}</div></div>` : ""}
