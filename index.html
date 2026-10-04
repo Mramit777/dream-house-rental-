@@ -7165,7 +7165,7 @@ window.filterRooms = function(){
     displayRooms = selected.concat(others);
   }
 
-  renderRooms(displayRooms);
+  renderRooms(displayRooms, true);
   updateCategoryUI();
 
 };
@@ -7504,6 +7504,21 @@ loadRooms();
 window.updateCompareBar();
 </script>
 
+
+<script>
+/* MY ACCOUNT CLICK FALLBACK — mobile + desktop */
+(function(){
+  function handleMyAccount(e){
+    var btn=e.target && e.target.closest ? e.target.closest('#accountNavBtn') : null;
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if(typeof window.openMyAccount === 'function') window.openMyAccount(e);
+  }
+  document.addEventListener('click',handleMyAccount,true);
+  document.addEventListener('pointerup',handleMyAccount,true);
+})();
+</script>
 
 <script>
 /* FINAL COMPACT PANEL CLICK FALLBACK */
