@@ -1751,8 +1751,8 @@ header{
     </button>
 
     <button id="accountNavBtn"
-            type="button"
-            onclick="openMyAccount(event)">
+            class="hidden"
+            onclick="showDashboard()">
       👤 My Account
     </button>
 
@@ -3518,8 +3518,6 @@ const notificationsCollection =
 let currentUser = null;
 let currentRooms = [];
 let categoryPriorityType = "";
-let lastPublicPage = "homePage";
-let lastPublicScrollY = 0;
 let editingId = null;
 let currentPhotoData = "";
 let currentPhotoGallery = [];
@@ -3693,18 +3691,6 @@ window.showPost = function(){
 };
 
 
-window.openMyAccount = function(event){
-  if(event){
-    event.preventDefault();
-    event.stopPropagation();
-  }
-  if(currentUser){
-    showDashboard();
-  }else{
-    showLogin();
-  }
-};
-
 window.showLogin = function(fromPostRoom = false){
 
   if(currentUser){
@@ -3712,16 +3698,6 @@ window.showLogin = function(fromPostRoom = false){
     showDashboard();
     return;
 
-  }
-
-  const visiblePublicPage = ["homePage","postPage","morePage"].find(id=>{
-    const el=$(id);
-    return el && !el.classList.contains("hidden");
-  });
-
-  if(visiblePublicPage){
-    lastPublicPage = visiblePublicPage;
-    lastPublicScrollY = window.scrollY || 0;
   }
 
   $("homePage").classList.add("hidden");
@@ -3735,11 +3711,6 @@ window.showLogin = function(fromPostRoom = false){
     postNotice.classList.toggle("hidden", !fromPostRoom);
   }
 
-  // Always open the normal Login form, even if Signup/Forgot Password was open earlier.
-  if(typeof window.showLoginTab === "function"){
-    window.showLoginTab();
-  }
-
   window.scrollTo({
     top:0,
     behavior:"smooth"
@@ -3749,17 +3720,8 @@ window.showLogin = function(fromPostRoom = false){
 
 };
 
+
 window.showDashboard = async function(){
-
-  const visiblePublicPage = ["homePage","postPage","morePage"].find(id=>{
-    const el=$(id);
-    return el && !el.classList.contains("hidden");
-  });
-
-  if(visiblePublicPage){
-    lastPublicPage = visiblePublicPage;
-    lastPublicScrollY = window.scrollY || 0;
-  }
 
   if(!currentUser){
 
@@ -4317,23 +4279,8 @@ window.logoutUser = async function(){
     if(loginToggle) loginToggle.textContent = "👁️";
     $("loginPassword").type = "password";
 
-    // Return to the same public page and approximately the same scroll position.
-    if(lastPublicPage === "postPage"){
-      $("homePage").classList.add("hidden");
-      $("postPage").classList.remove("hidden");
-      $("loginPage").classList.add("hidden");
-      $("dashboardPage").classList.add("hidden");
-      $("morePage").classList.add("hidden");
-      closeMenu();
-    }else if(lastPublicPage === "morePage"){
-      showMore();
-    }else{
-      showHome();
-    }
-
-    requestAnimationFrame(()=>{
-      window.scrollTo({top:lastPublicScrollY || 0, behavior:"auto"});
-    });
+    showLogin(false);
+    showLoginTab();
 
     alert("✅ Logout successful.");
 
@@ -4344,6 +4291,7 @@ window.logoutUser = async function(){
   }
 
 };
+
 
 /* ================= PROFILE ================= */
 
@@ -7007,7 +6955,6 @@ async function loadRooms(){
     renderRooms(
       currentRooms
     );
-    updateCategoryUI();
 
 
     if(currentUser){
@@ -7165,7 +7112,7 @@ window.filterRooms = function(){
     displayRooms = selected.concat(others);
   }
 
-  renderRooms(displayRooms, true);
+  renderRooms(displayRooms);
   updateCategoryUI();
 
 };
@@ -7251,9 +7198,9 @@ window.selectType = function(type){
 
   showHome();
 
-  // Category click prioritizes that category; tapping the same category again clears it.
-  const nextType = type || "";
-  categoryPriorityType = (categoryPriorityType === nextType) ? "" : nextType;
+  // Category click is a priority/sort action, not a hard filter.
+  // Clicking the same category again clears the priority.
+  categoryPriorityType = type || "";
   $("searchType").value = "";
 
   filterRooms();
@@ -7418,20 +7365,31 @@ window.submitFeedback = async function(){
 
 function updateNavbar(){
 
-  const loginBtn = $("loginNavBtn");
-  const accountBtn = $("accountNavBtn");
+  if(currentUser){
 
-  // My Account is always visible. If logged out, tapping it opens Login.
-  if(accountBtn){
-    accountBtn.classList.remove("hidden");
-  }
+    $("loginNavBtn")
+      .classList
+      .add("hidden");
 
-  if(loginBtn){
-    loginBtn.classList.toggle("hidden", !!currentUser);
+    $("accountNavBtn")
+      .classList
+      .remove("hidden");
+
+  }else{
+
+    // My Account remains available even when logged out.
+    // Touching it opens the existing Login page through showDashboard().
+    $("loginNavBtn")
+      .classList
+      .add("hidden");
+
+    $("accountNavBtn")
+      .classList
+      .remove("hidden");
+
   }
 
 }
-
 
 
 /* ================= AUTH STATE ================= */
@@ -7504,21 +7462,6 @@ loadRooms();
 window.updateCompareBar();
 </script>
 
-
-<script>
-/* MY ACCOUNT CLICK FALLBACK — mobile + desktop */
-(function(){
-  function handleMyAccount(e){
-    var btn=e.target && e.target.closest ? e.target.closest('#accountNavBtn') : null;
-    if(!btn) return;
-    e.preventDefault();
-    e.stopPropagation();
-    if(typeof window.openMyAccount === 'function') window.openMyAccount(e);
-  }
-  document.addEventListener('click',handleMyAccount,true);
-  document.addEventListener('pointerup',handleMyAccount,true);
-})();
-</script>
 
 <script>
 /* FINAL COMPACT PANEL CLICK FALLBACK */
