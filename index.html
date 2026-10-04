@@ -1751,8 +1751,8 @@ header{
     </button>
 
     <button id="accountNavBtn"
-            class="hidden"
-            onclick="showDashboard()">
+            type="button"
+            onclick="openMyAccount(event)">
       👤 My Account
     </button>
 
@@ -3692,6 +3692,18 @@ window.showPost = function(){
 
 };
 
+
+window.openMyAccount = function(event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  if(currentUser){
+    showDashboard();
+  }else{
+    showLogin();
+  }
+};
 
 window.showLogin = function(fromPostRoom = false){
 
@@ -6995,6 +7007,7 @@ async function loadRooms(){
     renderRooms(
       currentRooms
     );
+    updateCategoryUI();
 
 
     if(currentUser){
@@ -7405,29 +7418,20 @@ window.submitFeedback = async function(){
 
 function updateNavbar(){
 
-  if(currentUser){
+  const loginBtn = $("loginNavBtn");
+  const accountBtn = $("accountNavBtn");
 
-    $("loginNavBtn")
-      .classList
-      .add("hidden");
+  // My Account is always visible. If logged out, tapping it opens Login.
+  if(accountBtn){
+    accountBtn.classList.remove("hidden");
+  }
 
-    $("accountNavBtn")
-      .classList
-      .remove("hidden");
-
-  }else{
-
-    $("loginNavBtn")
-      .classList
-      .remove("hidden");
-
-    $("accountNavBtn")
-      .classList
-      .add("hidden");
-
+  if(loginBtn){
+    loginBtn.classList.toggle("hidden", !!currentUser);
   }
 
 }
+
 
 
 /* ================= AUTH STATE ================= */
