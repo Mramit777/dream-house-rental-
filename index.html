@@ -3656,7 +3656,7 @@ const db =
   initializeFirestore(
     app,
     {
-      experimentalForceLongPolling: true,
+      experimentalAutoDetectLongPolling: true,
       useFetchStreams: false
     },
     "default"
@@ -7125,6 +7125,36 @@ function renderRooms(rooms, alreadySorted=false){
   }
 
 
+  if(categoryPriorityType){
+    const selectedRooms = rooms.filter(room => typeMatchesRoom(room, categoryPriorityType));
+    const otherRooms = rooms.filter(room => !typeMatchesRoom(room, categoryPriorityType));
+    const count = selectedRooms.length;
+    const label = escapeHtml(categoryPriorityType);
+    const propertyWord = count === 1 ? "Property" : "Properties";
+
+    const selectedHtml = selectedRooms.length
+      ? selectedRooms.map(room => renderRoomCard(room,false)).join("")
+      : `<div style="grid-column:1/-1;text-align:center;padding:25px;background:#fff;border:1px solid #e7ebf2;border-radius:16px;color:#667085;">इस category की कोई property नहीं मिली।</div>`;
+
+    const otherHtml = otherRooms.length
+      ? otherRooms.map(room => renderRoomCard(room,false)).join("")
+      : `<div style="grid-column:1/-1;text-align:center;padding:20px;color:#667085;">कोई दूसरी property नहीं है।</div>`;
+
+    container.innerHTML = `
+      <div class="catalog-priority-heading" style="grid-column:1/-1;">
+        <div>🛏️ ${label} — ${count} ${propertyWord}</div>
+      </div>
+      ${selectedHtml}
+      <div class="catalog-priority-clear" style="grid-column:1/-1;">
+        <button type="button" onclick="clearCategoryPriority()">✕ Clear Selection</button>
+      </div>
+      <div class="catalog-all-divider" style="grid-column:1/-1;"></div>
+      <div class="catalog-all-heading" style="grid-column:1/-1;">🏠 All Properties</div>
+      ${otherHtml}
+    `;
+    return;
+  }
+
   container.innerHTML =
     rooms.map(
       room =>
@@ -7134,6 +7164,7 @@ function renderRooms(rooms, alreadySorted=false){
 }
 
 
+/* ================= ROOM REST FALLBACK (ONLY IF FIRESTORE SDK LOAD FAILS) ================= */
 /* ================= LOAD ROOMS ================= */
 
 async function loadRooms(){
@@ -7144,15 +7175,29 @@ async function loadRooms(){
       "⏳ Firebase / Firestore connecting...";
 
 
-    const snapshot =
-      await Promise.race([
-        getDocs(roomCollection),
-        new Promise((_, reject) =>
-          setTimeout(() =>
-            reject(new Error("Rooms load timeout. Internet/Firebase connection check करें और Retry करें.")),
-          30000)
-        )
-      ]);
+    let snapshot;
+    let lastRoomLoadError = null;
+
+    /* Keep the existing Firebase collection/query exactly the same.
+       If one browser mode hits a temporary connection timeout, retry the
+       same read once instead of making that mode show 0 rooms. */
+    for(let attempt = 1; attempt <= 3; attempt++){
+      try{
+        snapshot = await Promise.race([
+          getDocs(roomCollection),
+          new Promise((_, reject) =>
+            setTimeout(() =>
+              reject(new Error("Rooms load timeout. Internet/Firebase connection check करें और Retry करें.")),
+            45000)
+          )
+        ]);
+        break;
+      }catch(error){
+        lastRoomLoadError = error;
+        if(attempt === 3) throw error;
+        console.warn("Rooms load retry:", error);
+      }
+    }
 
 
     currentRooms = [];
@@ -7204,7 +7249,7 @@ async function loadRooms(){
 
   }catch(error){
 
-    console.error(error);
+    console.error("Firestore SDK rooms load failed:", error);
 
     $("firebaseStatus").innerHTML =
       "❌ Firebase error: " +
@@ -7750,13 +7795,17 @@ window.updateCompareBar();
     window.scrollTo({top:0, behavior:"smooth"});
   };
 
-  /* Logged-out = Login only. Logged-in = My Account only. */
+  /* Logged-out = Login only. Logged-in = My Account only.
+     Use Firebase's actual auth state so mobile/desktop stay identical. */
   updateNavbar = function(){
     const loginBtn = $u2("loginNavBtn");
     const accountBtn = $u2("accountNavBtn");
     if(!loginBtn || !accountBtn) return;
 
-    const signedInUser = (currentUser && currentUser.emailVerified) ? currentUser : null;
+    /* Use Firebase's live auth state, not a stale local currentUser value.
+       This keeps Normal/Mobile/Desktop consistent. */
+    const signedInUser = (auth && auth.currentUser) ? auth.currentUser : null;
+    currentUser = signedInUser;
 
     if(signedInUser){
       loginBtn.classList.add("hidden");
@@ -7767,13 +7816,59 @@ window.updateCompareBar();
     }
   };
 
-  /* Re-apply after Firebase auth state changes without touching Firebase logic. */
-  document.addEventListener("DOMContentLoaded", function(){
-    try{ window.updateNavbar(); }catch(e){}
-  });
+  /* Keep both navbar options in the HTML; only toggle visibility by real Firebase auth state. */
+  try{
+    onAuthStateChanged(auth, function(user){
+      currentUser = user || null;
+      try{ window.updateNavbar(); }catch(e){}
+    });
+  }catch(e){}
+
+  /* Also apply immediately for the already-available auth state. */
+  try{ window.updateNavbar(); }catch(e){}
 })();
 </script>
 
+
+<style id="v10-catalog-priority-only">
+.catalog-priority-heading{
+  margin-top:4px;
+  padding:12px 14px;
+  border-radius:13px;
+  background:#f7faff;
+  border:1px solid #dbe7ff;
+  color:#172033;
+  font-size:15px;
+  font-weight:900;
+}
+.catalog-priority-clear{
+  display:flex;
+  justify-content:flex-start;
+  padding:0 0 2px;
+}
+.catalog-priority-clear button{
+  border:1px solid #cbd5e1;
+  background:#fff;
+  color:#344054;
+  border-radius:9px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.catalog-priority-clear button:hover{background:#f8fafc;}
+.catalog-all-divider{
+  height:1px;
+  background:#e5e7eb;
+  margin:8px 0 2px;
+}
+.catalog-all-heading{
+  padding:8px 2px 2px;
+  color:#111827;
+  font-size:16px;
+  font-weight:900;
+}
+</style>
 
 <style id="hero-benefits-only">
 .hero-benefits{
