@@ -1,10 +1,17 @@
 <!DOCTYPE html>
+<!-- V55: Combined Reports + Feedback into one Admin counter; based on V54. V52: Scoped requested fixes on uploaded V51 base: no-photo fallback, public owner name, saved-item removal, admin soft-delete/restore, hidden admin email, deleted-property public filtering. V51: Requested fixes: unified auth nav, profile owner-name sync, saved view, My Posts actions, rent request modal, rent ranges and clear sorting. Based on V50; Firebase Rules-dependent feedback/report permissions still require Rules verification. -->
+<!-- Dream House Rental V34 | Based on V33 | V33 master remains unchanged -->
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Dream House Rental | Find • Rent • Stay</title>
+<meta name="description" content="Dream House Rental पर Room, Flat, House, PG, Hostel और Shop खोजें। अपनी property FREE में पोस्ट करें और owners से direct contact करें।">
+<meta property="og:title" content="Dream House Rental | Find • Rent • Stay">
+<meta property="og:description" content="Room, Flat, House, PG, Hostel और Shop खोजें। अपनी property FREE में पोस्ट करें।">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%232563eb%27/%3E%3Cpath d=%27M10 31 32 13l22 18v20a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4z%27 fill=%27white%27/%3E%3Cpath d=%27M26 55V38h12v17%27 fill=%27%232563eb%27/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
@@ -1123,6 +1130,37 @@ header{
   color:#98a2b3;
 }
 
+/* ================= V34 TRUST CENTER ================= */
+.v34-trust-box{
+  max-width:720px;
+}
+.v34-trust-content h3{
+  margin:18px 0 7px;
+  color:#111827;
+}
+.v34-trust-content p{
+  color:#475467;
+  margin:7px 0;
+}
+.v34-trust-content ul{
+  padding-left:22px;
+  color:#475467;
+}
+.v34-trust-content li{
+  margin:7px 0;
+}
+.v34-trust-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#ecfdf3;
+  color:#027a48;
+  font-weight:700;
+  font-size:12px;
+}
+
 /* ================= MODAL ================= */
 
 .modal{
@@ -1452,6 +1490,11 @@ header{
 .multi-select-box.open .multi-select-options{display:block !important;}
 .multi-select-toggle{cursor:pointer;}
 
+
+/* V44: Clear locked-feature hints for logged-out visitors. */
+.login-contact-hint,.login-location-hint{font-size:12px;line-height:1.5;color:#344054;background:#f8fafc;border:1px solid #d0d5dd;border-radius:10px;padding:9px 11px;margin:8px 0;width:100%;}
+.login-contact-hint{grid-column:1/-1;}
+.room-actions .login-contact-hint{flex-basis:100%;}
 </style>
 
 <style>
@@ -1858,6 +1901,7 @@ html, body{
   .hero:before{background:linear-gradient(90deg,rgba(4,47,98,.18),rgba(8,102,190,.06),rgba(0,0,0,0)) !important;}
 }
 </style>
+<meta name="dhr-version" content="V64 targeted updates">
 </head>
 
 <body>
@@ -1992,8 +2036,24 @@ html, body{
         </div>
 
         <div class="search-field">
-          <label>₹ Max Rent</label>
-          <input id="maxRent" type="number" min="0" placeholder="No Limit">
+          <label>₹ Rent Range</label>
+          <select id="maxRentRange" onchange="handleRentRangeChange()">
+            <option value="">All Rents</option>
+            <option value="0-500">₹500 तक</option>
+            <option value="500-1000">₹500–₹1,000</option>
+            <option value="1000-2000">₹1,000–₹2,000</option>
+            <option value="2000-3000">₹2,000–₹3,000</option>
+            <option value="3000-5000">₹3,000–₹5,000</option>
+            <option value="5000-10000">₹5,000–₹10,000</option>
+            <option value="10000-20000">₹10,000–₹20,000</option>
+            <option value="20000-plus">₹20,000 से अधिक</option>
+            <option value="custom">Custom Rent</option>
+          </select>
+          <div id="customRentFields" style="display:none;margin-top:7px;gap:6px;">
+            <input id="customRentMin" type="number" min="0" placeholder="Minimum ₹" aria-label="Minimum rent" oninput="filterRooms()">
+            <input id="customRentMax" type="number" min="0" placeholder="Maximum ₹" aria-label="Maximum rent" oninput="filterRooms()">
+          </div>
+          <input id="maxRent" type="hidden" value="">
         </div>
 
         <div class="search-bottom-row">
@@ -2099,7 +2159,9 @@ html, body{
         <option value="rentHigh">₹ Rent: High to Low</option>
         <option value="distance">📍 Nearest First</option>
       </select>
+      <button class="results-near-btn" type="button" onclick="clearSorting()">✖️ Clear Sorting</button>
       <button class="results-near-btn" type="button" onclick="searchNearMe()">📍 Near Me</button>
+      <button class="results-near-btn" type="button" onclick="refreshRooms()">🔄 Refresh Rooms</button>
     </div>
   </div>
 
@@ -3026,6 +3088,31 @@ html, body{
 
   </div>
 
+  <div class="account-quick-actions">
+    <button type="button" class="account-action-card" onclick="document.getElementById('myPostsList')?.scrollIntoView({behavior:'smooth',block:'start'})">
+      <span class="account-action-icon">🏠</span><strong>My Properties</strong><small>मेरी posted properties</small>
+    </button>
+    <button type="button" class="account-action-card" onclick="document.getElementById('savedPropertiesList')?.scrollIntoView({behavior:'smooth',block:'start'})">
+      <span class="account-action-icon">❤️</span><strong>Saved Properties</strong><small>मेरी saved properties</small>
+    </button>
+    <button type="button" class="account-action-card" onclick="document.getElementById('notificationsList')?.scrollIntoView({behavior:'smooth',block:'start'})">
+      <span class="account-action-icon">🔔</span><strong>Notifications</strong><small>नई updates देखें</small>
+    </button>
+    <button type="button" class="account-action-card" onclick="document.getElementById('myReportsList')?.scrollIntoView({behavior:'smooth',block:'start'}); window.loadMyReports?.()">
+      <span class="account-action-icon">🚩</span><strong>My Reports</strong><small>शिकायत का स्टेटस देखें</small>
+    </button>
+    <button type="button" class="account-action-card" onclick="document.getElementById('myInquiriesList')?.scrollIntoView({behavior:'smooth',block:'start'})">
+      <span class="account-action-icon">📩</span><strong>My Inquiries</strong><small>मेरी requirements</small>
+    </button>
+    <button type="button" class="account-action-card" onclick="openEditProfile()">
+      <span class="account-action-icon">⚙️</span><strong>Account Settings</strong><small>Profile update करें</small>
+    </button>
+  </div>
+
+  <div class="account-verified-banner">
+    <span>✅</span> <div><strong>Account Status</strong><small id="accountVerificationText">आपका account Firebase login के साथ सुरक्षित है।</small></div>
+  </div>
+
 
   <div class="dashboard-grid">
 
@@ -3106,6 +3193,13 @@ html, body{
 
     </div>
 
+
+    <div class="dashboard-card" id="myReportsCard">
+      <h3>🚩 My Reports / मेरी शिकायतें</h3>
+      <p style="color:#667085;font-size:13px;">आपकी भेजी गई शिकायतों का वर्तमान स्टेटस यहाँ दिखेगा।</p>
+      <div id="myReportsList"><p style="color:#667085;">शिकायतें load हो रही हैं...</p></div>
+      <button type="button" class="secondary-btn" onclick="window.loadMyReports?.()">🔄 Refresh Status</button>
+    </div>
 
     <div class="dashboard-card">
 
@@ -3211,6 +3305,25 @@ html, body{
 </div>
 
 
+
+<!-- V58: Recently viewed + Rental Guide -->
+<section id="recentlyViewedSection" class="section hidden">
+  <div class="section-title"><h2>🕘 Recently Viewed Properties</h2><p>आपने हाल में जो प्रॉपर्टी देखीं</p></div>
+  <div id="recentlyViewedList" class="rooms-grid"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+    <button type="button" class="secondary-btn" onclick="showRecentlyViewed()">View All / सभी देखें</button>
+    <button type="button" class="secondary-btn" onclick="clearRecentlyViewed()">Clear History / हिस्ट्री साफ करें</button>
+  </div>
+</section>
+<section id="rentalGuideHome" class="section hidden">
+  <div class="section-title"><h2>📘 Rental Guide / किराये की गाइड</h2><p>किराये पर घर लेने से पहले जरूरी बातें</p></div>
+  <div class="auth-box">
+    <p><b>Before paying / भुगतान से पहले:</b> rent और security deposit लिखित में तय करें; बिजली-पानी/मेंटेनेंस पूछें; कमरा, ताला, पानी, बिजली और आसपास की जगह देखें; मालिक की पहचान और ownership/authorization जाँचें; receipt लें और rental agreement पढ़कर ही sign करें.</p>
+    <p><b>सावधानी:</b> प्रॉपर्टी देखे बिना advance न भेजें, OTP/PIN साझा न करें, और भुगतान का प्रमाण रखें।</p>
+    <button type="button" class="secondary-btn" onclick="showRentalGuide()">Full Rental Guide / पूरी गाइड</button>
+  </div>
+</section>
+
 <!-- ================= MORE ================= -->
 
 <div id="morePage"
@@ -3232,6 +3345,8 @@ html, body{
 <section class="section">
 
 <div class="more-grid">
+<div class="more-card"><div class="big-icon">📘</div><h3>Rental Guide / किराये की गाइड</h3><p>Rent, deposit, documents और fraud safety.</p><button type="button" class="secondary-btn" onclick="showRentalGuide()">Open Guide / गाइड खोलें</button></div>
+
 
   <div class="more-card">
 
@@ -3247,17 +3362,17 @@ html, body{
 
       <a href="#"
          onclick="return false">
-        📸 Instagram
+        📸 Instagram — Coming Soon
       </a>
 
       <a href="#"
          onclick="return false">
-        ▶️ YouTube
+        ▶️ YouTube — Coming Soon
       </a>
 
       <a href="#"
          onclick="return false">
-        👍 Facebook
+        👍 Facebook — Coming Soon
       </a>
 
     </div>
@@ -3313,8 +3428,25 @@ html, body{
     </p>
 
     <p style="margin-top:12px;">
-      📧 Email: dreamhouserental@example.com
+      📧 Email: <a href="mailto:dreamhouserentalofficial@gmail.com" style="color:inherit;text-decoration:underline;">dreamhouserentalofficial@gmail.com</a>
     </p>
+
+  </div>
+
+
+  <div class="more-card">
+
+    <div class="big-icon">🛡️</div>
+
+    <h3>Trust & Safety</h3>
+
+    <p>Privacy, Terms और property listing rules देखें. सुरक्षित तरीके से property deal करें.</p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px;">
+      <button class="secondary-btn" type="button" onclick="openV34Trust('privacy')">Privacy</button>
+      <button class="secondary-btn" type="button" onclick="openV34Trust('terms')">Terms</button>
+      <button class="secondary-btn" type="button" onclick="openV34Trust('rules')">Listing Rules</button>
+    </div>
 
   </div>
 
@@ -3326,9 +3458,8 @@ html, body{
     <h3>Coming Soon</h3>
 
     <p>
-      GPS Nearby Search, better filters,
-      notifications aur aur bhi features
-      future updates mein add kiye ja sakte hain.
+      Notifications और नए trust features पर आगे काम जारी रहेगा।
+      GPS Nearby Search और advanced filters जैसी सुविधाएँ पहले से उपलब्ध हैं.
     </p>
 
   </div>
@@ -3373,60 +3504,77 @@ html, body{
 
   <div class="form-group">
 
-    <label>Type</label>
+    <label>Type / प्रकार</label>
 
-    <select id="feedbackType">
-      <option value="सुझाव">सुझाव</option>
-      <option value="शिकायत">शिकायत</option>
+    <select id="feedbackType" onchange="updateFeedbackSubjects()">
+      <option value="शिकायत">Complaint / शिकायत</option>
+      <option value="सुझाव">Suggestion / सुझाव</option>
+      <option value="Feedback">Feedback / प्रतिक्रिया</option>
+      <option value="Report">Report / रिपोर्ट</option>
+      <option value="Technical Issue">Technical Issue / तकनीकी समस्या</option>
+      <option value="Other">Other / अन्य</option>
     </select>
 
   </div>
 
 
   <div class="form-group">
-    <label>Name</label>
-    <input id="feedbackName"
-           placeholder="आपका नाम">
+    <label>Subject / विषय</label>
+    <select id="feedbackSubject">
+      <option value="">Select subject / विषय चुनें</option>
+    </select>
   </div>
 
 
   <div class="form-group">
-    <label>Mobile</label>
+    <label>Name / नाम</label>
+    <input id="feedbackName" type="text" placeholder="Your name / आपका नाम">
+  </div>
+  <div class="form-group">
+    <label>Profile ID (Optional / वैकल्पिक)</label>
+    <input id="feedbackProfileId" type="text" placeholder="Profile ID (optional)">
+  </div>
+  <div class="form-group">
+    <label>Email / ईमेल *</label>
+    <input id="feedbackEmail" type="email" required placeholder="your@email.com">
+  </div>
+
+
+  <div class="form-group">
+    <label>Mobile / मोबाइल</label>
     <input id="feedbackMobile"
-           placeholder="Mobile number">
-  </div>
-
-
-  <div class="form-group">
-    <label>Subject</label>
-    <input id="feedbackSubject"
-           placeholder="Subject">
+           placeholder="Mobile number / मोबाइल नंबर">
   </div>
 
 
   <div class="form-group">
 
-    <label>Message</label>
-
-    <textarea id="feedbackMessage"
-              placeholder="अपना सुझाव / शिकायत लिखें...">
-    </textarea>
+    <label>Message / विवरण (अधिकतम 200 शब्द)</label>
+    <textarea id="feedbackMessage" maxlength="1600" oninput="updateFeedbackWordCount()" placeholder="अपना सुझाव / शिकायत लिखें..."></textarea>
+    <small id="feedbackWordCount" style="display:block;color:#667085;margin-top:5px;">0 / 200 words</small>
+    <label style="display:block;margin-top:12px;">Photos / फोटो (अधिकतम 3)</label>
+    <input id="feedbackPhotos" type="file" accept="image/*" multiple onchange="validateFeedbackPhotos(this)">
+    <small id="feedbackPhotoStatus" style="display:block;color:#667085;">आप 2–3 फोटो चुन सकते हैं।</small>
 
   </div>
 
 
-  <button class="primary-btn"
-          onclick="submitFeedback()">
-    Submit Feedback
-  </button>
+  <div id="feedbackPhotoPreview" class="feedback-photo-preview" aria-live="polite"></div>
+  <button class="primary-btn" onclick="submitFeedback()">Submit Feedback / भेजें</button>
+  <button class="secondary-btn" type="button" onclick="clearFeedbackForm()">Clear / साफ करें</button>
 
   <button class="secondary-btn"
           onclick="closeFeedback()">
     Cancel
   </button>
 
-  <div id="feedbackStatus"
-       style="margin-top:15px;">
+  <div id="feedbackStatus" style="margin-top:15px;"></div>
+  <div class="feedback-status-check">
+    <h3>🔎 Feedback / Complaint Status देखें</h3>
+    <label for="feedbackCheckReference">Reference ID</label><input id="feedbackCheckReference" placeholder="FB-...">
+    <label for="feedbackCheckEmail">Email</label><input id="feedbackCheckEmail" type="email" placeholder="सबमिट किया गया ईमेल">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button type="button" class="primary-btn" onclick="checkFeedbackStatus()">Check Status</button><button type="button" class="secondary-btn" onclick="clearFeedbackStatusCheck()">Clear</button></div>
+    <div id="feedbackCheckResult" aria-live="polite"></div>
   </div>
 
 </div>
@@ -3506,6 +3654,20 @@ html, body{
 </div>
 
 
+<!-- ================= V34 TRUST CENTER ================= -->
+<div id="v34TrustModal" class="modal hidden" onclick="if(event.target===this)closeV34Trust()">
+  <div class="modal-box v34-trust-box">
+    <div class="modal-header">
+      <div>
+        <h2 id="v34TrustTitle">Dream House Rental Trust Center</h2>
+        <p style="color:#667085;font-size:13px;margin-top:3px;">Clear rules, privacy and safer property listings.</p>
+      </div>
+      <button class="close-btn" type="button" onclick="closeV34Trust()">×</button>
+    </div>
+    <div id="v34TrustContent" class="v34-trust-content"></div>
+  </div>
+</div>
+
 <!-- ================= FOOTER ================= -->
 
 <footer class="footer">
@@ -3552,6 +3714,21 @@ html, body{
         More
       </button>
 
+      <button onclick="openV34Trust('privacy')"
+              style="background:none;border:0;text-align:left;cursor:pointer;">
+        Privacy Policy
+      </button>
+
+      <button onclick="openV34Trust('terms')"
+              style="background:none;border:0;text-align:left;cursor:pointer;">
+        Terms & Conditions
+      </button>
+
+      <button onclick="openV34Trust('rules')"
+              style="background:none;border:0;text-align:left;cursor:pointer;">
+        Listing Rules
+      </button>
+
     </div>
 
   </div>
@@ -3562,9 +3739,9 @@ html, body{
     <h3>Connect</h3>
 
     <div class="footer-links">
-      <span>📸 Instagram</span>
-      <span>▶️ YouTube</span>
-      <span>👍 Facebook</span>
+      <span>📸 Instagram — Coming Soon</span>
+      <span>▶️ YouTube — Coming Soon</span>
+      <span>👍 Facebook — Coming Soon</span>
     </div>
 
   </div>
@@ -3578,6 +3755,58 @@ html, body{
 
 </footer>
 
+
+<script>
+/* ================= V34 TRUST CENTER ================= */
+function openV34Trust(type){
+  const modal=document.getElementById('v34TrustModal');
+  const title=document.getElementById('v34TrustTitle');
+  const content=document.getElementById('v34TrustContent');
+  if(!modal||!title||!content)return;
+  const data={
+    privacy:{
+      title:'Privacy Policy',
+      html:`<h3>हम आपकी जानकारी का सम्मान करते हैं</h3>
+      <p>Dream House Rental पर account, property और inquiry जैसी जानकारी केवल website की सुविधाएँ चलाने, संपर्क और service improvement के लिए उपयोग की जाती है.</p>
+      <h3>हम क्या जानकारी ले सकते हैं?</h3>
+      <ul><li>नाम और email/account information</li><li>Property listing की जानकारी</li><li>आपके द्वारा दी गई contact/inquiry information</li><li>Location/GPS केवल संबंधित सुविधा इस्तेमाल करने पर</li></ul>
+      <h3>महत्वपूर्ण</h3>
+      <p>अपना password, OTP या अन्य confidential information किसी व्यक्ति के साथ share न करें.</p>
+      <p>Privacy से जुड़े सवाल: <a href="mailto:dreamhouserentalofficial@gmail.com">dreamhouserentalofficial@gmail.com</a></p>`
+    },
+    terms:{
+      title:'Terms & Conditions',
+      html:`<h3>Website का उपयोग</h3>
+      <p>Dream House Rental property owners और renters को connect करने वाला platform है. Property की वास्तविकता, ownership और agreement की अंतिम जिम्मेदारी संबंधित users की होगी.</p>
+      <h3>निषिद्ध गतिविधियाँ</h3>
+      <ul><li>Fake, misleading या duplicate property listing</li><li>गलत price, location या owner information</li><li>Fraud, scam या किसी दूसरे व्यक्ति के नाम का गलत उपयोग</li><li>Illegal property या illegal activity से संबंधित listing</li></ul>
+      <h3>Safety</h3>
+      <p>Property देखने या payment करने से पहले location, owner identity, documents और terms स्वयं verify करें. किसी अनजान व्यक्ति को advance payment न करें जब तक उचित verification न हो.</p>`
+    },
+    rules:{
+      title:'Property Listing Rules',
+      html:`<h3>हर listing के लिए</h3>
+      <ul><li>सही property type, rent और location डालें.</li><li>वास्तविक और स्पष्ट photos इस्तेमाल करें.</li><li>अपना सही contact information रखें.</li><li>एक ही property की duplicate listings न बनाएं.</li><li>Fake, illegal या misleading content पोस्ट न करें.</li></ul>
+      <h3>🛡️ Owner Verification — Basic Structure</h3>
+      <p><span class="v34-trust-badge">✓ Verified Owner</span></p>
+      <p>आगे चलकर Dream House Rental में verified owner badge उन owners के लिए इस्तेमाल किया जा सकता है जिनकी आवश्यक जानकारी/document verification पूरी हो. अभी यह section verification का नियम/ढांचा बताता है; यह अपने-आप किसी owner को verified नहीं बनाता.</p>
+      <h3>Report</h3>
+      <p>Suspicious या गलत listing दिखे तो उसे report करें या <a href="mailto:dreamhouserentalofficial@gmail.com">dreamhouserentalofficial@gmail.com</a> पर जानकारी भेजें.</p>`
+    }
+  };
+  const item=data[type]||data.privacy;
+  title.textContent=item.title;
+  content.innerHTML=item.html;
+  modal.classList.remove('hidden');
+  document.body.style.overflow='hidden';
+}
+function closeV34Trust(){
+  const modal=document.getElementById('v34TrustModal');
+  if(modal)modal.classList.add('hidden');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeV34Trust();});
+</script>
 
 <script type="module">
 
@@ -3600,7 +3829,10 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
+  query,
+  where,
+  limit
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -3612,7 +3844,9 @@ import {
   sendPasswordResetEmail,
   sendEmailVerification,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
@@ -3659,6 +3893,9 @@ const db =
     "default"
   );
 
+/* Expose the already-initialized Firestore instance to the Admin module. */
+window.__DHR_DB = db;
+
 const auth =
   getAuth(app);
 
@@ -3674,6 +3911,9 @@ const usersCollection =
 
 const notificationsCollection =
   collection(db,"notifications");
+
+const reportsCollection =
+  collection(db,"reports");
 
 
 let currentUser = null;
@@ -3815,6 +4055,8 @@ window.closeMenu = function(){
 
 window.showHome = function(){
 
+  if($("adminPage")) $("adminPage").classList.add("hidden");
+
   $("homePage").classList.remove("hidden");
   $("postPage").classList.add("hidden");
   $("loginPage").classList.add("hidden");
@@ -3830,10 +4072,15 @@ window.showHome = function(){
 };
 
 
-window.showPost = function(){
+window.showPost = async function(){
 
+  if($("adminPage")) $("adminPage").classList.add("hidden");
+
+  /* Wait for Firebase to restore any saved session before deciding whether
+     this visitor must sign in. */
+  try{ if(auth && typeof auth.authStateReady === "function") await auth.authStateReady(); }catch(e){}
   /* V33: All Post Room / Post Property entry points use this single flow. */
-  const user = auth.currentUser || null;
+  const user = auth.currentUser || currentUser || null;
   currentUser = user;
 
   if(!user || !user.emailVerified){
@@ -3896,6 +4143,8 @@ window.openMyAccount = function(event){
 
 showLogin = function(fromPostRoom = false){
 
+  if($("adminPage")) $("adminPage").classList.add("hidden");
+
   if(currentUser){
 
     showDashboard();
@@ -3925,6 +4174,8 @@ showLogin = function(fromPostRoom = false){
 
 
 window.showDashboard = async function(){
+
+  if($("adminPage")) $("adminPage").classList.add("hidden");
 
   if(!currentUser){
 
@@ -3979,6 +4230,8 @@ window.showDashboard = async function(){
 
 
 window.showMore = function(){
+
+  if($("adminPage")) $("adminPage").classList.add("hidden");
 
   $("homePage").classList.add("hidden");
   $("postPage").classList.add("hidden");
@@ -4296,6 +4549,8 @@ window.signupUser = async function(){
 
   try{
 
+    await setPersistence(auth, browserLocalPersistence);
+
     const credential =
       await createUserWithEmailAndPassword(
         auth,
@@ -4411,6 +4666,8 @@ window.loginUser = async function(){
 
   try{
 
+    await setPersistence(auth, browserLocalPersistence);
+
     await signInWithEmailAndPassword(
       auth,
       email,
@@ -4440,6 +4697,12 @@ window.loginUser = async function(){
     setTimeout(()=>{
       if(pendingPostAfterLogin){
         window.showPost();
+      }else if(window.pendingContactRoomId){
+        const pendingId=window.pendingContactRoomId;
+        window.pendingContactRoomId=null;
+        window.pendingContactAction=null;
+        showHome();
+        setTimeout(()=>window.openPropertyDetails(pendingId),180);
       }else{
         showDashboard();
       }
@@ -4493,6 +4756,8 @@ window.logoutUser = async function(){
     $("loginPassword").type = "password";
 
     pendingPostAfterLogin = false;
+    const authStatusBox = $("authStatus");
+    if(authStatusBox) authStatusBox.innerHTML = "ℹ️ अभी Login नहीं है।";
     showLogin(false);
     showLoginTab();
 
@@ -4868,12 +5133,33 @@ window.saveProfile = async function(){
     profileData.city = city;
     profileData.address = address;
 
-
     updateProfileUI();
 
+    // Keep owner name/contact on previously posted listings in sync with profile.
+    try{
+      const ownedSnap = await getDocs(query(collection(db,"room"), where("ownerId","==",currentUser.uid), limit(300)));
+      const jobs = [];
+      ownedSnap.forEach(item=>{
+        const oldRoom = item.data() || {};
+        if(oldRoom.name !== name || oldRoom.mobile !== mobile){
+          jobs.push(updateDoc(doc(db,"room",item.id),{name,mobile,ownerName:name,ownerMobile:mobile,updatedAt:serverTimestamp()}));
+        }
+      });
+      await Promise.all(jobs);
+      currentRooms = currentRooms.map(r => r.ownerId===currentUser.uid ? {...r,name,mobile,ownerName:name,ownerMobile:mobile} : r);
+      renderRooms(currentRooms);
+      await loadMyPosts();
+    }catch(syncError){
+      console.warn("Profile saved but existing property owner details could not sync:",syncError);
+      // Profile itself is already saved; surface a clear partial-success message below.
+      window._profileRoomSyncFailed = true;
+    }
 
-    $("editProfileStatus").innerHTML =
-      "✅ Profile updated.";
+    updateNavbar();
+    $("editProfileStatus").innerHTML = window._profileRoomSyncFailed
+      ? "⚠️ Profile सेव हो गई, लेकिन पुराने Property Cards में नाम अपडेट नहीं हो पाया। Firestore Rules जाँचें।"
+      : "✅ Profile updated और आपकी पुरानी Properties में Owner का नाम/मोबाइल अपडेट कर दिया गया।";
+    window._profileRoomSyncFailed = false;
 
 
     setTimeout(
@@ -4896,7 +5182,7 @@ window.saveProfile = async function(){
 
 /* ================= DASHBOARD ================= */
 
-async function loadDashboard(){
+window.loadDashboard = async function loadDashboard(){
 
   if(!currentUser){
     return;
@@ -4908,8 +5194,38 @@ async function loadDashboard(){
   await loadNotifications();
   await loadSavedProperties();
   await loadMyInquiries();
+  await loadMyReports();
 
 }
+
+window.loadMyReports = async function loadMyReports(){
+  const container = $("myReportsList");
+  if(!container) return;
+  if(!currentUser){ container.innerHTML = '<p>अपनी शिकायतें देखने के लिए login करें।</p>'; return; }
+  container.innerHTML = '<p style="color:#667085;">शिकायतों का स्टेटस load हो रहा है...</p>';
+  try{
+    const snapshot = await getDocs(query(reportsCollection, where("reporterUserId","==",currentUser.uid), limit(100)));
+    const reports=[];
+    snapshot.forEach(d=>reports.push({id:d.id,...(d.data()||{})}));
+    reports.sort((a,b)=>{
+      const da=a.createdAt?.toDate?a.createdAt.toDate().getTime():0;
+      const db=b.createdAt?.toDate?b.createdAt.toDate().getTime():0;
+      return db-da;
+    });
+    if(!reports.length){container.innerHTML='<div style="padding:12px;border:1px dashed #d0d5dd;border-radius:12px;color:#667085;">अभी आपने कोई शिकायत नहीं भेजी है। किसी property पर 🚩 Report Listing चुनकर शिकायत भेज सकते हैं।</div>';return;}
+    const statusInfo={pending:{label:'Pending / जाँच बाकी',color:'#92400e',bg:'#fef3c7'},reviewed:{label:'Reviewed / देख ली गई',color:'#1d4ed8',bg:'#dbeafe'},in_progress:{label:'In Progress / कार्रवाई जारी',color:'#854d0e',bg:'#fef3c7'},resolved:{label:'Resolved / समाधान हुआ',color:'#166534',bg:'#dcfce7'},closed:{label:'Closed / शिकायत बंद',color:'#475467',bg:'#eaecf0'}};
+    container.innerHTML=reports.map(r=>{
+      const st=statusInfo[String(r.status||'pending').toLowerCase()]||statusInfo.pending;
+      const dt=r.createdAt?.toDate?r.createdAt.toDate().toLocaleString('en-IN'):'तारीख उपलब्ध नहीं';
+      const updated=r.statusUpdatedAt?.toDate?r.statusUpdatedAt.toDate().toLocaleString('en-IN'):(r.reviewedAt?.toDate?r.reviewedAt.toDate().toLocaleString('en-IN'):'अभी अपडेट नहीं');
+      const rid='RPT-'+String(r.id).slice(-6).toUpperCase();
+      return `<div style="border:1px solid #e4e7ec;border-radius:13px;padding:13px;margin:10px 0;background:#fff;"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;"><strong>${escapeHtml(rid)}</strong><span style="background:${st.bg};color:${st.color};border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;">${st.label}</span></div><p style="margin:9px 0 4px;"><strong>कारण:</strong> ${escapeHtml(r.reasonCategory||r.reason||'अन्य शिकायत')}</p>${r.details?`<p style="margin:4px 0;"><strong>विवरण:</strong> ${escapeHtml(r.details)}</p>`:''}${(r.adminFeedback||r.resolutionNote)?`<p style="margin:4px 0;"><strong>एडमिन का जवाब:</strong> ${escapeHtml(r.adminFeedback||r.resolutionNote)}</p>`:''}<p style="margin:4px 0;color:#667085;font-size:12px;">Property ID: ${escapeHtml(r.roomId||'-')} · शिकायत: ${escapeHtml(dt)}</p><p style="margin:4px 0;color:#667085;font-size:12px;">Last Update: ${escapeHtml(updated)}</p></div>`;
+    }).join('');
+  }catch(e){
+    console.error('My Reports load error:',e);
+    container.innerHTML='<div style="padding:12px;border:1px solid #f3b5b5;border-radius:12px;color:#991b1b;">शिकायतों का स्टेटस अभी load नहीं हो पाया। Firebase Rules में users को केवल अपनी reports पढ़ने की अनुमति जाँचें और फिर Refresh करें।</div>';
+  }
+};
 
 
 async function loadMyPosts(){
@@ -4942,14 +5258,46 @@ async function loadMyPosts(){
   }
 
 
-  container.innerHTML =
-    myRooms.map(
-      room =>
-        renderRoomCard(room,true)
-    ).join("");
+  container.innerHTML = myRooms.map(room => `
+    <div class="my-post-entry" style="border:1px solid #e4e7ec;border-radius:14px;padding:10px;margin-bottom:12px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+        <button type="button" class="small-btn edit" onclick="event.stopPropagation();editRoom('${escapeJs(room.id)}')">✏️ Edit</button>
+        <button type="button" class="small-btn delete" onclick="event.stopPropagation();deleteRoom('${escapeJs(room.id)}')">🗑️ Delete</button>
+        <button type="button" class="small-btn" onclick="event.stopPropagation();openPropertyDetails('${escapeJs(room.id)}')">View Details</button>
+      </div>
+      ${renderRoomCard(room,true)}
+    </div>`).join("");
 
 }
 
+
+window.openUserNotification = async function(notificationId){
+  if(!currentUser) return;
+  try{
+    const snap=await getDocs(query(notificationsCollection,where("userId","==",currentUser.uid),limit(100)));
+    const docSnap=snap.docs.find(d=>d.id===notificationId);
+    if(!docSnap){alert("यह notification नहीं मिली। Notifications दोबारा खोलें।");return;}
+    const n=docSnap.data()||{};
+    if(n.reportId){
+      const rid=String(n.reportId);
+      try{
+        const reportSnap=await getDoc(doc(db,"reports",rid));
+        if(reportSnap.exists()){
+          const r=reportSnap.data()||{};
+          alert(`Report: RPT-${rid.slice(-6).toUpperCase()}\nStatus: ${reportStatusLabel(r.status||"pending")}\nAdmin Reply: ${r.adminFeedback||r.resolutionNote||"अभी कोई जवाब नहीं है।"}`);
+          return;
+        }
+      }catch(e){console.warn("Report notification target unavailable",e);}
+      alert("इस notification से जुड़ी report का विवरण अभी उपलब्ध नहीं है।");return;
+    }
+    if(n.roomId){
+      const room=currentRooms.find(r=>String(r.id)===String(n.roomId));
+      if(room){showHome();setTimeout(()=>openPropertyDetails(room.id),180);return;}
+      alert("इस notification की property अभी उपलब्ध नहीं है या हटाई जा चुकी है।");return;
+    }
+    alert("यह notification सूचना के लिए है; इससे जुड़ा अलग detail page उपलब्ध नहीं है।\n\n"+(n.message||""));
+  }catch(e){console.error(e);alert("Notification detail अभी नहीं खुल पाई। कृपया फिर कोशिश करें।");}
+};
 
 async function loadNotifications(){
 
@@ -4961,7 +5309,11 @@ async function loadNotifications(){
 
     const snapshot =
       await getDocs(
-        notificationsCollection
+        query(
+          notificationsCollection,
+          where("userId","==",currentUser.uid),
+          limit(100)
+        )
       );
 
 
@@ -4972,17 +5324,10 @@ async function loadNotifications(){
 
       const data = item.data();
 
-      if(
-        data.userId ===
-        currentUser.uid
-      ){
-
-        notifications.push({
-          id:item.id,
-          ...data
-        });
-
-      }
+      notifications.push({
+        id:item.id,
+        ...data
+      });
 
     });
 
@@ -5003,6 +5348,49 @@ async function loadNotifications(){
 
     });
 
+
+    /* V36: private property-match notifications. These are calculated from
+       the current user's own inquiries + the already-loaded public rooms;
+       no other user's profile/inquiry data is read. */
+    try{
+      const ownUserSnap = await getDoc(doc(db,"users",currentUser.uid));
+      const ownInquiries = Array.isArray(ownUserSnap.data()?.inquiries) ? ownUserSnap.data().inquiries : [];
+      const nowMs = Date.now();
+      const localMatches = [];
+      for(const room of currentRooms){
+        for(const q of ownInquiries){
+          if(q.active===false) continue;
+          const roomState=String(room.state||"").toLowerCase();
+          const roomCity=String(room.city||"").toLowerCase();
+          const roomArea=String(room.address||"").toLowerCase();
+          const roomType=propertyTypeText(room);
+          if(q.state && !roomState.includes(String(q.state).toLowerCase())) continue;
+          if(q.city && !roomCity.includes(String(q.city).toLowerCase())) continue;
+          if(q.area && !roomArea.includes(String(q.area).toLowerCase())) continue;
+          if(q.type && q.type!==roomType) continue;
+          if(q.maxRent && Number(room.rent||0)>Number(q.maxRent)) continue;
+          if(q.latitude!==null && q.longitude!==null && room.latitude!==null && room.longitude!==null){
+            const R=6371, dLat=(Number(room.latitude)-Number(q.latitude))*Math.PI/180, dLng=(Number(room.longitude)-Number(q.longitude))*Math.PI/180;
+            const a=Math.sin(dLat/2)**2+Math.cos(Number(q.latitude)*Math.PI/180)*Math.cos(Number(room.latitude)*Math.PI/180)*Math.sin(dLng/2)**2;
+            const d=2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+            if(d>Number(q.radiusKm||5)) continue;
+          }
+          const created = room.createdAt?.toMillis ? room.createdAt.toMillis() : new Date(room.createdAt||0).getTime();
+          localMatches.push({
+            id:"local-match-"+room.id,
+            message:`🔔 New Property Match! ${room.type||"Property"} in ${room.city||"your area"}, ₹${room.rent||""}/month.${q.additionalRequirements ? " 📝 आपकी Demand: " + q.additionalRequirements : ""}`,
+            createdAt:{toMillis:()=>created||nowMs,toDate:()=>new Date(created||nowMs)},
+            localMatch:true,
+            roomId:room.id
+          });
+          break;
+        }
+      }
+      localMatches.sort((a,b)=>b.createdAt.toMillis()-a.createdAt.toMillis());
+      notifications = [...notifications, ...localMatches.slice(0,50)];
+    }catch(localMatchError){
+      console.warn("Private inquiry matching skipped:", localMatchError);
+    }
 
     $("notificationCount").textContent =
       notifications.filter(
@@ -5025,18 +5413,10 @@ async function loadNotifications(){
     container.innerHTML =
       notifications.map(
         n => `
-          <div class="notification-item ${
-            n.read ? "" : "unread"
-          }">
-
-            <div>
-              ${escapeHtml(n.message || "")}
-            </div>
-
-            <small style="color:#98a2b3;">
-              ${formatDate(n.createdAt)}
-            </small>
-
+          <div class="notification-item ${n.read ? "" : "unread"}" role="button" tabindex="0" style="cursor:pointer;" onclick="openUserNotification('${escapeJs(n.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openUserNotification('${escapeJs(n.id)}')}">
+            <div>${escapeHtml(n.message || "")}</div>
+            <small style="color:#98a2b3;">${formatDate(n.createdAt)}</small>
+            <small style="display:block;color:#155eef;margin-top:4px;">Tap to view details →</small>
           </div>
         `
       ).join("");
@@ -5059,6 +5439,7 @@ async function loadNotifications(){
 /* ================= PROPERTY INQUIRY ================= */
 
 window.getInquiryLocation = function(){
+  if(!window.requireLoginForAction("अपनी लोकेशन इस्तेमाल करना")) return;
   if(!navigator.geolocation){
     if($("inquiryStatus")) $("inquiryStatus").textContent="❌ इस browser में GPS support नहीं है।";
     return;
@@ -5074,7 +5455,7 @@ window.getInquiryLocation = function(){
 };
 
 window.savePropertyInquiry = async function(){
-  if(!currentUser){ showLogin(); return; }
+  if(!window.requireLoginForAction("Property Inquiry सेव करना")) return;
   const inquiry={
     id:"inq_"+Date.now(),
     state:$("inqState").value.trim(),
@@ -5123,30 +5504,9 @@ window.deletePropertyInquiry = async function(id){
 };
 
 async function notifyMatchingInquiries(room, roomId){
-  try{
-    const snap=await getDocs(usersCollection);
-    const roomState=String(room.state||"").toLowerCase(), roomCity=String(room.city||"").toLowerCase(), roomArea=String(room.address||"").toLowerCase(), roomType=propertyTypeText(room);
-    const tasks=[];
-    snap.forEach(item=>{
-      const data=item.data()||{}; if(item.id===currentUser?.uid) return;
-      const inquiries=Array.isArray(data.inquiries)?data.inquiries:[];
-      for(const q of inquiries){
-        if(q.active===false) continue;
-        if(q.state && !roomState.includes(String(q.state).toLowerCase())) continue;
-        if(q.city && !roomCity.includes(String(q.city).toLowerCase())) continue;
-        if(q.area && !roomArea.includes(String(q.area).toLowerCase())) continue;
-        if(q.type && q.type!==roomType) continue;
-        if(q.maxRent && Number(room.rent||0)>Number(q.maxRent)) continue;
-        if(q.latitude!==null && q.longitude!==null && room.latitude!==null && room.longitude!==null){
-          const R=6371, dLat=(Number(room.latitude)-Number(q.latitude))*Math.PI/180, dLng=(Number(room.longitude)-Number(q.longitude))*Math.PI/180;
-          const a=Math.sin(dLat/2)**2+Math.cos(Number(q.latitude)*Math.PI/180)*Math.cos(Number(room.latitude)*Math.PI/180)*Math.sin(dLng/2)**2;
-          const d=2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); if(d>Number(q.radiusKm||5)) continue;
-        }
-        tasks.push(addDoc(notificationsCollection,{userId:item.id,message:`🔔 New Property Match! ${room.type||"Property"} in ${room.city||"your area"}, ₹${room.rent||""}/month.${q.additionalRequirements ? " 📝 आपकी Demand: " + q.additionalRequirements : ""}`,roomId,read:false,createdAt:serverTimestamp()})); break;
-      }
-    });
-    await Promise.all(tasks);
-  }catch(e){ console.warn("Inquiry notification skipped:",e); }
+  /* V36: intentionally no cross-user Firestore notification writes.
+     Private matching is calculated when the interested user opens My Account. */
+  return;
 }
 
 /* ================= SAVED ================= */
@@ -5201,10 +5561,10 @@ async function loadSavedProperties(){
 
           </div>
 
-          <button class="small-btn"
-                  onclick="viewSavedRoom('${escapeJs(room.id)}')">
-            View
-          </button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="small-btn" onclick="viewSavedRoom('${escapeJs(room.id)}')">View</button>
+            <button class="small-btn danger" onclick="unsaveRoom('${escapeJs(room.id)}')">Remove Saved</button>
+          </div>
 
         </div>
 
@@ -5214,44 +5574,30 @@ async function loadSavedProperties(){
 }
 
 
+window.unsaveRoom = async function(id){
+  if(!currentUser){ alert("कृपया पहले Login करें।"); return; }
+  if(!savedRoomIds.includes(id)) return;
+  try{
+    const next=savedRoomIds.filter(x=>x!==id);
+    await updateDoc(doc(db,"users",currentUser.uid),{savedRoomIds:next,updatedAt:serverTimestamp()});
+    savedRoomIds=next;
+    await loadSavedProperties();
+    if(typeof renderRooms==="function") renderRooms(currentRooms);
+    alert("✅ आपकी प्रॉपर्टी Saved Properties से Unsave कर दी गई है।");
+  }catch(e){ alert("Saved list से हटाया नहीं जा सका: "+(e.message||e)); }
+};
+
 window.viewSavedRoom = function(id){
-
+  const room=currentRooms.find(r=>r.id===id);
+  if(!room){ alert("यह Saved Property अभी load नहीं हुई। कृपया Rooms दोबारा खोलें।"); return; }
   showHome();
-
-  setTimeout(()=>{
-
-    const card =
-      document.querySelector(
-        `[data-room-id="${CSS.escape(id)}"]`
-      );
-
-    if(card){
-
-      card.scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-      });
-
-    }
-
-  },300);
-
+  setTimeout(()=>window.openPropertyDetails(id),180);
 };
 
 
 window.toggleSaveRoom = async function(id){
 
-  if(!currentUser){
-
-    alert(
-      "🔐 Property save करने के लिए पहले Login करें।"
-    );
-
-    showLogin();
-
-    return;
-
-  }
+  if(!window.requireLoginForAction("Property Save करना")) return;
 
 
   try{
@@ -5318,48 +5664,26 @@ window.toggleSaveRoom = async function(id){
 /* ================= PROPERTY RATE REQUEST ================= */
 
 window.requestPropertyRate = async function(roomId){
-  if(!currentUser){
-    alert("🔐 Rate request भेजने के लिए पहले Login करें।");
-    showLogin();
-    return;
-  }
-  const room=currentRooms.find(r=>r.id===roomId);
-  if(!room) return;
-  if(room.ownerId===currentUser.uid){
-    alert("यह आपकी अपनी property है।");
-    return;
-  }
+  if(!window.requireLoginForAction("Rent Request भेजना")) return;
+  const room=currentRooms.find(r=>r.id===roomId); if(!room) return;
+  if(room.ownerId===currentUser.uid){ alert("यह आपकी अपनी property है।"); return; }
+  const old=document.getElementById("rentRequestModal"); if(old) old.remove();
   const current=Number(room.rent||0);
-  const input=prompt(`Current Rent: ₹${current}/month\nआप कितना Rent चाहते हैं?`, current ? String(current) : "");
-  if(input===null) return;
-  const requested=Number(String(input).replace(/[^0-9.]/g,""));
-  if(!Number.isFinite(requested)||requested<=0){ alert("❌ सही rent amount डालें।"); return; }
-  const direction=requested<current?"कम":"ज्यादा";
-  try{
-    await addDoc(notificationsCollection,{
-      userId:room.ownerId,
-      message:`💰 Rent Change Request: Customer ने ${room.type||"property"} (${room.city||""}) का rent ₹${current}/month से ₹${requested}/month ${direction} करने की request भेजी है।`,
-      roomId,
-      fromUserId:currentUser.uid,
-      requestType:"rate_change",
-      currentRent:current,
-      requestedRent:requested,
-      read:false,
-      createdAt:serverTimestamp()
-    });
-    await addDoc(notificationsCollection,{
-      userId:currentUser.uid,
-      message:`✅ आपकी Rent Change Request ₹${requested}/month के लिए owner को भेज दी गई है।`,
-      roomId,
-      requestType:"rate_change_sent",
-      read:false,
-      createdAt:serverTimestamp()
-    });
-    alert("✅ Rent request owner को भेज दी गई है।");
-  }catch(error){
-    console.error(error);
-    alert("❌ Rent request नहीं भेजी गई: "+error.message);
-  }
+  const modal=document.createElement("div"); modal.id="rentRequestModal";
+  modal.style.cssText="position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.65);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto;";
+  modal.innerHTML=`<div style="background:#fff;color:#101828;border-radius:16px;padding:20px;width:min(100%,480px);max-height:92vh;overflow:auto;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><h3 style="margin:0;">💰 Rent Request</h3><button type="button" id="rentReqClose" class="small-btn">✕</button></div><p>Current Rent: <strong>₹${current}/month</strong></p><form id="rentReqForm"><label for="rentReqAmount" style="display:block;margin:10px 0 5px;font-weight:700;">आपका प्रस्तावित किराया (₹/महीना)</label><input id="rentReqAmount" type="number" min="1" required value="${current||""}" style="width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:10px;box-sizing:border-box;"><label for="rentReqNote" style="display:block;margin:12px 0 5px;font-weight:700;">Message (वैकल्पिक)</label><textarea id="rentReqNote" rows="3" maxlength="500" placeholder="अपनी बात लिखें…" style="width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:10px;box-sizing:border-box;"></textarea><div id="rentReqStatus" style="margin:10px 0;font-size:13px;"></div><button type="submit" class="primary-btn" style="width:100%;">📨 Request भेजें</button></form></div>`;
+  document.body.appendChild(modal);
+  const close=()=>modal.remove(); modal.querySelector("#rentReqClose").onclick=close; modal.addEventListener("click",e=>{if(e.target===modal)close()});
+  modal.querySelector("#rentReqForm").addEventListener("submit",async e=>{
+    e.preventDefault(); const requested=Number(modal.querySelector("#rentReqAmount").value); const note=modal.querySelector("#rentReqNote").value.trim(); const status=modal.querySelector("#rentReqStatus"); const btn=modal.querySelector('button[type="submit"]');
+    if(!Number.isFinite(requested)||requested<=0){status.textContent="सही किराया भरें।";return;}
+    btn.disabled=true; btn.textContent="भेज रहे हैं…";
+    try{
+      await addDoc(notificationsCollection,{userId:room.ownerId,message:`💰 Rent Request: ${currentUser.email||"User"} ने ${room.type||"property"} (${room.city||""}) के लिए ₹${requested}/month प्रस्ताव दिया।${note?" Message: "+note:""}`,roomId,fromUserId:currentUser.uid,requestType:"rate_change",currentRent:current,requestedRent:requested,requestMessage:note,read:false,createdAt:serverTimestamp()});
+      await addDoc(notificationsCollection,{userId:currentUser.uid,message:`✅ आपकी Rent Request ₹${requested}/month owner को भेज दी गई है।`,roomId,requestType:"rate_change_sent",currentRent:current,requestedRent:requested,read:false,createdAt:serverTimestamp()});
+      status.style.color="#067647";status.textContent="Request भेज दी गई।";btn.textContent="Sent";setTimeout(close,900);
+    }catch(error){console.error(error);status.style.color="#b42318";status.textContent="Request नहीं भेजी गई: "+(error.message||error);btn.disabled=false;btn.textContent="📨 Request भेजें";}
+  });
 };
 
 
@@ -5708,6 +6032,25 @@ window.toggleMultiSelectPanel = function(button){
   document.querySelectorAll('.multi-select-box.open').forEach(x=>x.classList.remove('open'));
   if(!wasOpen) box.classList.add('open');
 };
+window.applyMultiSelectPanel = function(button){
+  const box=button && button.closest ? button.closest('.multi-select-box') : null;
+  if(!box) return;
+  const name=box.getAttribute('data-multi') || "";
+  if(name && typeof updateMultiSummary==="function") updateMultiSummary(name);
+  if(name==="propertyRules" && typeof updatePropertyRulesSummary==="function") updatePropertyRulesSummary();
+  box.classList.remove("open");
+};
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll(".multi-select-box").forEach(function(box){
+    const panel=box.querySelector(".multi-select-options");
+    if(!panel || panel.querySelector(".multi-select-done")) return;
+    const done=document.createElement("button");
+    done.type="button"; done.className="multi-select-done primary-btn"; done.textContent="✓ Done / Apply";
+    done.style.cssText="display:block;width:100%;margin-top:12px;padding:10px 14px;border:0;border-radius:9px;background:#2563eb;color:#fff;font-weight:800;cursor:pointer;";
+    done.addEventListener("click",function(){window.applyMultiSelectPanel(done);});
+    panel.appendChild(done);
+  });
+});
 function updateMultiSummary(name){
   const summary=document.getElementById('summary-'+name); if(!summary) return;
   const vals=getCheckedValues(name).slice();
@@ -5824,12 +6167,15 @@ document.addEventListener("input",function(e){
 
 window.postRoom = async function(){
 
+  try{ if(auth && typeof auth.authStateReady === "function") await auth.authStateReady(); }catch(e){}
+  currentUser = auth.currentUser || null;
+
   if(!currentUser){
 
     $("postStatus").innerHTML =
       "❌ Room post करने के लिए पहले Login / Signup करें।";
 
-    showLogin();
+    showLogin(true);
 
     return;
 
@@ -6012,13 +6358,18 @@ window.postRoom = async function(){
       data.createdAt =
         serverTimestamp();
 
+      if(!validateRoomForV36Security(data)){
+        throw new Error("Property details में required/valid information पूरी करें।");
+      }
 
       const newRoomRef = await addDoc(
         roomCollection,
         data
       );
 
-      await notifyMatchingInquiries(data,newRoomRef.id);
+      /* V36 security: automatic cross-user notification writes were removed.
+         Matching is calculated privately for each user in their own dashboard,
+         so one user cannot create a notification for another user's account. */
 
 
       await addDoc(
@@ -6044,9 +6395,11 @@ window.postRoom = async function(){
     }
 
 
+    const wasEditing = Boolean(editingId);
     clearPostForm();
-
     await loadRooms();
+    if($("postStatus")) $("postStatus").innerHTML = wasEditing ? "✅ Property Successfully Updated!" : "✅ Property Successfully Posted!";
+    if(typeof window.showDashboard === "function") await window.showDashboard();
 
 
   }catch(error){
@@ -6068,11 +6421,25 @@ window.postRoom = async function(){
 };
 
 
+function validateRoomForV36Security(data){
+  const name=String(data?.name||"").trim();
+  const mobile=String(data?.mobile||"").replace(/\D/g,"");
+  const state=String(data?.state||"").trim();
+  const city=String(data?.city||"").trim();
+  const address=String(data?.address||"").trim();
+  const rent=Number(data?.rent);
+  const types=Array.isArray(data?.type) ? data.type : [];
+  return !!data?.ownerId && name.length>=2 && name.length<=100 && mobile.length>=10 && mobile.length<=15 && state.length>=2 && state.length<=80 && city.length>=2 && city.length<=100 && address.length>=2 && address.length<=300 && Number.isFinite(rent) && rent>0 && rent<=100000000 && types.length>=1 && types.length<=5;
+}
+
 /* ================= EDIT ROOM ================= */
 
 window.editRoom = async function(id){
 
+  currentUser = (typeof auth !== "undefined" && auth && auth.currentUser) ? auth.currentUser : currentUser;
   if(!currentUser){
+    alert("कृपया पहले Login करें, फिर अपनी Property Edit करें।");
+    if(typeof window.showLogin==="function") window.showLogin();
     return;
   }
 
@@ -6084,6 +6451,7 @@ window.editRoom = async function(id){
 
 
   if(!room){
+    alert("यह Property अभी load नहीं हुई। कृपया My Account/Rooms Refresh करके फिर Edit करें।");
     return;
   }
 
@@ -6224,7 +6592,10 @@ window.editRoom = async function(id){
 
 window.deleteRoom = async function(id){
 
+  currentUser = (typeof auth !== "undefined" && auth && auth.currentUser) ? auth.currentUser : currentUser;
   if(!currentUser){
+    alert("कृपया पहले Login करें।");
+    if(typeof window.showLogin==="function") window.showLogin();
     return;
   }
 
@@ -6291,9 +6662,8 @@ window.deleteRoom = async function(id){
 
     await loadRooms();
 
-    alert(
-      "✅ Property deleted."
-    );
+    alert("✅ Property Deleted Successfully!");
+    if(typeof window.showDashboard === "function") await window.showDashboard();
 
 
   }catch(error){
@@ -6388,10 +6758,33 @@ function clearPostForm(){
 }
 
 
+/* V43: Require login for contact, reports, save and personal actions. */
+window.showLoginRequiredPopup = function(actionLabel="यह सुविधा"){
+  const old=document.getElementById('loginRequiredModal'); if(old) old.remove();
+  const modal=document.createElement('div'); modal.id='loginRequiredModal';
+  modal.style.cssText='position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.62);display:flex;align-items:center;justify-content:center;padding:16px;';
+  modal.innerHTML=`<div role="dialog" aria-modal="true" aria-labelledby="loginRequiredTitle" style="width:min(100%,390px);background:#fff;border-radius:18px;padding:23px 20px;box-shadow:0 24px 70px rgba(0,0,0,.25);text-align:center;color:#101828;"><div style="font-size:42px;margin-bottom:8px;">🔐</div><h2 id="loginRequiredTitle" style="margin:0 0 8px;font-size:22px;">पहले Login करें</h2><p style="margin:0 0 18px;color:#667085;line-height:1.55;">${actionLabel} इस्तेमाल करने के लिए पहले अपने Dream House Rental अकाउंट में Login करें या नया अकाउंट बनाएं।</p><div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;"><button type="button" id="loginRequiredCancel" style="padding:11px 15px;border:1px solid #d0d5dd;background:#fff;border-radius:10px;font-weight:700;">अभी नहीं</button><button type="button" id="loginRequiredSignup" style="padding:11px 15px;border:1px solid #155eef;background:#fff;color:#155eef;border-radius:10px;font-weight:800;">Sign Up</button><button type="button" id="loginRequiredLogin" style="padding:11px 17px;border:0;background:#155eef;color:#fff;border-radius:10px;font-weight:800;">Login करें</button></div></div>`;
+  document.body.appendChild(modal);
+  const close=()=>modal.remove();
+  modal.querySelector('#loginRequiredCancel').onclick=close;
+  modal.addEventListener('click',e=>{if(e.target===modal)close()});
+  const go=(signup)=>{close(); const lp=document.getElementById('loginPage'); if(lp) lp.classList.remove('hidden'); ['homePage','postPage','dashboardPage','morePage','adminPage'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden')}); if(typeof window.showLoginTab==='function') window.showLoginTab(); if(signup && typeof window.showSignupTab==='function') window.showSignupTab(); window.scrollTo({top:0,behavior:'smooth'}); };
+  modal.querySelector('#loginRequiredLogin').onclick=()=>go(false);
+  modal.querySelector('#loginRequiredSignup').onclick=()=>go(true);
+};
+window.requireLoginForAction = function(actionLabel){
+  if(auth.currentUser || currentUser) return true;
+  window.showLoginRequiredPopup(actionLabel);
+  return false;
+};
+
 /* ================= CALL ================= */
 
 window.contactOwner = async function(mobile, roomId){
 
+  if(!(auth.currentUser || currentUser)){ window.pendingContactRoomId=roomId||null; window.pendingContactAction="call"; if(!window.requireLoginForAction("Owner को Call करना")) return; }
+  const matchedRoom = currentRooms.find(r => String(r.id) === String(roomId));
+  mobile = (matchedRoom && matchedRoom.mobile) || mobile;
   if(!mobile){
 
     alert(
@@ -6432,6 +6825,9 @@ window.whatsappOwner = async function(
   roomId
 ){
 
+  if(!(auth.currentUser || currentUser)){ window.pendingContactRoomId=roomId||null; window.pendingContactAction="whatsapp"; if(!window.requireLoginForAction("Owner को WhatsApp करना")) return; }
+  const matchedRoom = currentRooms.find(r => String(r.id) === String(roomId));
+  mobile = (matchedRoom && matchedRoom.mobile) || mobile;
   const number =
     cleanWhatsAppNumber(mobile);
 
@@ -6493,6 +6889,33 @@ async function notifyOwnerContact(roomId,channel){
 
 window.roomSortMode = "latest";
 
+window.handleRentRangeChange = function(){
+  const sel=document.getElementById("maxRentRange");
+  const custom=document.getElementById("customRentFields");
+  if(custom) custom.style.display=sel?.value==="custom"?"grid":"none";
+  const hidden=document.getElementById("maxRent");
+  if(hidden) hidden.value="";
+  if(typeof window.filterRooms==="function") window.filterRooms();
+};
+window.clearSorting = function(){
+  window.roomSortMode="latest";
+  const sel=document.getElementById("roomSort"); if(sel) sel.value="latest";
+  if(typeof window.filterRooms==="function") window.filterRooms();
+  else window.sortRooms("latest");
+};
+function selectedRentBounds(){
+  const val=document.getElementById("maxRentRange")?.value||"";
+  if(val==="custom"){
+    const min=Number(document.getElementById("customRentMin")?.value||0);
+    const max=Number(document.getElementById("customRentMax")?.value||0);
+    return {min:min>0?min:0,max:max>0?max:Infinity};
+  }
+  if(!val) return {min:0,max:Infinity};
+  if(val==="20000-plus") return {min:20000.01,max:Infinity};
+  const parts=val.split("-").map(Number);
+  return {min:parts[0]||0,max:parts[1]||Infinity};
+}
+
 window.sortRooms = function(mode){
   window.roomSortMode = mode || "latest";
   const sorted = [...currentRooms];
@@ -6521,9 +6944,7 @@ function renderRoomCard(
     ? room.images.slice(0,4)
     : (room.image ? [room.image] : []);
 
-  const image =
-    gallery[0] ||
-    "https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80";
+  const image = gallery[0] || "";
 
   const isNew = (()=>{
     try{
@@ -6565,12 +6986,8 @@ function renderRoomCard(
 
       <div class="room-image-wrap">
 
-        <button class="room-photo-button" type="button" onclick="openRoomGallery('${escapeJs(room.id)}')" title="View property photos">
-          <img
-            class="room-image"
-            src="${escapeHtml(image)}"
-            alt="Property"
-            onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=900&q=80'">
+        <button class="room-photo-button" type="button" onclick="${image ? `openRoomGallery('${escapeJs(room.id)}')` : 'return false'}" title="View property photos">
+          ${image ? `<img class="room-image" src="${escapeHtml(image)}" alt="Property" onerror="this.outerHTML='<div class=\'room-image\' style=\'display:flex;align-items:center;justify-content:center;background:#f2f4f7;color:#667085;font-weight:800;\'>📷 Photo Not Available</div>'">` : `<div class="room-image" style="display:flex;align-items:center;justify-content:center;background:#f2f4f7;color:#667085;font-weight:800;">📷 Photo Not Available</div>`}
         </button>
 
         <div class="property-badge">
@@ -6585,12 +7002,12 @@ function renderRoomCard(
         <button
           class="save-top"
           onclick="toggleSaveRoom('${escapeJs(room.id)}')"
-          title="Save Property">
-          ${saved ? "❤️" : "♡"}
+          title="${currentUser ? "Save Property" : "Login करें — Save Property"}">
+          ${currentUser ? (saved ? "❤️" : "♡") : "🔒♡"}
         </button>
 
-        <label class="compare-check" onclick="event.stopPropagation()">
-          <input type="checkbox" ${window.compareIds?.includes(room.id)?"checked":""} onchange="toggleCompare('${escapeJs(room.id)}',this.checked)"> Compare
+        <label class="compare-check" onclick="event.stopPropagation()" title="${currentUser ? "Compare properties" : "Compare करने के लिए Login करें"}">
+          <input type="checkbox" ${window.compareIds?.includes(room.id)?"checked":""} onchange="toggleCompare('${escapeJs(room.id)}',this.checked)"> ${currentUser ? "Compare" : "🔒 Compare"}
         </label>
 
       </div>
@@ -6616,7 +7033,7 @@ function renderRoomCard(
 
         <div class="room-meta">
 
-          <div>👤 <span>Owner: ${escapeHtml(room.name || "-")}</span></div>
+          <div>👤 <span>Owner: ${escapeHtml(room.ownerName || room.name || "Property Owner")} ${room.verifiedOwner === true ? '<span class="v34-trust-badge">✓ Verified Owner</span>' : ''}</span></div>
 
           <div>📍 <span>${escapeHtml(room.city || "")}${room.state ? ", " + escapeHtml(room.state) : ""}${Number.isFinite(Number(room._distanceKm)) ? ` <strong class="distance-away">📏 ${Number(room._distanceKm).toFixed(1)} km</strong>` : ""}</span></div>
 
@@ -6628,14 +7045,14 @@ function renderRoomCard(
 
           <button
             class="small-btn primary"
-            onclick="contactOwner('${escapeJs(room.mobile || "") }','${escapeJs(room.id)}')">
+            onclick="contactOwner('','${escapeJs(room.id)}')">
             📞 Call Owner
           </button>
 
           <button
             class="small-btn whatsapp"
             onclick="whatsappOwner(
-              '${escapeJs(room.mobile || "")}',
+              '',
               '${escapeJs(propertyTypeText(room))}',
               '${escapeJs(room.city || "")}',
               '${escapeJs(room.id)}'
@@ -6647,6 +7064,12 @@ function renderRoomCard(
             class="small-btn details-btn full"
             onclick="event.stopPropagation(); openPropertyDetails('${escapeJs(room.id)}')">
             📋 View Full Details →
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="event.stopPropagation(); reportProperty('${escapeJs(room.id)}')">
+            ${currentUser ? "🚩 Report Listing" : "🔒 Login to Report"}
           </button>
 
         </div>
@@ -6671,7 +7094,7 @@ window.openPropertyDetails = function(id,event){
   const gallery = Array.isArray(room.images) && room.images.length
     ? room.images.slice(0,4)
     : (room.image ? [room.image] : []);
-  const image = gallery[0] || "https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=80";
+  const image = gallery[0] || "";
   const modalId="propertyDetailPage";
   let modal=$(modalId);
   if(!modal){
@@ -6697,7 +7120,7 @@ window.openPropertyDetails = function(id,event){
     </div>
     <div class="property-detail-inner">
       <div class="property-detail-card">
-        <img class="property-detail-main-photo" src="${escapeHtml(image)}" alt="Property" onerror="this.src='https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=80'">
+        ${image ? `<img class="property-detail-main-photo" src="${escapeHtml(image)}" alt="Property" onerror="this.outerHTML='<div class=\'property-detail-main-photo\' style=\'display:flex;align-items:center;justify-content:center;background:#f2f4f7;color:#667085;min-height:220px;font-weight:800;\'>📷 Photo Not Available</div>'">` : `<div class="property-detail-main-photo" style="display:flex;align-items:center;justify-content:center;background:#f2f4f7;color:#667085;min-height:220px;font-weight:800;">📷 Photo Not Available</div>`}
         ${galleryHtml}
         <div class="property-detail-content">
           <div class="property-detail-title-row">
@@ -6708,7 +7131,7 @@ window.openPropertyDetails = function(id,event){
             <div class="property-detail-rent">₹${escapeHtml(room.rent||"")}<small style="display:block;text-align:right;color:#98a2b3;font-size:12px;">/ month</small></div>
           </div>
           <div class="property-detail-grid">
-            <div class="property-detail-info"><strong>👤 Owner</strong><span>${escapeHtml(room.name||"-")}</span></div>
+            <div class="property-detail-info"><strong>👤 Owner</strong><span>${escapeHtml(room.ownerName||room.name||"Property Owner")}</span></div>
             <div class="property-detail-info"><strong>📍 City / State</strong><span>${escapeHtml([room.city,room.state].filter(Boolean).join(", ")||"-")}</span></div>
             <div class="property-detail-info"><strong>🏠 Area / Address</strong><span>${escapeHtml(room.address||"-")}</span></div>
             <div class="property-detail-info"><strong>🛋️ Furnishing</strong><span>${escapeHtml(room.furnishing||"-")}</span></div>
@@ -6725,14 +7148,15 @@ window.openPropertyDetails = function(id,event){
           ${Array.isArray(room.facilities)&&room.facilities.length ? `<div class="property-detail-description"><strong>✨ Facilities / सुविधाएँ</strong><div class="feature-chips">${room.facilities.map(f=>`<span class="feature-chip">${escapeHtml(f)}</span>`).join("")}</div></div>` : ""}
           ${room.description ? `<div class="property-detail-description"><strong>📝 Description</strong><br>${escapeHtml(room.description)}</div>` : ""}
           <div class="property-detail-actions">
-            <button class="small-btn primary" onclick="contactOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.id)}')">📞 Call Owner</button>
-            <button class="small-btn whatsapp" onclick="whatsappOwner('${escapeJs(room.mobile||"")}','${escapeJs(room.type||"property")}','${escapeJs(room.city||"")}','${escapeJs(room.id)}')">💬 WhatsApp</button>
-            <button class="small-btn save" onclick="toggleSaveRoom('${escapeJs(room.id)}')">${savedRoomIds.includes(room.id)?"❤️ Saved":"♡ Save Property"}</button>
+            <button class="small-btn primary" onclick="contactOwner('','${escapeJs(room.id)}')">📞 Call Owner</button>
+            <button class="small-btn whatsapp" onclick="whatsappOwner('','${escapeJs(room.type||"property")}','${escapeJs(room.city||"")}','${escapeJs(room.id)}')">💬 WhatsApp</button>
+            <button class="small-btn save" onclick="toggleSaveRoom('${escapeJs(room.id)}')">${!currentUser ? "🔒 Login to Save" : (savedRoomIds.includes(room.id)?"❤️ Saved":"♡ Save Property")}</button>
             ${ownerActions}
           </div>
           <div class="property-detail-location">
             <strong>📍 Property Location</strong>
             <div style="margin-top:5px;color:#475467;">${escapeHtml(locationText||"Location details available नहीं हैं।")}</div>
+            
             <button type="button" class="primary-btn" style="margin-top:10px;width:100%;" onclick="openGoogleLocation(${hasCoords?`'${escapeJs(room.latitude)}','${escapeJs(room.longitude)}'`:`null,null`},'${escapeJs(room.address||"")}','${escapeJs(room.city||"")}','${escapeJs(room.state||"")}')">🗺️ Open This Location in Google Maps</button>
           </div>
           <div class="property-detail-description" style="background:#fff;border:1px solid #e5e7eb;">
@@ -6748,7 +7172,7 @@ window.openPropertyDetails = function(id,event){
   const roomTypes=propertyTypesOf(room);
   const similar=currentRooms.filter(r=>r.id!==room.id && (propertyTypesOf(r).some(t=>roomTypes.includes(t)) || r.city===room.city)).slice(0,3);
   const simBox=$("similarProperties-"+room.id);
-  if(simBox) simBox.innerHTML=similar.length?`<div class="similar-grid">${similar.map(r=>{const im=(Array.isArray(r.images)&&r.images.length?r.images[0]:r.image)||"https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=600&q=80";return `<div class="similar-item" onclick="openPropertyDetails('${escapeJs(r.id)}',event)"><img src="${escapeHtml(im)}"><strong>${escapeHtml(propertyTypeText(r))}</strong><div>₹${escapeHtml(r.rent||0)} • ${escapeHtml(r.city||"")}</div></div>`}).join("")}</div>`:`<div style="margin-top:8px;color:#667085">अभी similar property नहीं मिली।</div>`;
+  if(simBox) simBox.innerHTML=similar.length?`<div class="similar-grid">${similar.map(r=>{const im=(Array.isArray(r.images)&&r.images.length?r.images[0]:r.image)||"";return `<div class="similar-item" onclick="openPropertyDetails('${escapeJs(r.id)}',event)">${im?`<img src="${escapeHtml(im)}" alt="Property photo">`:`<div style="height:90px;display:flex;align-items:center;justify-content:center;background:#f2f4f7;color:#667085;">📷 Photo Not Available</div>`}<strong>${escapeHtml(propertyTypeText(r))}</strong><div>₹${escapeHtml(r.rent||0)} • ${escapeHtml(r.city||"")}</div></div>`}).join("")}</div>`:`<div style="margin-top:8px;color:#667085">अभी similar property नहीं मिली।</div>`;
   window._propertyDetailOpen=true;
   try{history.pushState({propertyDetail:id},"",location.pathname+location.search+"#property-"+encodeURIComponent(id));}catch(e){}
 };
@@ -6760,7 +7184,10 @@ window.closePropertyDetails = function(fromPop){
   const wasOpen=window._propertyDetailOpen;
   window._propertyDetailOpen=false;
   if(wasOpen && !fromPop){
-    try{history.back();}catch(e){}
+    try{
+      const cleanUrl=location.pathname+location.search;
+      if(location.hash.indexOf("#property-")===0) history.replaceState(history.state,"",cleanUrl);
+    }catch(e){}
   }
 };
 
@@ -6768,12 +7195,26 @@ window.addEventListener("popstate",function(){
   if(window._propertyDetailOpen) closePropertyDetails(true);
 });
 
+
+
+// Scoped logged-out gate for any existing Rate/Review control, including controls rendered dynamically.
+document.addEventListener("click",function(e){
+  const el=e.target && e.target.closest ? e.target.closest("button,a,[role='button']") : null;
+  if(!el) return;
+  const label=String(el.innerText||el.getAttribute("aria-label")||el.title||"").trim();
+  if(!/rate|review|रेटिंग|रेट\s*\/\s*रिव्यू|समीक्षा/i.test(label)) return;
+  if(auth.currentUser || currentUser) return;
+  e.preventDefault(); e.stopPropagation();
+  window.showLoginRequiredPopup("Rate / Review करना");
+},true);
+
 /* ================= COMPARE PROPERTIES ================= */
 window.compareIds = window.compareIds || [];
 window.toggleCompare = function(id,checked){
+  if(!window.requireLoginForAction("Property Compare करना")) return;
   if(checked){
+    if(!window.compareIds.includes(id) && window.compareIds.length>=3){ alert("आप एक बार में 3 से अधिक प्रॉपर्टी Compare नहीं कर सकते।"); return; }
     if(!window.compareIds.includes(id)) window.compareIds.push(id);
-    if(window.compareIds.length>3){ window.compareIds.shift(); alert("एक साथ maximum 3 properties compare कर सकते हैं।"); }
   }else{
     window.compareIds=window.compareIds.filter(x=>x!==id);
   }
@@ -7093,6 +7534,29 @@ window.closeRoomGallery = function(event){
 };
 
 
+
+window.reportProperty = function(roomId){
+  if(!(auth.currentUser || currentUser)){ window.showLoginRequiredPopup("Property report करना"); return; }
+  const room = currentRooms.find(r => String(r.id) === String(roomId));
+  if(!room){
+    alert("Property details अभी उपलब्ध नहीं हैं।");
+    return;
+  }
+  const subject = `Report Property - ${propertyTypeText(room)} - ${room.city || ""}`;
+  const body = [
+    "Hello Dream House Rental,",
+    "",
+    "I want to report this property listing.",
+    `Property ID: ${room.id}`,
+    `Property Type: ${propertyTypeText(room)}`,
+    `City: ${room.city || ""}`,
+    `Owner: ${room.name || ""}`,
+    "",
+    "Reason for report: "
+  ].join("\n");
+  window.location.href = `mailto:dreamhouserentalofficial@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
 function renderRooms(rooms, alreadySorted=false){
 
   if(!alreadySorted && window.roomSortMode){
@@ -7198,6 +7662,21 @@ function renderRooms(rooms, alreadySorted=false){
 }
 
 
+window.refreshRooms = async function(){
+  const btns=Array.from(document.querySelectorAll('button[onclick="refreshRooms()"]'));
+  btns.forEach(b=>{b.disabled=true;b.dataset.oldText=b.textContent;b.textContent="⏳ Refreshing...";});
+  try{
+    await loadRooms();
+    if(window.roomSortMode && typeof sortRooms==="function") sortRooms(window.roomSortMode);
+    const status=document.getElementById("nearMeStatus");
+    if(status) status.textContent="✅ Properties refreshed.";
+  }catch(e){
+    const status=document.getElementById("nearMeStatus");
+    if(status) status.textContent="❌ Properties refresh नहीं हो पाया। कृपया फिर कोशिश करें।";
+    console.error("Refresh rooms failed",e);
+  }finally{btns.forEach(b=>{b.disabled=false;b.textContent=b.dataset.oldText||"🔄 Refresh Rooms";});}
+};
+
 /* ================= ROOM REST FALLBACK (ONLY IF FIRESTORE SDK LOAD FAILS) ================= */
 /* ================= LOAD ROOMS ================= */
 
@@ -7218,7 +7697,7 @@ async function loadRooms(){
     for(let attempt = 1; attempt <= 2; attempt++){
       try{
         snapshot = await Promise.race([
-          getDocs(roomCollection),
+          getDocs(query(roomCollection,limit(500))),
           new Promise((_, reject) =>
             setTimeout(() =>
               reject(new Error("Rooms load timeout. Internet/Firebase connection check करें और Retry करें.")),
@@ -7239,9 +7718,12 @@ async function loadRooms(){
 
     snapshot.forEach(item=>{
 
+      const roomData = item.data() || {};
+      if(roomData.status === "blocked" || roomData.status === "deleted" || roomData.deleted === true || roomData.isDeleted === true) return;
+
       currentRooms.push({
         id:item.id,
-        ...item.data()
+        ...roomData
       });
 
     });
@@ -7400,10 +7882,8 @@ window.filterRooms = function(){
       }
 
 
-      if(
-        maxRent &&
-        roomRent > maxRent
-      ){
+      const rentBounds=selectedRentBounds();
+      if(roomRent < rentBounds.min || roomRent > rentBounds.max){
         return false;
       }
       if(searchFacility && !(Array.isArray(room.facilities)&&room.facilities.includes(searchFacility))) return false;
@@ -7441,6 +7921,10 @@ window.clearFilters = function(){
   $("searchArea").value = "";
   $("searchType").value = "";
   $("maxRent").value = "";
+  if($("maxRentRange")) $("maxRentRange").value="";
+  if($("customRentMin")) $("customRentMin").value="";
+  if($("customRentMax")) $("customRentMax").value="";
+  if($("customRentFields")) $("customRentFields").style.display="none";
   if($("searchFacility")) $("searchFacility").value="";
   if($("searchSuitable")) $("searchSuitable").value="";
   categoryPriorityType = "";
@@ -7504,7 +7988,7 @@ window.searchNearMe = function(){
 
   },function(error){
     console.error(error);
-    if(status) status.innerHTML="❌ Location नहीं मिली। Phone में Location ON करके permission Allow करें।";
+    if(status) status.innerHTML="❌ GPS location नहीं मिली या permission नहीं मिली। Phone Location ON करके permission Allow करें, या नीचे City/Area Search इस्तेमाल करें।";
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 
 };
@@ -7595,118 +8079,279 @@ window.heroSearch = function(){
 
 /* ================= FEEDBACK ================= */
 
-window.submitFeedback = async function(){
-
-  const type =
-    $("feedbackType").value;
-
-  const name =
-    $("feedbackName")
-      .value
-      .trim();
-
-  const mobile =
-    $("feedbackMobile")
-      .value
-      .trim();
-
-  const subject =
-    $("feedbackSubject")
-      .value
-      .trim();
-
-  const message =
-    $("feedbackMessage")
-      .value
-      .trim();
-
-
-  if(!name || !message){
-
-    $("feedbackStatus").innerHTML =
-      "❌ Name और Message भरें।";
-
-    return;
-
-  }
-
-
-  $("feedbackStatus").innerHTML =
-    "⏳ Feedback submit हो रहा है...";
-
-
-  try{
-
-    await addDoc(
-      feedbackCollection,
-      {
-        type:type,
-        name:name,
-        mobile:mobile,
-        subject:subject,
-        message:message,
-        userId:
-          currentUser
-          ? currentUser.uid
-          : null,
-        createdAt:
-          serverTimestamp()
+window._compressFeedbackImages = async function(files){
+  const out=[], failed=[];
+  for(const file of Array.from(files||[]).slice(0,3)){
+    // Android file pickers sometimes return an empty MIME type for valid photos; attempt decoding instead of rejecting by MIME alone.
+    if(file.type && !file.type.startsWith('image/')) { failed.push(file.name||'unknown image'); continue; }
+    let source=null, objectUrl=null, bitmap=null;
+    try{
+      if(typeof createImageBitmap==='function'){
+        try { bitmap=await createImageBitmap(file); source=bitmap; } catch(_e) { source=null; }
       }
-    );
-
-
-    $("feedbackStatus").innerHTML =
-      "✅ आपका feedback successfully submit हो गया।";
-
-
-    $("feedbackName").value = "";
-    $("feedbackMobile").value = "";
-    $("feedbackSubject").value = "";
-    $("feedbackMessage").value = "";
-
-
-  }catch(error){
-
-    console.error(error);
-
-    $("feedbackStatus").innerHTML =
-      "❌ " + escapeHtml(error.message);
-
+      if(!source){
+        // Android content-provider files can fail when decoded from a blob URL. Read the actual bytes first.
+        let dataUrl='';
+        try {
+          dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(new Error('FileReader could not read this image'));reader.onabort=()=>reject(new Error('Image file reading was cancelled'));reader.readAsDataURL(file);});
+          source=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(new Error('Image bytes were read but the browser could not decode this format'));im.src=dataUrl;});
+        } catch(readerError) {
+          // Last fallback: some browser file providers decode more reliably from an object URL.
+          objectUrl=URL.createObjectURL(file);
+          try { source=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(readerError);im.src=objectUrl;}); }
+          catch(_blobError) { throw readerError; }
+        }
+      }
+      const w=source.width||source.naturalWidth, h=source.height||source.naturalHeight;
+      if(!w||!h) throw new Error('invalid image dimensions');
+      const max=1000, scale=Math.min(1,max/Math.max(w,h));
+      const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(w*scale));canvas.height=Math.max(1,Math.round(h*scale));
+      const ctx=canvas.getContext('2d');if(!ctx) throw new Error('canvas unavailable');
+      ctx.drawImage(source,0,0,canvas.width,canvas.height);
+      let quality=.72, compressed=canvas.toDataURL('image/jpeg',quality);
+      while(compressed.length>180000 && quality>.35){quality=Math.max(.35,quality-.1);compressed=canvas.toDataURL('image/jpeg',quality);}
+      if(compressed.length>220000) throw new Error('compressed image too large');
+      out.push({name:file.name||'feedback-photo.jpg',type:'image/jpeg',data:compressed,dataUrl:compressed});
+    }catch(e){ console.warn('Feedback photo skipped:',file.name,e); failed.push(file.name||'selected photo'); }
+    finally{ if(bitmap && typeof bitmap.close==='function')bitmap.close(); if(objectUrl)URL.revokeObjectURL(objectUrl); }
   }
-
+  return {photos:out,failed};
 };
 
+window.copyFeedbackReference = async function(){
+  const el = document.getElementById('savedFeedbackReference');
+  const value = (el?.textContent || '').trim();
+  if (!value) { alert('शिकायत नंबर उपलब्ध नहीं है।'); return; }
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(value);
+    } else {
+      const temp = document.createElement('textarea');
+      temp.value = value;
+      temp.setAttribute('readonly', '');
+      temp.setAttribute('aria-label', 'Complaint number to copy');
+      temp.style.position = 'fixed';
+      temp.style.left = '8px';
+      temp.style.top = '8px';
+      temp.style.width = 'calc(100% - 16px)';
+      temp.style.fontSize = '16px';
+      temp.style.zIndex = '2147483647';
+      temp.style.background = '#fff';
+      temp.style.color = '#111';
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      temp.setSelectionRange(0, temp.value.length);
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { copied = false; }
+      if (copied) temp.remove();
+      else {
+        const msg = document.getElementById('feedbackCopyMessage');
+        if (msg) msg.textContent = 'नंबर select कर दिया है। Copy चुनें; या नीचे शिकायत नंबर को दबाकर रखें और Copy चुनें।';
+        temp.addEventListener('blur', () => { if (temp.isConnected) temp.remove(); }, {once:true});
+        throw new Error('Clipboard copy was blocked; text left selected for manual copy');
+      }
+    }
+    const msg = document.getElementById('feedbackCopyMessage');
+    if (msg) msg.textContent = '✅ शिकायत नंबर कॉपी हो गया! अब आप इसे पेस्ट कर सकते हैं।';
+  } catch (e) {
+    const msg = document.getElementById('feedbackCopyMessage');
+    if (msg) {
+      msg.textContent = 'कॉपी अपने आप नहीं हो पाया। नीचे दिख रहे शिकायत नंबर को दबाकर रखें और Copy चुनें।';
+      const ref = document.getElementById('savedFeedbackReference');
+      if (ref) {
+        ref.setAttribute('tabindex', '0');
+        ref.style.userSelect = 'text';
+        ref.style.webkitUserSelect = 'text';
+        ref.style.padding = '4px 7px';
+        ref.style.border = '1px dashed #667085';
+        ref.style.display = 'inline-block';
+      }
+    } else {
+      alert('कॉपी नहीं हो पाया। शिकायत नंबर को दबाकर रखें और Copy चुनें।');
+    }
+  }
+};
+
+window.startNewFeedback = function(){
+  const section=document.getElementById('feedbackSection');
+  const box=section?.querySelector('.auth-box');
+  if(box) Array.from(box.children).forEach(child=>{child.style.display='';});
+  const status=document.getElementById('feedbackStatus'); if(status) status.innerHTML='';
+  const preview=document.getElementById('feedbackPhotoPreview'); if(preview) preview.innerHTML='';
+  const result=document.getElementById('feedbackCheckResult'); if(result) result.textContent='';
+  ['feedbackName','feedbackProfileId','feedbackEmail','feedbackMobile','feedbackSubject','feedbackMessage','feedbackPhotos'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  if(document.getElementById('feedbackType')) document.getElementById('feedbackType').selectedIndex=0;
+  if(document.getElementById('feedbackPhotoStatus')) document.getElementById('feedbackPhotoStatus').textContent='आप अधिकतम 3 फोटो चुन सकते हैं।';
+  if(document.getElementById('feedbackWordCount')) document.getElementById('feedbackWordCount').textContent='0 / 200 words';
+  const sectionTop=section?.querySelector('.auth-box'); if(sectionTop) sectionTop.scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+window.submitFeedback = async function(){
+  const type=$('feedbackType').value;
+  const name=$('feedbackName').value.trim();
+  const mobile=$('feedbackMobile').value.trim();
+  const email=$('feedbackEmail')?.value.trim()||'';
+  const profileId=$('feedbackProfileId')?.value.trim()||'';
+  const subject=$('feedbackSubject').value.trim();
+  const rating=Number($('feedbackRating')?.value||0);
+  const message=$('feedbackMessage').value.trim();
+  const photoInput=$('feedbackPhotos');
+  const files=photoInput?Array.from(photoInput.files||[]):[];
+  const wordCount=message?message.split(/\s+/).filter(Boolean).length:0;
+  const status=$('feedbackStatus');
+  // Field-by-field validation: only the field that is actually invalid gets an error.
+  const validationFields = [
+    {id:'feedbackName', value:name, message:'Please enter your name / कृपया अपना नाम भरें।'},
+    {id:'feedbackEmail', value:email, message:'Please enter your email / कृपया अपनी ईमेल आईडी भरें।'},
+    {id:'feedbackSubject', value:subject, message:'Please select a subject / कृपया विषय चुनें।'},
+    {id:'feedbackMessage', value:message, message:'Please enter your message / कृपया विवरण भरें।'}
+  ];
+  document.querySelectorAll('.feedback-field-error').forEach(el=>el.remove());
+  document.querySelectorAll('#feedbackSection .feedback-field-invalid').forEach(el=>el.classList.remove('feedback-field-invalid'));
+  const showFieldError=(id,text)=>{
+    const field=$(id); if(!field)return;
+    field.classList.add('feedback-field-invalid');
+    const old=field.nextElementSibling;
+    if(old && old.classList.contains('feedback-field-error'))old.remove();
+    const err=document.createElement('small');
+    err.className='feedback-field-error';
+    err.setAttribute('role','alert');
+    err.style.cssText='display:block;color:#b42318;margin-top:5px;font-weight:500;';
+    err.textContent=text;
+    field.insertAdjacentElement('afterend',err);
+  };
+  const validateLiveField=(id)=>{
+    const field=$(id); if(!field)return true;
+    const value=String(field.value||'').trim();
+    let error='';
+    if(id==='feedbackEmail'){
+      if(!value) error='कृपया अपनी ईमेल आईडी भरें।';
+      else if(!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(value)) error='सही ईमेल फॉर्मेट भरें, जैसे name@gmail.com।';
+      else if((value.split('@').pop()||'').toLowerCase().split('.')[0].length<2) error='ईमेल डोमेन अधूरा या गलत लग रहा है। पूरा ईमेल भरें, जैसे bharti@gmail.com।';
+      else { const d=(value.split('@').pop()||'').toLowerCase(); const fixes={'gil.com':'gmail.com','gil':'gmail.com','g-mail.com':'gmail.com','gmil.com':'gmail.com','gmol.com':'gmail.com','gmal.com':'gmail.com','gmai.com':'gmail.com','gamil.com':'gmail.com','gmali.com':'gmail.com','gmaill.com':'gmail.com','gmial.com':'gmail.com','gmaiil.com':'gmail.com','gmail.con':'gmail.com','gmail.cim':'gmail.com','gmail.comm':'gmail.com','gmail.om':'gmail.com','gmaik.com':'gmail.com','gmaol.com':'gmail.com','gmaul.com':'gmail.com','gmaill.co':'gmail.com','gmail.co':'gmail.com','gmail.coom':'gmail.com','gmail.vom':'gmail.com','gmail.cpm':'gmail.com','gmaik.con':'gmail.com','gmal.con':'gmail.com','gmil.con':'gmail.com','gamil.con':'gmail.com','gmaill.con':'gmail.com','gmai.com':'gmail.com','gmai.con':'gmail.com','gmail.c0m':'gmail.com','gmail.comm':'gmail.com','gmail.xom':'gmail.com','gmail.cin':'gmail.com','gmail.cim':'gmail.com','gmail.cpm':'gmail.com','gmail.om':'gmail.com','gmail.in':'gmail.com'}; if(fixes[d])error='ईमेल में टाइपिंग गलती लग रही है। क्या आपका मतलब '+fixes[d]+' है?'; }
+    } else if(id==='feedbackMobile' && value){
+      const n=value.replace(/[\s-]/g,'').replace(/^\+91/,'').replace(/^91(?=[6-9]\d{9}$)/,'');
+      if(!/^[6-9]\d{9}$/.test(n))error='सही भारतीय मोबाइल नंबर भरें (10 अंक; +91 भी स्वीकार है)।';
+    } else if(id==='feedbackName' && !value) error='कृपया अपना नाम भरें।';
+    else if(id==='feedbackSubject' && !value) error='कृपया विषय चुनें।';
+    else if(id==='feedbackMessage' && !value) error='कृपया विवरण भरें।';
+    if(error){showFieldError(id,error);return false;}
+    const next=field.nextElementSibling;if(next&&next.classList.contains('feedback-field-error'))next.remove();field.classList.remove('feedback-field-invalid');return true;
+  };
+  ['feedbackName','feedbackEmail','feedbackSubject','feedbackMessage','feedbackMobile'].forEach(id=>{
+    const field=$(id); if(field&&!field.dataset.feedbackValidationBound){field.dataset.feedbackValidationBound='1';field.addEventListener('blur',()=>validateLiveField(id));field.addEventListener('change',()=>validateLiveField(id));field.addEventListener('input',()=>{if(field.classList.contains('feedback-field-invalid'))validateLiveField(id);});}
+  });
+  for(const item of validationFields){
+    if(!item.value){showFieldError(item.id,item.message);const field=$(item.id);field?.focus();field?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(email)){
+    showFieldError('feedbackEmail','Enter a valid email address / सही ईमेल पता भरें। उदाहरण: bharti@gmail.com');
+    $('feedbackEmail')?.focus();return;
+  }
+  const emailDomain=(email.split('@').pop()||'').toLowerCase();
+  const domainLabels=emailDomain.split('.');
+  if(domainLabels.length<2 || domainLabels.some(label=>!label || label.length<2 || label.length>63 || !/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(label)) || !/^[a-z]{2,63}$/.test(domainLabels[domainLabels.length-1])){
+    showFieldError('feedbackEmail','ईमेल डोमेन अधूरा या गलत लग रहा है। सही ईमेल भरें, जैसे bharti@gmail.com।');
+    $('feedbackEmail')?.focus();return;
+  }
+  const commonDomainFixes={'gil.com':'gmail.com','gil':'gmail.com','g-mail.com':'gmail.com','gmil.com':'gmail.com','gmol.com':'gmail.com','gmal.com':'gmail.com','gmai.com':'gmail.com','gamil.com':'gmail.com','gmali.com':'gmail.com','gmaill.com':'gmail.com','gimail.com':'gmail.com','gmial.com':'gmail.com','gmaiil.com':'gmail.com','gmaim.com':'gmail.com','gmaik.com':'gmail.com','gmaul.com':'gmail.com','gmaol.com':'gmail.com','gmail.con':'gmail.com','gmail.cim':'gmail.com','gmail.comm':'gmail.com','gmail.om':'gmail.com','gmail.in':'gmail.com','hotnail.com':'hotmail.com','hotmai.com':'hotmail.com','hotmil.com':'hotmail.com','outllok.com':'outlook.com','outlok.com':'outlook.com','outloo.com':'outlook.com','yaho.com':'yahoo.com','yahoo.con':'yahoo.com','gmaik.com':'gmail.com','gmaol.com':'gmail.com','gmaul.com':'gmail.com','gmaill.co':'gmail.com','gmail.co':'gmail.com','gmail.coom':'gmail.com','gmail.vom':'gmail.com','gmail.cpm':'gmail.com','gmaik.con':'gmail.com','gmal.con':'gmail.com','gmil.con':'gmail.com','gamil.con':'gmail.com','gmaill.con':'gmail.com','gmai.com':'gmail.com','gmai.con':'gmail.com','gmail.c0m':'gmail.com','gmail.comm':'gmail.com','gmail.xom':'gmail.com','gmail.cin':'gmail.com','gmail.cim':'gmail.com','gmail.cpm':'gmail.com','gmail.om':'gmail.com','gmail.in':'gmail.com'};
+  if(commonDomainFixes[emailDomain]){
+    showFieldError('feedbackEmail','ईमेल डोमेन में टाइपिंग गलती लग रही है। क्या आपका मतलब '+commonDomainFixes[emailDomain]+' है? / Please correct the email domain.');
+    $('feedbackEmail')?.focus();return;
+  }
+  const normalizedMobile=mobile.replace(/[\s-]/g,'').replace(/^\+91/,'').replace(/^91(?=[6-9]\d{9}$)/,'');
+  if(mobile && !/^[6-9]\d{9}$/.test(normalizedMobile)){
+    showFieldError('feedbackMobile','Please enter a valid Indian mobile number / सही भारतीय मोबाइल नंबर भरें (10 अंक; +91 भी स्वीकार है)।');
+    $('feedbackMobile')?.focus();return;
+  }
+  if(wordCount>200){showFieldError('feedbackMessage','Message must be 200 words or fewer / विवरण 200 शब्दों से अधिक नहीं होना चाहिए।');$('feedbackMessage')?.focus();return;}
+  if(files.length>3){showFieldError('feedbackPhotos','Select no more than 3 photos / अधिकतम 3 फोटो चुनें।');$('feedbackPhotos')?.focus();return;}
+  status.innerHTML='⏳ Feedback और चुनी गई फोटो तैयार हो रही हैं...';
+  try{
+    const photoResult=await window._compressFeedbackImages(files);
+    const photos=photoResult.photos||[];
+    // Unreadable photos are skipped so the feedback text can still be saved.
+    // Generate the complaint reference once and save that exact value. Do not
+    // rely on a second updateDoc: feedback rules intentionally deny user updates,
+    // and changing the displayed reference after a failed update breaks status lookup.
+    const referenceId='FB-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
+    const ref=await addDoc(feedbackCollection,{
+      referenceId,
+      type,name,profileId,email,mobile:normalizedMobile,subject,message,photos,rating:0,
+      status:'Pending',adminReply:'',
+      userId:(auth.currentUser||currentUser)?(auth.currentUser||currentUser).uid:null,
+      userEmail:email,
+      createdAt:serverTimestamp()
+    });
+    let adminFeedbackNotificationSaved = false;
+    let notificationError = '';
+    try{
+      await addDoc(notificationsCollection,{
+        userId: 'a9o5xqXYQrVFt0IMQi1S3Hy6uTf2', // Admin UID is scoped locally here; V36_ADMIN_UID belongs to a separate module.
+        message:`💬 नया Feedback / नई प्रतिक्रिया (${referenceId}) — Type: ${type} — Subject: ${subject} — User: ${name} — ${message.slice(0,180)}`,
+        notificationType:'admin_new_feedback',
+        category:'complaints',
+        feedbackId:ref.id,
+        referenceId,
+        read:false,
+        createdAt:serverTimestamp()
+      });
+      adminFeedbackNotificationSaved = true;
+    }catch(e){
+      console.error('Admin feedback notification could not be saved. Current Firestore rules require an authenticated user to create notifications; do not weaken rules to public writes:',e);
+      notificationError = String(e?.code ? e.code + ': ' : '') + String(e?.message || e || 'Unknown Firebase error');
+    }
+    status.innerHTML=`<div style="padding:12px;border-radius:10px;background:#ecfdf3;color:#027a48"><strong>✅ Feedback / शिकायत सफलतापूर्वक दर्ज हुई।</strong><p>आपका शिकायत नंबर / Complaint Number:</p><p style="font-size:18px"><b id="savedFeedbackReference">${escapeHtml(referenceId)}</b></p><button type="button" class="secondary-btn" onclick="copyFeedbackReference()">📋 शिकायत नंबर कॉपी करें / Copy Complaint Number</button><p id="feedbackCopyMessage" role="status" aria-live="polite"></p><button type="button" class="primary-btn" onclick="startNewFeedback()">➕ नई शिकायत / New Feedback</button><p>${adminFeedbackNotificationSaved?'🔔 Admin portal पर notification भेज दिया गया।':'⚠️ Feedback सेव हुआ, लेकिन Admin notification सेव नहीं हो पाया।'}</p>${adminFeedbackNotificationSaved?'':'<p style="font-size:12px;color:#7f1d1d;overflow-wrap:anywhere">Firebase error: '+escapeHtml(notificationError||'Unknown error')+'</p>'}${photoResult.failed&&photoResult.failed.length?'<p style="font-size:12px;color:#7f1d1d">⚠️ इन फोटो को पढ़ा नहीं जा सका, इसलिए सेव नहीं किया गया: '+escapeHtml(photoResult.failed.join(', '))+'</p>':''}</div>`;
+    if(photoResult.failed && photoResult.failed.length){ status.innerHTML += '<p style="color:#92400e;margin-top:8px">⚠️ Feedback सेव हो गया, लेकिन ये फोटो पढ़ी नहीं जा सकीं: '+photoResult.failed.map(escapeHtml).join(', ')+'. कृपया फोटो को JPG/PNG में सेव करके दोबारा चुनें।</p>'; }
+
+    const feedbackSection = document.getElementById('feedbackSection');
+    const feedbackBox = feedbackSection?.querySelector('.auth-box');
+    if (feedbackBox) {
+      Array.from(feedbackBox.children).forEach(child => {
+        if (child.id !== 'feedbackStatus' && child.id !== 'feedbackPhotoPreview' && !child.classList.contains('feedback-status-check')) child.style.display = 'none';
+      });
+    }
+    const checkRef = document.getElementById('feedbackCheckReference');
+    const checkEmail = document.getElementById('feedbackCheckEmail');
+    if (checkRef) checkRef.value = referenceId;
+    if (checkEmail) checkEmail.value = email;
+    ['feedbackName','feedbackProfileId','feedbackEmail','feedbackMobile','feedbackSubject','feedbackMessage','feedbackPhotos'].forEach(id=>{const el=$(id);if(el)el.value='';});
+    if($('feedbackType'))$('feedbackType').selectedIndex=0;
+    if($('feedbackPhotoStatus'))$('feedbackPhotoStatus').textContent='आप 2–3 फोटो चुन सकते हैं।';
+    window.updateFeedbackWordCount();
+  }catch(error){
+    console.error(error);
+    status.innerHTML='❌ Feedback सेव नहीं हुआ: '+escapeHtml(error.message||'कृपया दोबारा कोशिश करें।');
+  }
+};
 
 /* ================= NAVBAR ================= */
 
 function updateNavbar(){
-
-  if(currentUser){
-
-    $("loginNavBtn")
-      .classList
-      .add("hidden");
-
-    $("accountNavBtn")
-      .classList
-      .remove("hidden");
-
-  }else{
-
-    $("loginNavBtn")
-      .classList
-      .remove("hidden");
-
-    $("accountNavBtn")
-      .classList
-      .add("hidden");
-
-  }
-
+  const btn = document.getElementById("authNavBtn");
+  if(!btn) return;
+  const loggedIn = !!(auth.currentUser || currentUser);
+  btn.textContent = loggedIn ? "👤 My Account" : "🔐 Login";
+  btn.setAttribute("aria-label", loggedIn ? "My Account" : "Login");
+  btn.setAttribute("title", loggedIn ? "My Account" : "Login");
+  btn.onclick = function(event){
+    event?.preventDefault?.();
+    const u = auth.currentUser || currentUser;
+    if(u){
+      if(typeof window.showDashboard === "function") window.showDashboard();
+      else { showHome(); document.getElementById("dashboardPage")?.classList.remove("hidden"); loadDashboard(); }
+    }else{
+      if(typeof window.showLogin === "function") window.showLogin();
+      else { showHome(); document.getElementById("loginPage")?.classList.remove("hidden"); }
+    }
+  };
 }
 
 
 /* ================= AUTH STATE ================= */
+
+try{ setPersistence(auth,browserLocalPersistence).catch(e=>console.warn("Local auth persistence could not be set",e)); }catch(e){ console.warn("Local auth persistence setup skipped",e); }
 
 onAuthStateChanged(
   auth,
@@ -7767,6 +8412,12 @@ onAuthStateChanged(
 );
 
 
+
+window.addEventListener("pageshow", function(){
+  if(auth.currentUser) currentUser=auth.currentUser;
+  updateNavbar();
+});
+
 /* ================= START ================= */
 
 populateStateOptions();
@@ -7805,13 +8456,16 @@ window.updateCompareBar();
 (function(){
   const $u2 = (id) => document.getElementById(id);
 
+  let v50AuthStateResolved = false;
+
   window.updateNavbar = function(){
     const btn = $u2("authNavBtn");
     if(!btn) return;
 
-    const user = (typeof auth !== "undefined" && auth && auth.currentUser)
+    const firebaseUser = (typeof auth !== "undefined" && auth)
       ? auth.currentUser
       : null;
+    const user = firebaseUser || (v50AuthStateResolved ? null : (currentUser || null));
 
     currentUser = user;
 
@@ -7830,6 +8484,12 @@ window.updateCompareBar();
     if(event){
       try{ event.preventDefault(); event.stopPropagation(); }catch(e){}
     }
+
+    try{
+      if(typeof auth !== "undefined" && auth && typeof auth.authStateReady === "function"){
+        await auth.authStateReady();
+      }
+    }catch(e){}
 
     const user = (typeof auth !== "undefined" && auth && auth.currentUser)
       ? auth.currentUser
@@ -7888,18 +8548,23 @@ window.updateCompareBar();
   /* Firebase Auth is the only source of truth. No viewport-specific logic. */
   try{
     onAuthStateChanged(auth, function(user){
+      v50AuthStateResolved = true;
       currentUser = user || null;
       window.updateNavbar();
     });
   }catch(error){
     console.error("Auth state listener error:", error);
-    currentUser = null;
+    v50AuthStateResolved = true;
+    currentUser = auth.currentUser || null;
     window.updateNavbar();
   }
 
-  /* Initial safe state: Login until Firebase confirms a signed-in user. */
-  currentUser = null;
-  window.updateNavbar();
+  /* Keep the HTML's default Login label until Firebase confirms auth state.
+     Do not overwrite a restored signed-in user with a premature null value. */
+  if(auth.currentUser){
+    currentUser = auth.currentUser;
+    window.updateNavbar();
+  }
 })();
 </script>
 
@@ -7986,6 +8651,12 @@ window.desktopAuthNavClick = async function(event){
     try{ event.preventDefault(); event.stopPropagation(); }catch(e){}
   }
 
+  try{
+    if(typeof auth !== "undefined" && auth && typeof auth.authStateReady === "function"){
+      await auth.authStateReady();
+    }
+  }catch(e){}
+
   const btn = document.getElementById("authNavBtn");
   const user = (typeof auth !== "undefined" && auth && auth.currentUser)
     ? auth.currentUser
@@ -8033,6 +8704,708 @@ window.desktopAuthNavClick = async function(event){
     }catch(e){}
   }
 };
+</script>
+
+
+<script type="module" id="v36-admin-system">
+import { getApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, deleteDoc, addDoc, query, where, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+const V36_ADMIN_UID="a9o5xqXYQrVFt0IMQi1S3Hy6uTf2";
+const app=getApp();
+const auth=getAuth(app);
+const db=window.__DHR_DB || getFirestore(app);
+const usersRef=collection(db,"users");
+const roomsRef=collection(db,"room");
+const reportsRef=collection(db,"reports");
+const notificationsRef=collection(db,"notifications");
+const feedbackRef=collection(db,"feedback");
+const $id=(id)=>document.getElementById(id);
+const esc=(v)=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
+const dateText=(v)=>{try{const d=v?.toDate?v.toDate():new Date(v);return Number.isNaN(d.getTime())?"":d.toLocaleString("en-IN");}catch(e){return "";}};
+function isAdmin(){return !!auth.currentUser && auth.currentUser.uid===V36_ADMIN_UID;}
+
+window.adminLogout=async function(){
+  try{
+    await signOut(auth);
+    currentUser = null;
+    const adminBtn = document.getElementById("v36AdminNavBtn");
+    if(adminBtn) adminBtn.remove();
+    const authStatusBox = document.getElementById("authStatus");
+    if(authStatusBox) authStatusBox.innerHTML = "ℹ️ अभी Login नहीं है।";
+    if($id("adminPage")) $id("adminPage").classList.add("hidden");
+    if(typeof showLogin === "function") showLogin();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }catch(e){
+    alert("❌ Logout failed: "+(e?.message||e));
+  }
+};
+
+window.showAdmin=async function(){
+  if(!isAdmin()){ alert("⛔ Admin access नहीं है।"); return; }
+  ["homePage","postPage","loginPage","dashboardPage","morePage"].forEach(id=>{const e=$id(id);if(e)e.classList.add("hidden")});
+  const p=$id("adminPage"); if(p)p.classList.remove("hidden");
+  if($id("adminAccessStatus")) $id("adminAccessStatus").innerHTML=`✅ Secure Admin access — Secure Admin`;
+  await loadAdminDashboard();
+  if(window.closeMenu) window.closeMenu();
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+window.openAdminTab=function(tab){
+  ["overview","users","properties","reports","notifications","feedback"].forEach(t=>{const p=$id("admin"+t.charAt(0).toUpperCase()+t.slice(1)+"Panel");if(p)p.classList.toggle("active",t===tab);});
+  document.querySelectorAll("[data-admin-tab]").forEach(b=>b.classList.toggle("active",b.getAttribute("data-admin-tab")===tab));
+};
+async function loadAdminDashboard(activeTab="users"){
+  if(!isAdmin()) return;
+  const safeAdminRead=async(label,q)=>{try{return {label,snap:await getDocs(q),error:null};}catch(e){console.error("Admin read failed:",label,e);return {label,snap:null,error:e};}};
+  const [u,r,rep,n,f]=await Promise.all([
+    safeAdminRead("Users",query(usersRef,limit(1000))),
+    safeAdminRead("Properties",query(roomsRef,limit(1000))),
+    safeAdminRead("Reports",query(reportsRef,limit(500))),
+    safeAdminRead("Notifications",query(notificationsRef,limit(500))),
+    safeAdminRead("Feedback",query(feedbackRef,limit(500)))
+  ]);
+  const uSnap=u.snap||emptyQuerySnapshot(), rSnap=r.snap||emptyQuerySnapshot(), repSnap=rep.snap||emptyQuerySnapshot(), nSnap=n.snap||emptyQuerySnapshot(), fSnap=f.snap||emptyQuerySnapshot();
+  const failures=[u,r,rep,n,f].filter(x=>x.error);
+  const errBox=failures.length?`<div class="v36-admin-card" style="border-color:#f5c2c7;background:#fff5f5;margin-bottom:14px;"><strong>⚠️ Admin data warning</strong><br><small>${failures.map(x=>esc(x.label+": "+(x.error?.message||"read failed"))).join("<br>")}</small><br><small>यदि Feedback में permission error है, तो Firestore Rules में केवल Admin UID को feedback read की अनुमति जाँचें; HTML अकेले Firebase Rules नहीं बदल सकता।</small></div>`:"";
+  const stats=$id("adminStats"); if(stats) stats.innerHTML=errBox+`<div class="v36-admin-stat"><strong>${uSnap.size}</strong><span>Users</span></div><div class="v36-admin-stat"><strong>${rSnap.size}</strong><span>Total Properties</span></div><div class="v36-admin-stat"><strong>${repSnap.size+fSnap.size}</strong><span>Complaints + Feedback</span><small style="display:block;color:#667085;margin-top:5px;">Reports: ${repSnap.size} · Feedback: ${f.error?"लोड नहीं हुआ":fSnap.size}</small></div><div class="v36-admin-stat"><strong>${nSnap.size}</strong><span>Notifications</span></div>`;
+  const overview=$id("adminOverviewPanel"); if(overview) overview.innerHTML=`<div class="v36-admin-card"><h3>📊 Admin Control Center</h3><p>पहले Action Required items जाँचें; routine account activity बाद में देखें।</p><div class="v36-admin-actions"><button onclick="openAdminTab('reports')">🚩 Open Reports (${repSnap.size})</button><button onclick="openAdminTab('properties')">🏠 Manage Properties (${rSnap.size})</button><button onclick="openAdminTab('feedback')">💬 Review Feedback</button><button onclick="openAdminTab('notifications')">🔔 All Notifications (${nSnap.size})</button></div><p style="color:#667085;font-size:13px;margin-top:12px;">यदि किसी सेक्शन में permission error है, तो Firebase Rules और Admin UID की जाँच आवश्यक है।</p></div>`;
+  renderUsers(uSnap); renderProperties(rSnap); renderReports(repSnap); renderNotifications(nSnap); renderFeedback(fSnap); openAdminTab(activeTab);
+}
+function emptyQuerySnapshot(){return {size:0,forEach:()=>{}};}
+function v75DateMillis(value){
+  if(!value) return 0;
+  if(typeof value.toMillis === "function") return value.toMillis();
+  if(typeof value.toDate === "function") return value.toDate().getTime();
+  if(typeof value.seconds === "number") return value.seconds*1000;
+  const n=Date.parse(value); return Number.isFinite(n)?n:0;
+}
+function v75SortedDocs(snap, fields=["createdAt","submittedAt","updatedAt","timestamp","date"]){
+  const docs=[]; snap.forEach(d=>docs.push(d));
+  return docs.sort((a,b)=>{
+    const x=a.data()||{}, y=b.data()||{};
+    const get=o=>{for(const f of fields){const n=v75DateMillis(o[f]);if(n)return n;}return 0;};
+    const diff=get(y)-get(x); return diff || String(b.id).localeCompare(String(a.id));
+  });
+}
+function renderUsers(snap){
+  const rows=[]; v75SortedDocs(snap).forEach(d=>{const x=d.data()||{}; rows.push(`<tr><td><strong>${esc(x.name||"-")}</strong><br><small>${esc(x.email||d.id)}</small></td><td>${esc(x.mobile||"-")}<br>${esc(x.city||"")}</td><td>${esc(x.status||"active")}</td><td class="v36-admin-actions">${d.id===V36_ADMIN_UID?'<span>👑 Admin</span>':`<button class="${x.status==="blocked"?"primary":""}" onclick="adminToggleUser('${esc(d.id)}','${x.status==="blocked"?"active":"blocked"}')">${x.status==="blocked"?"Unblock":"Block"}</button>`}</td></tr>`)});
+  $id("adminUsersPanel").innerHTML=`<div class="v36-admin-card"><h3>👥 Users</h3><div class="v36-admin-table-wrap"><table class="v36-admin-table"><thead><tr><th>User</th><th>Contact</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows.join("")||'<tr><td colspan="4" class="v36-admin-empty">No users found.</td></tr>'}</tbody></table></div></div>`;
+}
+function renderProperties(snap){
+  const active=[], blocked=[], deleted=[];
+  v75SortedDocs(snap).forEach(d=>{
+    const x=d.data()||{};
+    const isDeleted=x.status==="deleted"||x.deleted===true||x.isDeleted===true;
+    const isBlocked=x.status==="blocked";
+    const actions=isDeleted
+      ? `<button class="primary" onclick="adminRestoreProperty('${esc(d.id)}')">Restore</button>`
+      : `<button onclick="adminToggleProperty('${esc(d.id)}','${isBlocked?"active":"blocked"}')">${isBlocked?"Activate":"Block"}</button><button class="danger" onclick="adminDeleteProperty('${esc(d.id)}')">Move to Deleted</button>`;
+    const row=`<tr><td><strong>${esc(x.type||"Property")}</strong><br>${esc(x.city||"")}, ${esc(x.state||"")}<br><small>ID: ${esc(d.id)}</small></td><td>₹${esc(x.rent||"")}<br>${esc(x.name||"")}<br><small>${esc(x.ownerId||"")}</small></td><td>${esc(isDeleted?"deleted":x.status||"active")}</td><td class="v36-admin-actions">${actions}</td></tr>`;
+    (isDeleted?deleted:isBlocked?blocked:active).push(row);
+  });
+  const table=(title,rows)=>`<div class="v36-admin-card" style="margin-bottom:14px"><h3>${title} (${rows.length})</h3><div class="v36-admin-table-wrap"><table class="v36-admin-table"><thead><tr><th>Property</th><th>Owner / Rent</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows.join("")||'<tr><td colspan="4" class="v36-admin-empty">No properties in this section.</td></tr>'}</tbody></table></div></div>`;
+  $id("adminPropertiesPanel").innerHTML=table("🏠 Active Properties",active)+table("⛔ Blocked Properties",blocked)+table("🗑️ Deleted Properties (soft-deleted; restorable)",deleted);
+}
+function reportStatusLabel(status){
+  return ({pending:"Pending / नई शिकायत",reviewed:"Reviewed / शिकायत देखी गई",in_progress:"In Progress / कार्रवाई जारी",resolved:"Resolved / समाधान हुआ",closed:"Closed / शिकायत बंद"})[status]||status||"Pending / नई शिकायत";
+}
+function renderReports(snap){
+  const rows=[];
+  v75SortedDocs(snap).forEach(d=>{
+    const x=d.data()||{}, status=x.status||"pending";
+    const selected=(s,label)=>`<button class="${status===s?"selected-status":""}" onclick="adminSetReportStatus('${esc(d.id)}','${s}')" ${status===s?"disabled":""}>${label}${status===s?" ✓":""}</button>`;
+    rows.push(`<tr>
+      <td data-report-search="${esc([d.id,x.roomId,x.reporterEmail,x.reporterUserId,x.reasonCategory,x.reason,x.details].filter(Boolean).join(" ").toLowerCase())}"><strong>RPT-${esc(String(d.id).slice(-6).toUpperCase())}</strong><br>
+        Property ID: ${esc(x.roomId||"-")}<br>
+        <strong>${esc(x.reasonCategory||x.reason||"No reason")}</strong>
+        ${x.details?`<br><small>${esc(x.details)}</small>`:""}
+        ${(x.adminFeedback||x.resolutionNote)?`<div class="v49-existing-reply"><b>मौजूदा Admin जवाब:</b><br>${esc(x.adminFeedback||x.resolutionNote)}</div>`:""}
+      </td>
+      <td>${esc(x.reporterEmail||x.reporterUserId||"-")}<br>${dateText(x.createdAt)}</td>
+      <td><b>${esc(reportStatusLabel(status))}</b><br><small>Last Update: ${dateText(x.statusUpdatedAt||x.reviewedAt||x.createdAt)||"—"}</small></td>
+      <td class="v36-admin-actions v49-report-actions">
+        <div class="v49-status-buttons">
+          ${selected("pending","Pending")}
+          ${selected("reviewed","Reviewed")}
+          ${selected("in_progress","In Progress")}
+          ${selected("resolved","Resolved")}
+          ${selected("closed","Closed")}
+        </div>
+        <div class="v49-report-feedback">
+          <label for="report-feedback-${esc(d.id)}">💬 Admin का जवाब</label>
+          <textarea id="report-feedback-${esc(d.id)}" rows="3" maxlength="1500" placeholder="शिकायतकर्ता के लिए जवाब लिखें...">${esc(x.adminFeedback||x.resolutionNote||"")}</textarea>
+          <button class="v49-save-reply" onclick="adminSaveReportFeedback('${esc(d.id)}')">💾 जवाब सेव करें और नोटिफिकेशन भेजें</button>
+        </div>
+      </td>
+    </tr>`);
+  });
+  $id("adminReportsPanel").innerHTML=`<div class="v36-admin-card">
+    <h3>🚩 Reports &amp; Complaints</h3>
+    <p>स्टेटस बदलने के अलावा, अब मौजूदा स्टेटस को बदले बिना भी Admin का जवाब सेव कर सकते हैं। जवाब सेव होने पर शिकायतकर्ता को नोटिफिकेशन भेजने की कोशिश होगी।</p>
+    <label for="adminReportSearch">Search by Report ID / Property ID / User / Reason</label><input id="adminReportSearch" type="search" oninput="filterAdminReports()" placeholder="RPT number, property ID, user, reason..." style="width:100%;max-width:520px;padding:10px;border:1px solid #d0d5dd;border-radius:9px;margin:6px 0 12px;">
+    <div class="v36-admin-table-wrap"><table class="v36-admin-table"><thead><tr><th>Report / Complaint</th><th>Reporter / Date</th><th>Status / Last Update</th><th>Action / Admin Reply</th></tr></thead>
+    <tbody>${rows.join("")||'<tr><td colspan="4" class="v36-admin-empty">No in-app reports found.</td></tr>'}</tbody></table></div>
+  </div>`;
+}
+window.filterAdminReports=function(){
+  const q=String($id("adminReportSearch")?.value||"").trim().toLowerCase();
+  document.querySelectorAll("#adminReportsPanel tbody tr").forEach(row=>{
+    const content=(row.querySelector("[data-report-search]")?.getAttribute("data-report-search")||row.textContent||"").toLowerCase();
+    row.style.display=!q||content.includes(q)?"":"none";
+  });
+};
+function renderNotifications(snap){
+  const records=[]; v75SortedDocs(snap).forEach(d=>records.push({id:d.id,...(d.data()||{})}));
+  const rows=records.sort((a,b)=>{
+    const millis=v=>{if(!v)return 0;if(typeof v.toMillis==="function")return v.toMillis();if(typeof v.toDate==="function")return v.toDate().getTime();if(typeof v.seconds==="number")return v.seconds*1000;const n=Date.parse(v);return Number.isFinite(n)?n:0;};
+    return millis(b.createdAt)-millis(a.createdAt) || String(b.id).localeCompare(String(a.id));
+  }).map(x=>`<tr tabindex="0" role="button" style="cursor:pointer" data-notification-id="${esc(x.id)}" data-reference-id="${esc(x.referenceId||"")}" data-feedback-id="${esc(x.feedbackId||"")}" data-report-id="${esc(x.reportId||"")}" data-room-id="${esc(x.roomId||"")}" data-notification-category="${esc((x.category||x.type||(/report|complaint|feedback/i.test(x.message||"")?"complaints":"activity")).toLowerCase())}"><td>${esc(x.message||"")}</td><td>${esc(x.userId||"-")}</td><td>${dateText(x.createdAt)}</td><td>${x.read?"Read":"Unread"}</td></tr>`);
+  $id("adminNotificationsPanel").innerHTML=`<div class="v36-admin-card"><h3>🔔 Notifications (admin view)</h3><label for="adminNotificationFilter">Category</label> <select id="adminNotificationFilter" onchange="filterAdminNotifications(this.value)"><option value="all">All Notifications</option><option value="action">Action Required</option><option value="property">Property Activity</option><option value="complaints">Complaints &amp; Feedback</option><option value="requests">Requests &amp; Contact</option><option value="account">Account Activity</option></select><div class="v36-admin-table-wrap"><table class="v36-admin-table"><thead><tr><th>Message</th><th>User</th><th>Date</th><th>Read status</th></tr></thead><tbody>${rows.slice(0,200).join("")||'<tr><td colspan="4" class="v36-admin-empty">No notifications found.</td></tr>'}</tbody></table></div></div>`;
+}
+window.filterAdminNotifications=function(category){
+  document.querySelectorAll("#adminNotificationsPanel tbody tr[data-notification-category]").forEach(row=>{
+    const value=row.getAttribute("data-notification-category")||"activity";
+    const msg=(row.cells[0]?.textContent||"").toLowerCase();
+    let show=category==="all";
+    if(category==="action") show=/pending|urgent|action required|in progress|unread|needs review/.test(msg);
+    if(category==="property") show=/property|room|listing|blocked|deleted|restore/.test(msg);
+    if(category==="complaints") show=/report|complaint|feedback|rpt-/.test(msg)||value.includes("complaint");
+    if(category==="requests") show=/request|contact|call|whatsapp|inquiry/.test(msg);
+    if(category==="account") show=/login|account|signup|profile|password/.test(msg);
+    row.style.display=show?"":"none";
+  });
+};
+document.addEventListener("click",function(e){const row=e.target.closest("#adminNotificationsPanel tbody tr[data-notification-id]");if(!row)return;const msg=row.cells[0]?.textContent||"Notification";const feedbackId=row.dataset.feedbackId;const reportId=row.dataset.reportId;const roomId=row.dataset.roomId;if(feedbackId){openAdminTab("feedback");const panel=document.getElementById("adminFeedbackPanel");if(panel){panel.dataset.focusFeedbackId=feedbackId;setTimeout(()=>{const hit=[...panel.querySelectorAll("tr")].find(tr=>tr.textContent.includes(feedbackId)||tr.textContent.includes(row.dataset.referenceId||"\u0000"));if(hit)hit.scrollIntoView({behavior:"smooth",block:"center"});},100);}return;}if(reportId){openAdminTab("reports");alert(msg+"\nReport ID: "+reportId);return;}if(roomId){openAdminTab("properties");alert(msg+"\nProperty ID: "+roomId);return;}alert(msg+ (row.dataset.referenceId?"\nReference ID: "+row.dataset.referenceId:""));});
+document.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.matches("#adminNotificationsPanel tbody tr[data-notification-id]")){e.preventDefault();e.target.click();}});
+function renderFeedback(snap){
+  const docs=v75SortedDocs(snap);
+  const rows=[];
+  docs.forEach(d=>{
+    const x=d.data()||{};
+    const rating=Number(x.rating||0);
+    const photos=Array.isArray(x.photos)?x.photos:[];
+    rows.push(`<tr tabindex="0" role="button" style="cursor:pointer" onclick="openAdminFeedbackDetail('${esc(d.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAdminFeedbackDetail('${esc(d.id)}')}"><td><strong>${esc(x.type||"Feedback")}</strong><br>${esc(x.subject||"")}<br><small>Ref: ${esc(x.referenceId||d.id)}</small><br><small>Rating: ${rating?'★'.repeat(Math.max(0,Math.min(5,rating)) )+'☆'.repeat(5-Math.max(0,Math.min(5,rating))):'Not rated'}</small><br><small>Status: ${esc(x.status||"Pending")}</small></td><td>${esc(x.message||"")}${photos.length?`<div><b>Photos (${photos.length}):</b> ${photos.map(p=>esc(p.name||p.fileName||"photo")).join(", ")}</div>`:""}${x.adminReply?`<div><b>Admin reply:</b> ${esc(x.adminReply)}</div>`:""}<br><small><b>Tap to open details / जवाब दें</b></small></td><td>${esc(x.name||"-")}<br><small>${esc(x.email||x.userEmail||x.userId||"Guest")}</small><br><small>${esc(x.profileId||"")}</small><br><small>${esc(x.mobile||"-")}</small></td><td>${dateText(x.createdAt)||"—"}</td></tr>`);
+  });
+  $id("adminFeedbackPanel").innerHTML=`<div class="v36-admin-card"><h3>💬 User Feedback</h3><p>नया Feedback सबसे ऊपर है। किसी भी रिकॉर्ड पर टच करके पूरी शिकायत, उपलब्ध फोटो और Admin reply खोलें।</p><div class="v36-admin-table-wrap"><table class="v36-admin-table"><thead><tr><th>Type / Subject</th><th>Message</th><th>User</th><th>Date</th></tr></thead><tbody>${rows.join("")||'<tr><td colspan="4" class="v36-admin-empty">अभी कोई Feedback नहीं मिला।</td></tr>'}</tbody></table></div><div id="adminFeedbackDetail" style="margin-top:14px"></div></div>`;
+}
+window.openAdminFeedbackDetail=function(id){
+  const ref=doc(db,"feedback",id);
+  getDoc(ref).then(snap=>{
+    if(!snap.exists()){alert("यह Feedback रिकॉर्ड नहीं मिला।");return;}
+    const x=snap.data()||{}, photos=Array.isArray(x.photos)?x.photos:[];
+    const photoHtml=photos.length?photos.map(p=>{
+      const url=(typeof p==="string"?p:(p.url||p.downloadURL||p.downloadUrl||p.src||p.dataUrl||p.data||p.imageUrl||""));
+      const name=typeof p==="string"?p:(p.name||p.fileName||"Photo");
+      return url && /^https?:|^data:image\//i.test(url)?`<a href="${esc(url)}" target="_blank" rel="noopener"><img src="${esc(url)}" alt="${esc(name)}" style="width:110px;height:110px;object-fit:cover;border-radius:10px;border:1px solid #ddd;margin:4px"></a>`:`<div style="display:inline-block;padding:8px;margin:4px;border:1px solid #ddd;border-radius:8px">📎 ${esc(name)}<br><small>Photo URL unavailable</small></div>`;
+    }).join(""):"कोई फोटो संलग्न नहीं है।";
+    const panel=document.getElementById("adminFeedbackDetail"); if(!panel)return;
+    panel.innerHTML=`<div class="v36-admin-card" style="border:2px solid #d0d5dd"><h3>📋 Feedback Details</h3><p><b>Reference:</b> ${esc(x.referenceId||id)}</p><p><b>Type:</b> ${esc(x.type||"Feedback")} · <b>Subject:</b> ${esc(x.subject||"-")}</p><p><b>Message:</b><br>${esc(x.message||"-")}</p><p><b>User:</b> ${esc(x.name||"-")} · ${esc(x.email||x.userEmail||x.userId||"Guest")} · ${esc(x.mobile||"-")}</p><p><b>Date:</b> ${dateText(x.createdAt)||"—"}</p><p><b>Status:</b> ${esc(x.status||"Pending")}</p><h4>📷 Attached Photos</h4><div>${photoHtml}</div><h4>💬 Admin Reply</h4><textarea id="admin-feedback-reply-${esc(id)}" rows="3" maxlength="1500" style="width:100%;box-sizing:border-box" placeholder="यूज़र के लिए जवाब लिखें...">${esc(x.adminReply||"")}</textarea><label for="admin-feedback-status-${esc(id)}">Status</label><select id="admin-feedback-status-${esc(id)}"><option value="Pending" ${String(x.status||"Pending").toLowerCase()==="pending"?"selected":""}>Pending</option><option value="In Progress" ${String(x.status||"").toLowerCase()==="in progress"?"selected":""}>In Progress</option><option value="Resolved" ${String(x.status||"").toLowerCase()==="resolved"?"selected":""}>Resolved</option><option value="Closed" ${String(x.status||"").toLowerCase()==="closed"?"selected":""}>Closed</option></select><p><button class="primary" onclick="adminSaveFeedbackReply('${esc(id)}')">💾 Save Reply & Status</button> <button onclick="document.getElementById('adminFeedbackDetail').innerHTML=''">Close</button></p><small>यदि Firestore Rules में feedback update प्रतिबंधित है, तो सेव करने के लिए Rules में केवल Admin UID को update की अनुमति देनी होगी।</small></div>`;
+    panel.scrollIntoView({behavior:"smooth",block:"start"});
+  }).catch(e=>alert("Feedback details नहीं खुल सके: "+(e.message||e)));
+};
+window.adminSaveFeedbackReply=async function(id){
+  if(!isAdmin()||!auth.currentUser){alert("Admin account से login करें।");return;}
+  const reply=document.getElementById("admin-feedback-reply-"+id)?.value.trim()||"";
+  const status=document.getElementById("admin-feedback-status-"+id)?.value||"Pending";
+  if(reply.length>1500){alert("जवाब 1500 अक्षरों से छोटा रखें।");return;}
+  try{
+    const feedbackRef=doc(db,"feedback",id);
+    const beforeSnap=await getDoc(feedbackRef);
+    if(!beforeSnap.exists()) throw new Error("यह Feedback रिकॉर्ड नहीं मिला।");
+    const before=beforeSnap.data()||{};
+    await updateDoc(feedbackRef,{adminReply:reply,status,statusUpdatedAt:serverTimestamp(),repliedAt:serverTimestamp(),repliedBy:auth.currentUser.uid});
+    let userNotice='';
+    const recipientUid=before.userId||null;
+    if(recipientUid){
+      try{
+        await addDoc(notificationsCollection,{userId:recipientUid,message:`💬 आपकी Feedback/शिकायत ${before.referenceId||id} पर Admin ने जवाब दिया है। Status: ${status}${reply?' — '+reply.slice(0,160):''}`,notificationType:'feedback_admin_reply',category:'complaints',feedbackId:id,referenceId:before.referenceId||id,read:false,createdAt:serverTimestamp()});
+        userNotice='\nयूज़र Notification भी भेज दिया गया।';
+      }catch(notifyError){console.error('Feedback reply notification failed:',notifyError);userNotice='\n⚠️ Reply/Status सेव हुआ, लेकिन यूज़र Notification नहीं भेजा जा सका: '+(notifyError.code||notifyError.message||'Unknown error');}
+    }else{
+      userNotice='\n⚠️ यह Feedback बिना लॉगिन यूज़र ने भेजा था, इसलिए किसी User UID पर notification नहीं भेजी जा सकती।';
+    }
+    alert("✅ Feedback का जवाब और Status सेव हो गया।"+userNotice); await loadAdminDashboard("feedback");
+  }catch(e){alert("❌ जवाब सेव नहीं हुआ: "+(e.message||e)+"\nFirestore Rules में Admin-only feedback update की अनुमति जाँचें।");}
+};
+
+async function recordAdminAudit(action, roomId, extra={}){
+  try{ if(!auth.currentUser) return; await addDoc(collection(db,"adminActivity"),{action,roomId:roomId||null,adminUid:auth.currentUser.uid,createdAt:serverTimestamp(),...extra}); }
+  catch(e){ console.warn("Admin audit log unavailable; check adminActivity Firestore Rules",e); }
+}
+window.adminToggleUser=async function(uid,status){if(!isAdmin())return;try{await updateDoc(doc(db,"users",uid),{status,updatedAt:serverTimestamp()});alert(`User ${status}.`);await loadAdminDashboard();}catch(e){alert("❌ User status update failed: "+e.message)}};
+window.adminToggleProperty=async function(id,status){if(!isAdmin())return;try{await updateDoc(doc(db,"room",id),{status,updatedAt:serverTimestamp()});alert(`Property ${status}.`);await loadAdminDashboard();}catch(e){alert("❌ Property update failed: "+e.message)}};
+window.adminDeleteProperty=async function(id){if(!isAdmin())return;if(!confirm("इस property को Deleted Properties में भेजें? रिकॉर्ड सुरक्षित रहेगा और Restore किया जा सकेगा।"))return;try{await updateDoc(doc(db,"room",id),{status:"deleted",deleted:true,deletedAt:serverTimestamp(),deletedBy:auth.currentUser.uid,updatedAt:serverTimestamp()});await recordAdminAudit("delete_property",id);alert("✅ Property Deleted section में भेज दी गई; रिकॉर्ड सुरक्षित है।");await loadAdminDashboard("properties");await loadRooms();}catch(e){alert("❌ Delete failed: "+e.message)}};
+window.adminRestoreProperty=async function(id){if(!isAdmin())return;if(!confirm("इस property को फिर से Active करना है?"))return;try{await updateDoc(doc(db,"room",id),{status:"active",deleted:false,restoredAt:serverTimestamp(),restoredBy:auth.currentUser.uid,updatedAt:serverTimestamp()});await recordAdminAudit("restore_property",id);alert("✅ Property restore हो गई।");await loadAdminDashboard("properties");await loadRooms();}catch(e){alert("❌ Restore failed: "+e.message)}};
+window.adminSaveReportFeedback=async function(id){
+  if(!isAdmin() || !auth.currentUser){
+    alert("⛔ Admin permission नहीं मिली। कृपया Admin account से login करें।");
+    return;
+  }
+  const textarea=document.getElementById("report-feedback-"+id);
+  if(!textarea){ alert("⚠️ जवाब लिखने का बॉक्स नहीं मिला। Reports को Refresh करके दोबारा कोशिश करें।"); return; }
+  const adminFeedback=textarea.value.trim();
+  if(!adminFeedback){ alert("कृपया पहले Admin का जवाब लिखें।"); textarea.focus(); return; }
+  if(adminFeedback.length>1500){ alert("जवाब 1500 अक्षरों से छोटा रखें।"); return; }
+
+  const saveButton=textarea.parentElement.querySelector(".v49-save-reply");
+  if(saveButton) saveButton.disabled=true;
+  try{
+    const reportRef=doc(db,"reports",id);
+    const reportSnap=await getDoc(reportRef);
+    if(!reportSnap.exists()) throw new Error("यह शिकायत Firebase में नहीं मिली।");
+    const report=reportSnap.data()||{};
+    const previous=String(report.adminFeedback||report.resolutionNote||"").trim();
+    if(previous===adminFeedback){
+      alert("यह जवाब पहले से सेव है। कोई डुप्लिकेट नोटिफिकेशन नहीं भेजा गया।");
+      if(saveButton) saveButton.disabled=false;
+      return;
+    }
+
+    const update={
+      adminFeedback,
+      statusUpdatedAt:serverTimestamp(),
+      feedbackUpdatedAt:serverTimestamp(),
+      lastUpdatedBy:auth.currentUser.uid
+    };
+    if(["resolved","closed"].includes(String(report.status||"").toLowerCase())){
+      update.resolutionNote=adminFeedback;
+    }
+    await updateDoc(reportRef,update);
+
+    let notificationSaved=false, notificationError="";
+    if(report.reporterUserId){
+      try{
+        const rid="RPT-"+String(id).slice(-6).toUpperCase();
+        await addDoc(collection(db,"notifications"),{
+          userId:report.reporterUserId,
+          message:`💬 Admin ने आपकी शिकायत ${rid} पर जवाब दिया: ${adminFeedback}`,
+          notificationType:"report_feedback",
+          reportId:id,
+          reportStatus:report.status||"pending",
+          roomId:report.roomId||"",
+          read:false,
+          createdAt:serverTimestamp()
+        });
+        notificationSaved=true;
+      }catch(notifErr){
+        notificationError=notifErr?.message||String(notifErr);
+      }
+    }else{
+      notificationError="इस शिकायत में reporterUserId नहीं है।";
+    }
+
+    await loadAdminDashboard("reports");
+    if(notificationSaved){
+      alert("✅ Admin का जवाब सेव हो गया और शिकायतकर्ता के लिए नोटिफिकेशन भी बन गया।");
+    }else{
+      alert("✅ Admin का जवाब Firebase में सेव हो गया, लेकिन नोटिफिकेशन नहीं बन पाया: "+notificationError);
+    }
+  }catch(e){
+    alert("❌ जवाब सेव नहीं हुआ: "+(e?.message||e));
+    if(saveButton) saveButton.disabled=false;
+  }
+};
+
+window.adminSetReportStatus=async function(id,status){
+  if(!isAdmin() || !auth.currentUser){ alert("⛔ Admin permission नहीं मिली। कृपया Admin account से login करें।"); return; }
+  const allowed=["reviewed","in_progress","resolved","closed"];
+  if(!id || !allowed.includes(status)){ alert("⚠️ Report ID या status सही नहीं है।"); return; }
+  const feedbackPrompt={
+    reviewed:"यूज़र के लिए Admin feedback / जवाब लिखें (वैकल्पिक):",
+    in_progress:"यूज़र को कार्रवाई की जानकारी लिखें (वैकल्पिक):",
+    resolved:"समाधान में क्या कार्रवाई की गई? यूज़र को जवाब लिखें (वैकल्पिक):",
+    closed:"शिकायत बंद करने का कारण/जवाब लिखें (वैकल्पिक):"
+  };
+  const answer=prompt(feedbackPrompt[status],"");
+  if(answer===null) return;
+  const adminFeedback=answer.trim();
+  const resolutionNote=(status==="resolved" || status==="closed")?adminFeedback:"";
+  const buttons=document.querySelectorAll('#adminReportsPanel button[onclick*="adminSetReportStatus"]');
+  buttons.forEach(b=>b.disabled=true);
+  try{
+    const reportRef=doc(db,"reports",id);
+    const reportSnap=await getDoc(reportRef);
+    if(!reportSnap.exists()) throw new Error("यह शिकायत Firebase में नहीं मिली।");
+    const report=reportSnap.data()||{};
+    const update={status,statusUpdatedAt:serverTimestamp(),lastUpdatedBy:auth.currentUser.uid,adminFeedback};
+    if(status==="reviewed") { update.reviewedBy=auth.currentUser.uid; update.reviewedAt=serverTimestamp(); }
+    if(status==="resolved" || status==="closed") { update.resolutionNote=resolutionNote; update.resolvedBy=auth.currentUser.uid; update.resolvedAt=serverTimestamp(); }
+    await updateDoc(reportRef,update);
+    let notificationSaved=true, notificationError="";
+    if(report.reporterUserId){
+      const messages={
+        reviewed:`🔎 आपकी शिकायत RPT-${String(id).slice(-6).toUpperCase()} एडमिन ने देख ली है।${adminFeedback?" एडमिन का जवाब: "+adminFeedback:" आगे की कार्रवाई के दौरान स्टेटस अपडेट किया जाएगा।"}`,
+        in_progress:`🛠️ आपकी शिकायत RPT-${String(id).slice(-6).toUpperCase()} पर कार्रवाई जारी है।${adminFeedback?" एडमिन का जवाब: "+adminFeedback:""}`,
+        resolved:`✅ आपकी शिकायत RPT-${String(id).slice(-6).toUpperCase()} का समाधान कर दिया गया है।${adminFeedback?" एडमिन का जवाब: "+adminFeedback:""}`,
+        closed:`📁 आपकी शिकायत RPT-${String(id).slice(-6).toUpperCase()} बंद कर दी गई है।${adminFeedback?" एडमिन का जवाब: "+adminFeedback:""}`
+      };
+      try{
+        await addDoc(collection(db,"notifications"),{userId:report.reporterUserId,message:messages[status],notificationType:"report_status",reportId:id,reportStatus:status,roomId:report.roomId||"",read:false,createdAt:serverTimestamp()});
+      }catch(notifErr){ notificationSaved=false; notificationError=notifErr?.message||String(notifErr); }
+    }else{
+      notificationSaved=false; notificationError="इस शिकायत में reporterUserId नहीं है, इसलिए user notification नहीं भेजा जा सका।";
+    }
+    await loadAdminDashboard("reports");
+    if(notificationSaved) alert("✅ स्टेटस Firebase में सेव हुआ और शिकायतकर्ता के My Account में नोटिफिकेशन भेज दिया गया।");
+    else alert("✅ स्टेटस Firebase में सेव हुआ। लेकिन नोटिफिकेशन नहीं बन पाया: "+notificationError);
+  }catch(e){
+    alert("❌ शिकायत का स्टेटस सेव नहीं हुआ: "+(e?.message||e));
+    buttons.forEach(b=>b.disabled=false);
+  }
+};
+
+/* Logged-in users are checked against the app-level blocked status. */
+onAuthStateChanged(auth,async user=>{
+  const existingAdminBtn=document.getElementById("v36AdminNavBtn");
+  if(!user || user.uid!==V36_ADMIN_UID){
+    if(existingAdminBtn) existingAdminBtn.remove();
+  }else{
+    const nav=document.getElementById("navLinks");
+    if(nav && !existingAdminBtn){
+      const b=document.createElement("button"); b.id="v36AdminNavBtn"; b.type="button"; b.textContent="🛡️ Admin"; b.onclick=()=>window.showAdmin(); nav.appendChild(b);
+    }
+  }
+  if(!user) return;
+  try{
+    const snap=await getDoc(doc(db,"users",user.uid));
+    if(snap.exists() && snap.data()?.status==="blocked"){
+      alert("⛔ आपका Dream House Rental account blocked है।");
+      await signOut(auth);
+      return;
+    }
+  }catch(e){console.warn("Blocked-status check skipped:",e);}
+});
+
+/* V42: Accessible report form with categories, detailed description and private My Reports status. */
+window.reportProperty=async function(roomId){
+  if(!window.requireLoginForAction("Property Report करना")) return;
+  const old=document.getElementById('v42ReportModal'); if(old)old.remove();
+  const modal=document.createElement('div'); modal.id='v42ReportModal';
+  modal.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.62);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto;';
+  modal.innerHTML=`<div role="dialog" aria-modal="true" aria-labelledby="v42ReportTitle" style="width:min(100%,540px);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.25);color:#101828;"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><h2 id="v42ReportTitle" style="margin:0;font-size:22px;">🚩 Report Property</h2><button type="button" id="v42ReportClose" aria-label="Close" style="border:0;background:#f2f4f7;border-radius:10px;padding:8px 12px;font-size:18px;">✕</button></div><p style="color:#667085;margin:8px 0 16px;">इस प्रॉपर्टी में क्या समस्या है? सही विकल्प चुनें और विवरण लिखें।</p><form id="v42ReportForm"><input type="hidden" name="roomId" value="${esc(roomId)}"><label for="v42ReportReason" style="display:block;font-weight:800;margin-bottom:7px;">शिकायत का कारण <span style="color:#b42318;">*</span></label><select id="v42ReportReason" required style="width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:10px;font:inherit;margin-bottom:14px;"><option value="">कारण चुनें</option><option>गलत या फर्जी प्रॉपर्टी</option><option>गलत किराया या जानकारी</option><option>प्रॉपर्टी अब उपलब्ध नहीं है</option><option>धोखाधड़ी का शक</option><option>डुप्लीकेट लिस्टिंग</option><option>अनुचित फोटो या गलत सामग्री</option><option>अन्य शिकायत</option></select><label for="v42ReportDetails" style="display:block;font-weight:800;margin-bottom:7px;">शिकायत का पूरा विवरण <span style="color:#b42318;">*</span></label><textarea id="v42ReportDetails" required minlength="5" maxlength="1500" rows="5" placeholder="कृपया समस्या विस्तार से लिखें…" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #d0d5dd;border-radius:10px;font:inherit;resize:vertical;"></textarea><p style="font-size:12px;color:#667085;margin:6px 0 14px;">आपकी शिकायत एडमिन को भेजी जाएगी। आप My Account → My Reports में स्टेटस देख सकते हैं।</p><div style="display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;"><button type="button" id="v42ReportCancel" style="padding:11px 15px;border:1px solid #d0d5dd;background:#fff;border-radius:10px;font-weight:700;">Cancel</button><button type="submit" id="v42ReportSubmit" style="padding:11px 17px;border:0;background:#155eef;color:#fff;border-radius:10px;font-weight:800;">📨 शिकायत भेजें</button></div><div id="v42ReportFeedback" role="status" style="margin-top:12px;font-size:13px;"></div></form></div>`;
+  document.body.appendChild(modal);
+  const close=()=>modal.remove();
+  modal.querySelector('#v42ReportClose').onclick=close; modal.querySelector('#v42ReportCancel').onclick=close;
+  modal.addEventListener('click',e=>{if(e.target===modal)close()});
+  modal.querySelector('#v42ReportReason').focus();
+  modal.querySelector('#v42ReportForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const user=auth.currentUser; if(!user){modal.querySelector('#v42ReportFeedback').textContent='आपका login समाप्त हो गया है। कृपया फिर से login करें।';return;}
+    const reasonCategory=modal.querySelector('#v42ReportReason').value;
+    const details=modal.querySelector('#v42ReportDetails').value.trim();
+    const feedback=modal.querySelector('#v42ReportFeedback'); const submit=modal.querySelector('#v42ReportSubmit');
+    if(!reasonCategory||details.length<5){feedback.style.color='#b42318';feedback.textContent='कृपया कारण चुनें और कम से कम 5 अक्षरों में विवरण लिखें।';return;}
+    submit.disabled=true;submit.textContent='भेज रहे हैं…';
+    try{
+      const saved=await addDoc(reportsRef,{roomId,reasonCategory,details:details.slice(0,1500),reason:reasonCategory+' — '+details.slice(0,300),reporterUserId:user.uid,reporterEmail:user.email||'',status:'pending',createdAt:serverTimestamp()});
+      const reportCode='RPT-'+String(saved.id).slice(-6).toUpperCase();
+      try{
+        await addDoc(collection(db,"notifications"),{
+          userId:"a9o5xqXYQrVFt0IMQi1S3Hy6uTf2",
+          message:`🚩 नई Property Report ${reportCode}: ${reasonCategory} — ${details.slice(0,180)}`,
+          notificationType:"admin_new_report",
+          reportId:saved.id,
+          roomId,
+          reporterUserId:user.uid,
+          read:false,
+          createdAt:serverTimestamp()
+        });
+      }catch(adminNotifError){
+        console.warn("Admin report notification could not be saved:",adminNotifError);
+      }
+      modal.querySelector('#v42ReportForm').innerHTML=`<div style="text-align:center;padding:14px 2px;"><div style="font-size:42px;">✅</div><h3 style="margin:8px 0;">शिकायत सफलतापूर्वक भेज दी गई</h3><p>आपकी Report ID: <strong>${esc(reportCode)}</strong></p><p style="color:#667085;">स्टेटस: <strong style="color:#92400e;">Pending / जाँच बाकी</strong></p><p style="color:#667085;font-size:13px;">My Account → My Reports में बाद में स्टेटस देख सकते हैं।</p><button type="button" id="v42ReportDone" style="padding:11px 18px;border:0;background:#155eef;color:#fff;border-radius:10px;font-weight:800;">Done</button></div>`;
+      modal.querySelector('#v42ReportDone').onclick=()=>{close();if(typeof window.loadMyReports==='function')window.loadMyReports();};
+    }catch(err){console.error('Report submit error:',err);feedback.style.color='#b42318';feedback.textContent='शिकायत सेव नहीं हुई: '+(err?.message||'कृपया दोबारा कोशिश करें।');submit.disabled=false;submit.textContent='📨 शिकायत भेजें';}
+  });
+};
+</script>
+
+<style id="v40-account-professional-style">
+.account-quick-actions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0 0 16px;}
+.account-action-card{border:1px solid #e4e7ec;background:#fff;border-radius:14px;padding:13px 11px;text-align:left;cursor:pointer;box-shadow:0 4px 14px rgba(15,23,42,.05);transition:transform .15s ease,box-shadow .15s ease;}
+.account-action-card:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(15,23,42,.08);}
+.account-action-icon{display:block;font-size:22px;margin-bottom:6px;}
+.account-action-card strong{display:block;font-size:13px;color:#101828;}
+.account-action-card small{display:block;color:#667085;font-size:11px;margin-top:3px;line-height:1.35;}
+.account-verified-banner{display:flex;align-items:flex-start;gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:12px 14px;margin:0 0 16px;color:#166534;}
+.account-verified-banner span{font-size:20px;line-height:1;}
+.account-verified-banner strong,.account-verified-banner small{display:block;}
+.account-verified-banner small{margin-top:2px;color:#475467;font-size:12px;}
+@media(max-width:900px){.account-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:520px){.account-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}.account-action-card{padding:11px 9px;}}
+</style>
+<style id="v36-admin-system-style">
+.v36-admin-page{padding:22px 14px 60px;max-width:1200px;margin:0 auto}
+.v36-admin-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.v36-admin-head h1{margin:0;color:#111827;font-size:28px}
+.v36-admin-note{color:#667085;margin:5px 0 0}
+.v36-admin-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.v36-admin-stat,.v36-admin-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 6px 20px rgba(15,23,42,.05)}
+.v36-admin-stat strong{display:block;font-size:26px;color:#111827}.v36-admin-stat span{color:#667085;font-size:13px}
+.v36-admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.v36-admin-tabs button{border:1px solid #d0d5dd;background:#fff;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.v36-admin-tabs button.active{background:#111827;color:#fff}
+.v36-admin-panel{display:none}.v36-admin-panel.active{display:block}.v36-admin-table-wrap{overflow:auto}.v36-admin-table{width:100%;border-collapse:collapse;min-width:720px}.v36-admin-table th,.v36-admin-table td{padding:10px;border-bottom:1px solid #eef2f6;text-align:left;vertical-align:top;font-size:13px}.v36-admin-table th{background:#f8fafc}.v36-admin-actions{display:flex;gap:6px;flex-wrap:wrap}.v36-admin-actions button{border:1px solid #d0d5dd;background:#fff;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:800;cursor:pointer}.v36-admin-actions .danger{color:#b42318}.v36-admin-actions .primary{background:#111827;color:#fff}.v36-admin-empty{color:#667085;padding:15px 0}.v36-admin-loading{color:#667085;padding:18px 0}
+@media(max-width:800px){.v36-admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.v36-admin-head h1{font-size:23px}}
+</style>
+
+<div id="adminPage" class="page hidden">
+  <div class="v36-admin-page">
+    <div class="v36-admin-head">
+      <div><h1>🛡️ Admin Dashboard</h1><p class="v36-admin-note">Dream House Rental — secure project administration</p></div>
+      <div><button class="secondary-btn" type="button" onclick="showHome()">🏠 Home</button> <button class="danger-btn" type="button" onclick="showHome()">Close</button> <button class="danger-btn" type="button" onclick="adminLogout()">🚪 Logout</button></div>
+    </div>
+    <div id="adminAccessStatus" class="v36-admin-card" style="margin-bottom:14px;">Admin access checking...</div>
+    <div id="adminStats" class="v36-admin-stats"></div>
+    <div class="v36-admin-tabs">
+      <button type="button" data-admin-tab="overview" onclick="openAdminTab('overview')">📊 Overview</button>
+      <button type="button" data-admin-tab="users" onclick="openAdminTab('users')">👥 Users</button>
+      <button type="button" data-admin-tab="properties" onclick="openAdminTab('properties')">🏠 Properties</button>
+      <button type="button" data-admin-tab="reports" onclick="openAdminTab('reports')">🚩 Reports</button>
+      <button type="button" data-admin-tab="notifications" onclick="openAdminTab('notifications')">🔔 Notifications</button>
+      <button type="button" data-admin-tab="feedback" onclick="openAdminTab('feedback')">💬 Feedback</button>
+    </div>
+    <div id="adminOverviewPanel" class="v36-admin-panel"></div>
+    <div id="adminUsersPanel" class="v36-admin-panel"></div>
+    <div id="adminPropertiesPanel" class="v36-admin-panel"></div>
+    <div id="adminReportsPanel" class="v36-admin-panel"></div>
+    <div id="adminNotificationsPanel" class="v36-admin-panel"></div>
+    <div id="adminFeedbackPanel" class="v36-admin-panel"></div>
+  </div>
+</div>
+<!-- V42: Report form upgrade + My Reports status view; based on V41 Reports Action Fix. -->
+<script>
+
+/* ================= V58 ADDITIONS ================= */
+window.updateFeedbackWordCount=function(){
+  const el=document.getElementById("feedbackMessage"), count=document.getElementById("feedbackWordCount");
+  if(!el||!count)return;
+  const words=el.value.trim()?el.value.trim().split(/\s+/).length:0;
+  count.textContent=words+" / 200 words";
+  count.style.color=words>200?"#b42318":"#667085";
+  if(words>200){el.setCustomValidity("विवरण अधिकतम 200 शब्दों का हो सकता है।");}else{el.setCustomValidity("");}
+};
+window.validateFeedbackPhotos=function(input){
+  const files=Array.from(input.files||[]), status=document.getElementById("feedbackPhotoStatus");
+  if(files.length>3){ alert("अधिकतम 3 फोटो चुनें।"); input.value=""; if(status)status.textContent="अधिकतम 3 फोटो चुनें।"; return; }
+  if(status)status.textContent=files.length+" photo(s) selected. बड़े फोटो compress करने का प्रयास submit के समय होगा।";
+};
+window.clearFeedbackForm=function(){
+  ["feedbackName","feedbackProfileId","feedbackEmail","feedbackMobile","feedbackSubject","feedbackMessage","feedbackPhotos"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  const t=document.getElementById("feedbackType"); if(t)t.selectedIndex=0;
+  if(document.getElementById("feedbackRating"))document.getElementById("feedbackRating").value="0";
+  if(typeof window.setFeedbackRating==="function")window.setFeedbackRating(0);
+  if(typeof window.updateFeedbackSubjects==="function")window.updateFeedbackSubjects();
+  const result=document.getElementById("feedbackCheckResult");if(result)result.textContent="";
+  const preview=document.getElementById("feedbackPhotoPreview");if(preview)preview.innerHTML="";
+  const s=document.getElementById("feedbackStatus"); if(s)s.textContent="";
+  const p=document.getElementById("feedbackPhotoStatus"); if(p)p.textContent="आप 2–3 फोटो चुन सकते हैं।";
+  window.updateFeedbackWordCount();
+};
+window._recentViewedIds=window._recentViewedIds||[];
+window.recordRecentlyViewed=function(id){
+  try{
+    const saved=JSON.parse(localStorage.getItem("dhr_recent_viewed")||"[]");
+    const next=[String(id),...saved.filter(x=>String(x)!==String(id))].slice(0,12);
+    localStorage.setItem("dhr_recent_viewed",JSON.stringify(next));
+    window._recentViewedIds=next;
+    window.renderRecentlyViewed();
+  }catch(e){}
+};
+window.renderRecentlyViewed=function(){
+  const section=document.getElementById("recentlyViewedSection"), list=document.getElementById("recentlyViewedList");
+  if(!section||!list)return;
+  let ids=[];try{ids=JSON.parse(localStorage.getItem("dhr_recent_viewed")||"[]");}catch(e){}
+  const rooms=ids.map(id=>currentRooms.find(r=>String(r.id)===String(id))).filter(Boolean);
+  section.classList.toggle("hidden",!rooms.length);
+  list.innerHTML=rooms.slice(0,4).map(r=>`<div class="room-card" onclick="openPropertyDetails('${String(r.id).replace(/'/g,"\\'")}')"><strong>${escapeHtml(propertyTypeText(r))}</strong><p>₹${escapeHtml(r.rent||0)} / month</p><p>${escapeHtml([r.city,r.state].filter(Boolean).join(", "))}</p><button class="secondary-btn" type="button" onclick="event.stopPropagation();openPropertyDetails('${String(r.id).replace(/'/g,"\\'")}')">View Details</button></div>`).join("");
+};
+window.showRecentlyViewed=function(){
+  const section=document.getElementById("recentlyViewedSection"); if(section){section.classList.remove("hidden");section.scrollIntoView({behavior:"smooth",block:"start"});}
+  window.renderRecentlyViewed();
+};
+window.clearRecentlyViewed=function(){
+  try{localStorage.removeItem("dhr_recent_viewed");}catch(e){}
+  window.renderRecentlyViewed();
+};
+window.showRentalGuide=function(){
+  const old=document.getElementById("rentalGuideModal");if(old)old.remove();
+  const modal=document.createElement("div");modal.id="rentalGuideModal";modal.style.cssText="position:fixed;inset:0;z-index:100001;background:#0009;display:flex;align-items:center;justify-content:center;padding:14px;";
+  modal.innerHTML=`<div style="background:#fff;color:#101828;border-radius:16px;padding:20px;max-width:650px;width:100%;max-height:85vh;overflow:auto"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h2>📘 Rental Guide / किराये की गाइड</h2><button class="secondary-btn" id="rentalGuideClose">✕</button></div><h3>1. Rent & Deposit / किराया और जमा</h3><p>मासिक किराया, security deposit, refund conditions, due date, maintenance, बिजली-पानी और अन्य charges लिखित में तय करें।</p><h3>2. Inspection Checklist / जाँच</h3><p>दरवाज़े/ताले, पानी, बिजली, सीलन, खिड़कियाँ, बाथरूम, मोबाइल नेटवर्क और आसपास की सुरक्षा देखें। अंदर आने से पहले फोटो लें।</p><h3>3. Documents / दस्तावेज़</h3><p>मालिक/अधिकृत व्यक्ति की पहचान, property authorization, signed rent agreement, payment receipts और move-in inventory की कॉपी रखें।</p><h3>4. Fraud Safety / धोखाधड़ी से बचाव</h3><p>प्रॉपर्टी देखे बिना advance न भेजें। OTP, UPI PIN या passwords साझा न करें। संदिग्ध भुगतान अनुरोध पर रुकें और प्रमाण सुरक्षित रखें।</p><h3>5. Agreement / किरायानामा</h3><p>अवधि, notice period, deposit return, repairs, guests, pets और termination की शर्तें पढ़कर ही sign करें। स्थानीय नियमों के अनुसार जरूरत हो तो कानूनी सलाह लें।</p></div>`;
+  document.body.appendChild(modal);const closeGuide=()=>modal.remove();modal.querySelector("#rentalGuideClose").onclick=closeGuide;modal.addEventListener("click",e=>{if(e.target===modal)closeGuide();});modal.addEventListener("keydown",e=>{if(e.key==="Escape")closeGuide();});
+};
+window._locationSuggestionsInit=function(){
+  const pairs=[["city","city"],["searchCity","city"],["village","area"],["searchArea","area"],["editCity","city"],["editVillage","area"]];
+  const rooms=Array.isArray(currentRooms)?currentRooms:[];
+  pairs.forEach(([id,key])=>{
+    const el=document.getElementById(id);if(!el||el.dataset.dhrSuggest==="1")return;
+    el.dataset.dhrSuggest="1";
+    const dl=document.createElement("datalist");dl.id=id+"Suggestions";
+    const vals=[...new Set(rooms.map(r=>key==="city"?r.city:(r.village||r.area||r.address)).filter(Boolean).map(String))].slice(0,500);
+    vals.forEach(v=>{const o=document.createElement("option");o.value=v;dl.appendChild(o);});
+    el.setAttribute("list",dl.id);el.insertAdjacentElement("afterend",dl);
+  });
+};
+document.addEventListener("DOMContentLoaded",()=>{window.updateFeedbackWordCount();window._locationSuggestionsInit();window.renderRecentlyViewed();});
+const _v58OpenDetails=window.openPropertyDetails;
+if(typeof _v58OpenDetails==="function"){
+  window.openPropertyDetails=function(id,event){const result=_v58OpenDetails.call(this,id,event);window.recordRecentlyViewed(id);return result;};
+}
+const _v58ToggleCompare=window.toggleCompare;
+window.toggleCompare=function(id,checked){
+  if(checked && !window.compareIds.includes(id) && window.compareIds.length>=3){alert("आप एक बार में 3 से अधिक प्रॉपर्टी Compare नहीं कर सकते। पहले किसी एक को हटाएँ।");renderRooms(currentRooms);return;}
+  return _v58ToggleCompare.call(this,id,checked);
+};
+
+</script>
+<script>
+
+/* V59 validation fixes: refresh suggestions after room data/render changes */
+try{
+  const _v59RenderRooms=window.renderRooms;
+  if(typeof _v59RenderRooms==='function')window.renderRooms=function(...args){const result=_v59RenderRooms.apply(this,args);try{window._locationSuggestionsInit();window.renderRecentlyViewed();}catch(e){}return result;};
+}catch(e){}
+
+</script>
+
+<style id="dhr-requested-updates-style">
+#feedbackSection .feedback-field-invalid{border-color:#b42318!important;outline-color:#b42318!important;}
+
+/* Scoped list scrolling: prevent notification/feedback tables from growing their pages. */
+#adminNotificationsPanel .v36-admin-table-wrap,#adminFeedbackPanel .v36-admin-table-wrap,
+#adminReportsPanel .v36-admin-table-wrap,#adminUsersPanel .v36-admin-table-wrap,
+.feedback-history-list,#notificationsList,#adminNotificationsPanel .v36-admin-table-wrap,#adminFeedbackPanel .v36-admin-table-wrap,#adminReportsPanel .v36-admin-table-wrap{max-height:340px;overflow-y:auto;overscroll-behavior:contain;}
+#adminNotificationsPanel .v36-admin-table-wrap::-webkit-scrollbar,#adminFeedbackPanel .v36-admin-table-wrap::-webkit-scrollbar,
+#adminReportsPanel .v36-admin-table-wrap::-webkit-scrollbar{width:9px}
+#adminNotificationsPanel .v36-admin-table-wrap::-webkit-scrollbar-thumb,#adminFeedbackPanel .v36-admin-table-wrap::-webkit-scrollbar-thumb,
+#adminReportsPanel .v36-admin-table-wrap::-webkit-scrollbar-thumb{background:#98a2b3;border-radius:10px}
+.feedback-status-check{margin-top:20px;padding:16px;border:1px solid #d0d5dd;border-radius:14px;background:#f8fafc}
+.feedback-status-check input{display:block;width:100%;margin:5px 0 12px;padding:11px;border:1px solid #d0d5dd;border-radius:9px;box-sizing:border-box}
+.feedback-photo-preview{display:flex;gap:10px;flex-wrap:wrap;max-height:none;overflow:visible;margin-top:8px}
+.feedback-photo-item{position:relative;border:1px solid #d0d5dd;border-radius:10px;padding:6px;width:115px;overflow:hidden}
+.feedback-photo-item img{width:100%;height:80px;object-fit:cover;border-radius:6px}
+.feedback-photo-item button{position:absolute;right:3px;top:3px;border:0;border-radius:50%;background:#b42318;color:white;width:25px;height:25px;font-weight:bold}
+#adminNotificationsPanel tbody tr[data-notification-id]{cursor:pointer}#adminNotificationsPanel tbody tr[data-notification-id]:hover{background:#eff6ff}
+#feedbackStatus,#feedbackCheckResult{overflow-wrap:anywhere}
+@media(max-width:600px){#adminNotificationsPanel .v36-admin-table-wrap,#adminFeedbackPanel .v36-admin-table-wrap{max-height:320px}}
+</style>
+<script id="dhr-requested-updates-script">
+(function(){
+ const $=id=>document.getElementById(id);
+ const subjectChoices={
+  'सुझाव':['Website improvement / वेबसाइट सुधार','New feature suggestion / नया फीचर','Other suggestion / अन्य सुझाव'],
+  'शिकायत':['Website Problem / वेबसाइट समस्या','Property Listing / प्रॉपर्टी लिस्टिंग','Login / Signup / लॉगिन','Payment or Rent / भुगतान या किराया','Fraud / गलत जानकारी','Other / अन्य']
+ };
+ function setSubjects(){if(typeof window.updateFeedbackSubjects==='function'){window.updateFeedbackSubjects();return;}const t=$('feedbackType'),s=$('feedbackSubject');if(!t||!s)return;const fallback={'सुझाव':['Website improvement / वेबसाइट सुधार','New feature suggestion / नया फीचर','Other suggestion / अन्य सुझाव'],'शिकायत':['Website Problem / वेबसाइट समस्या','Property Listing / प्रॉपर्टी लिस्टिंग','Login / Signup / लॉगिन','Payment or Rent / भुगतान या किराया','Fraud / गलत जानकारी','Other / अन्य']};const items=fallback[t.value]||[];s.innerHTML='<option value="">Select subject / विषय चुनें</option>'+items.map(v=>'<option value="'+v.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'">'+v+'</option>').join('');}
+ document.addEventListener('DOMContentLoaded',()=>{
+  setSubjects();$('feedbackType')?.addEventListener('change',setSubjects);
+  const inp=$('feedbackPhotos');if(inp)inp.addEventListener('change',()=>{const box=$('feedbackPhotoPreview');if(!box)return;box.innerHTML='';const files=[...(inp.files||[])].slice(0,3);files.forEach((f,i)=>{const item=document.createElement('div');item.className='feedback-photo-item';const img=document.createElement('img');img.alt=f.name;img.src=URL.createObjectURL(f);const name=document.createElement('small');name.textContent=f.name;const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.title='Remove photo';remove.onclick=()=>{const dt=new DataTransfer();[...(inp.files||[])].forEach((x,j)=>{if(j!==i)dt.items.add(x)});inp.files=dt.files;inp.dispatchEvent(new Event('change',{bubbles:true}));};item.append(img,name,remove);box.appendChild(item);});});
+ });
+ const oldClear=window.clearFeedbackForm;window.clearFeedbackForm=function(){if(typeof oldClear==='function')oldClear();['feedbackProfileId','feedbackEmail'].forEach(id=>{if($(id))$(id).value=''});if($('feedbackPhotoPreview'))$('feedbackPhotoPreview').innerHTML='';};
+ window.clearFeedbackStatusCheck=function(){['feedbackCheckReference','feedbackCheckEmail'].forEach(id=>{if($(id))$(id).value=''});if($('feedbackCheckResult'))$('feedbackCheckResult').innerHTML='';};
+ 
+window.__resolvedFeedbackRatingValue = 0;
+window.selectResolvedFeedbackRating = function(n){
+  window.__resolvedFeedbackRatingValue = Math.max(1,Math.min(5,Number(n)||1));
+  document.querySelectorAll('#resolvedFeedbackRating button[data-rating]').forEach(b=>{
+    const active=Number(b.dataset.rating)<=window.__resolvedFeedbackRatingValue;
+    b.textContent=active?'★':'☆'; b.style.color=active?'#f59e0b':'#98a2b3';
+  });
+};
+window.saveResolvedFeedbackRating = async function(docId, referenceId){
+  const msg=document.getElementById('resolvedFeedbackRatingMessage');
+  const rating=Number(window.__resolvedFeedbackRatingValue||0);
+  if(!rating){if(msg)msg.textContent='Please select 1–5 stars first / कृपया पहले 1 से 5 स्टार चुनें।';return;}
+  try{
+    const snap=await getDocs(feedbackCollection);
+    let target=null;
+    snap.forEach(d=>{const x=d.data()||{};if(d.id===docId && String(x.referenceId||'')===referenceId)target={id:d.id,data:x};});
+    if(!target){if(msg)msg.textContent='शिकायत रिकॉर्ड नहीं मिला।';return;}
+    if(String(target.data.status||'').toLowerCase()!=='resolved'){if(msg)msg.textContent='Rating is available only for Resolved complaints / रेटिंग केवल Resolved शिकायत पर दी जा सकती है।';return;}
+    if(Number(target.data.rating||0)>0 || target.data.ratingSubmitted===true){if(msg)msg.textContent='A rating has already been submitted for this complaint / इस शिकायत पर रेटिंग पहले ही दी जा चुकी है।';return;}
+    await updateDoc(doc(feedbackCollection,target.id),{rating:rating,ratingSubmitted:true,ratingSubmittedAt:serverTimestamp()});
+    if(msg)msg.textContent='धन्यवाद! आपकी रेटिंग सेव हो गई।';
+    const buttons=document.querySelectorAll('#resolvedFeedbackRating button');buttons.forEach(b=>b.disabled=true);
+  }catch(e){console.error(e);if(msg)msg.textContent='रेटिंग सेव नहीं हुई। Firebase permissions/connection जाँचें।';}
+};
+window.checkFeedbackStatus=async function(){const ref=$('feedbackCheckReference')?.value.trim(),email=$('feedbackCheckEmail')?.value.trim(),out=$('feedbackCheckResult');if(!out)return;if(!ref||!email){out.textContent='Reference ID और Email दोनों भरें।';return;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){out.textContent='सही Email format भरें।';return;}out.textContent='जाँच हो रही है…';try{const exactQuery=query(feedbackCollection,where('referenceId','==',ref),where('email','==',email),limit(1));const snap=await getDocs(exactQuery);let found=null;snap.forEach(d=>{const x=d.data()||{};if(String(x.referenceId||'').toLowerCase()===ref.toLowerCase()&&String(x.email||x.userEmail||'').trim().toLowerCase()===email.toLowerCase())found={id:d.id,...x};});if(!found){out.textContent='इस Reference ID और Email से कोई Feedback नहीं मिला।';return;}const safeStatus=String(found.status||'Pending').replace(/[&<>"']/g,'');const processText=({'Pending':'आपकी शिकायत दर्ज है और एडमिन की जाँच का इंतज़ार है।','In Progress':'एडमिन आपकी शिकायत की जाँच कर रहा है।','Resolved':'शिकायत पर कार्रवाई पूरी कर दी गई है।','Closed':'इस शिकायत की प्रक्रिया बंद कर दी गई है।'})[safeStatus]||'आपकी शिकायत की स्थिति अपडेट की जा रही है।';out.innerHTML='<p><b>शिकायत नंबर / Reference ID:</b> '+String(found.referenceId||ref).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p><p><b>स्थिति / Status:</b> '+safeStatus+'</p><p><b>अभी क्या प्रक्रिया चल रही है / Current Process:</b> '+processText+'</p><p><b>एडमिन का जवाब / Admin Reply:</b> '+String(found.adminReply||'अभी कोई जवाब नहीं दिया गया।').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>';
+if(String(found.status||'').toLowerCase()==='resolved'){
+  const alreadyRated = Number(found.rating||0)>0 || found.ratingSubmitted===true;
+  out.insertAdjacentHTML('beforeend',
+    alreadyRated
+      ? '<p><b>आपकी रेटिंग / Your Rating:</b> '+String(found.rating||'Submitted')+'/5</p>'
+      : `<div class="form-group" style="margin-top:14px;padding:12px;border:1px solid #d0d5dd;border-radius:10px"><b>समाधान के बाद रेटिंग दें / Rate after resolution</b><p style="margin:6px 0;color:#667085;font-size:13px">यह विकल्प केवल Resolved शिकायतों के लिए है।</p><div id="resolvedFeedbackRating" style="display:flex;gap:8px;font-size:28px"><button type="button" data-rating="1" aria-label="1 star" onclick="selectResolvedFeedbackRating(1)">☆</button><button type="button" data-rating="2" aria-label="2 stars" onclick="selectResolvedFeedbackRating(2)">☆</button><button type="button" data-rating="3" aria-label="3 stars" onclick="selectResolvedFeedbackRating(3)">☆</button><button type="button" data-rating="4" aria-label="4 stars" onclick="selectResolvedFeedbackRating(4)">☆</button><button type="button" data-rating="5" aria-label="5 stars" onclick="selectResolvedFeedbackRating(5)">☆</button></div><button type="button" class="primary-btn" style="margin-top:8px" onclick="saveResolvedFeedbackRating('${String(found.id).replace(/['\\]/g,'')}','${String(found.referenceId||ref).replace(/['\\]/g,'')}')">रेटिंग भेजें / Submit Rating</button><div id="resolvedFeedbackRatingMessage" aria-live="polite"></div></div>`);
+}
+}catch(e){const code=String(e?.code||'');out.textContent=(code.includes('permission-denied')||/Missing or insufficient permissions/i.test(String(e?.message||'')))?'Status नहीं खुल पाया: Firebase ने feedback पढ़ने की अनुमति नहीं दी (permission-denied)। इसे HTML से अकेले ठीक नहीं किया जा सकता; सुरक्षित Firebase-side lookup/API या उपयुक्त Rules की ज़रूरत है।':'Status नहीं खुल पाया। इंटरनेट कनेक्शन जाँचें। अगर समस्या जारी रहे तो Firebase error की जाँच ज़रूरी है।';console.error('Feedback status lookup failed:',e);}};
+ // Make long lists internally scrollable even if generated by other dashboard renderers.
+ const observer=new MutationObserver(()=>{['adminNotificationsPanel','adminFeedbackPanel','adminReportsPanel'].forEach(id=>{const root=$(id);if(!root)return;root.querySelectorAll('.v36-admin-table-wrap').forEach(w=>{w.style.maxHeight='340px';w.style.overflowY='auto';w.style.overscrollBehavior='contain';});});});
+ if(document.documentElement)observer.observe(document.documentElement,{childList:true,subtree:true});
+ // Give each admin notification row a click affordance and contextual explanation; navigate when a known reference exists.
+ document.addEventListener('click',e=>{const row=e.target.closest('#adminNotificationsPanel tbody tr');if(!row||!row.dataset.notificationId)return;const ref=row.dataset.referenceId||'';const msg=row.cells[0]?.textContent||'Notification';if(ref){if(/rpt-/i.test(ref)){if(typeof window.showAdminReports==='function')window.showAdminReports();else alert(msg+'\nReference: '+ref);}else if(/^fb-/i.test(ref)){if(typeof window.showAdminFeedback==='function')window.showAdminFeedback();else alert(msg+'\nReference: '+ref);}else alert(msg+'\nReference: '+ref);}else alert(msg);});
+})();
+</script>
+
+
+<script>
+// V75: clear selected feedback photos only after the form reports successful submission.
+(function(){
+ const clearAfterSuccess=()=>{
+   const status=document.getElementById("feedbackStatus");
+   if(!status || !/successfully|सफलतापूर्वक दर्ज|feedback saved|feedback submitted/i.test(status.textContent||"")) return;
+   const input=document.getElementById("feedbackPhotos"); if(input) input.value="";
+   const preview=document.getElementById("feedbackPhotoPreview"); if(preview) preview.innerHTML="";
+   const photoStatus=document.getElementById("feedbackPhotoStatus"); if(photoStatus) photoStatus.textContent="आप 2–3 फोटो चुन सकते हैं।";
+ };
+ const observer=new MutationObserver(clearAfterSuccess);
+ document.addEventListener("DOMContentLoaded",()=>{const status=document.getElementById("feedbackStatus");if(status)observer.observe(status,{childList:true,subtree:true,characterData:true});});
+})();
+</script>
+
+
+<style id="v43-login-gate-style">.room-actions button,.property-detail-actions button{transition:filter .15s ease}.room-actions button:active,.property-detail-actions button:active{filter:brightness(.96)}#loginRequiredModal button{cursor:pointer}</style>
+
+
+<style id="v49-report-reply-style">
+.v49-report-actions{min-width:245px;display:table-cell!important}
+.v49-status-buttons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.v36-admin-actions button.selected-status,
+.v36-admin-actions button.selected-status:disabled{
+  background:#dcfce7!important;color:#166534!important;border-color:#86efac!important;
+  font-weight:900;opacity:1!important;cursor:default;
+}
+.v49-report-feedback{border-top:1px solid #e4e7ec;padding-top:10px;min-width:220px}
+.v49-report-feedback label{display:block;font-weight:800;font-size:12px;color:#344054;margin-bottom:5px}
+.v49-report-feedback textarea{display:block;width:100%;min-width:210px;min-height:76px;border:1px solid #cfd7e3;border-radius:9px;padding:9px;resize:vertical;background:#fff;color:#172033}
+.v49-report-feedback textarea:focus{outline:2px solid #bfdbfe;border-color:#2563eb}
+.v49-report-feedback .v49-save-reply{width:100%;margin-top:7px;border:0;border-radius:9px;padding:9px 10px;background:#2563eb;color:#fff;font-weight:800;white-space:normal}
+.v49-report-feedback .v49-save-reply:hover{background:#1d4ed8}
+.v49-report-feedback .v49-save-reply:disabled{opacity:.65;cursor:wait}
+.v49-existing-reply{margin-top:8px;padding:8px;border-radius:8px;background:#f0fdf4;color:#166534;font-size:12px;overflow-wrap:anywhere}
+</style>
+
+<style id="v64-targeted-scroll-fixes">
+#notificationsList,#myPostsList,#myReportsList,.feedback-history-list{max-height:340px;overflow-y:auto;overscroll-behavior:contain;padding-right:4px;}
+#notificationsList .notification-item,#myPostsList .room-card,#myPostsList .property-card{margin-bottom:10px;}
+.feedback-star{border:0;background:transparent;padding:0 2px;cursor:pointer;line-height:1;font-size:28px;}
+.feedback-star:focus-visible{outline:2px solid #155eef;outline-offset:2px;border-radius:4px;}
+@media(max-width:600px){#notificationsList{max-height:360px}#myPostsList,#myReportsList,.feedback-history-list{max-height:300px}}
+</style>
+<script>
+
+/* V64 targeted updates: feedback rating/subjects and bounded list scrolling. */
+(function(){
+ const subjectMap={
+  'शिकायत':['Website Problem / वेबसाइट समस्या','Property Listing / प्रॉपर्टी लिस्टिंग','Login / Signup / लॉगिन','Owner / Contact Issue / संपर्क समस्या','Fraud or Incorrect Listing / गलत लिस्टिंग','Other / अन्य'],
+  'सुझाव':['Website Improvement / वेबसाइट सुधार','New Feature / नया फीचर','Search and Filters / सर्च','Other / अन्य'],
+  'Feedback':['Website Experience / वेबसाइट अनुभव','Property Details / प्रॉपर्टी विवरण','User Experience / यूज़र अनुभव','Other / अन्य'],
+  'Report':['Fake Listing / फर्जी लिस्टिंग','Incorrect Information / गलत जानकारी','Suspicious User / संदिग्ध यूज़र','Other / अन्य'],
+  'Technical Issue':['Login / Signup / लॉगिन','Photo Upload / फोटो अपलोड','Page or Button Not Working / पेज या बटन','Other / अन्य'],
+  'Other':['General Question / सामान्य प्रश्न','Other / अन्य']
+ };
+ window.updateFeedbackSubjects=function(){const type=document.getElementById('feedbackType'),sub=document.getElementById('feedbackSubject');if(!type||!sub)return;const previous=sub.value;const items=subjectMap[type.value]||subjectMap.Other;sub.innerHTML='<option value="">Select subject / विषय चुनें</option>'+items.map(v=>'<option value="'+v.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'">'+v+'</option>').join('');if(items.includes(previous))sub.value=previous;};
+ window.setFeedbackRating=function(n){n=Math.max(0,Math.min(5,Number(n)||0));const field=document.getElementById('feedbackRating');if(field)field.value=String(n);document.querySelectorAll('#feedbackRatingControl .feedback-star').forEach(b=>{const active=Number(b.dataset.rating)<=n;b.textContent=active?'★':'☆';b.style.color=active?'#f59e0b':'#98a2b3';b.setAttribute('aria-pressed',String(Number(b.dataset.rating)===n));});const label=document.getElementById('feedbackRatingLabel');if(label)label.textContent=n?n+' / 5':'Optional';};
+ document.addEventListener('DOMContentLoaded',()=>{window.updateFeedbackSubjects();window.setFeedbackRating(0);});
+})();
+
 </script>
 
 </body>
